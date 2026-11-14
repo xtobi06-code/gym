@@ -1,5 +1,5 @@
 'use strict';
-/* Abgleich mit einer JSON-Datei im privaten GitHub-Repo (wie beim Panel: data-np).
+/* Abgleich mit einer JSON-Datei im privaten GitHub-Repo (Standard: data-gym).
    Ablauf: Datei lesen, mit dem lokalen Stand zusammenführen, bei Unterschied zurückschreiben. */
 
 const Sync = {
@@ -11,7 +11,7 @@ const Sync = {
 
   cfg() {
     const np = lager.get('np-config', {});   // Zugang vom Panel mitbenutzen, falls im selben Browser vorhanden
-    return { owner: np.owner || 'xtobi06-code', repo: np.repo || 'data-np', pfad: 'gym/daten.json', token: np.token || '', ...lager.get(this.KEY, {}) };
+    return { owner: np.owner || 'xtobi06-code', repo: 'data-gym', pfad: 'daten.json', token: np.token || '', ...lager.get(this.KEY, {}) };
   },
   speichereCfg(c) { lager.set(this.KEY, c); },
   get zeit() { return lager.get('gym-sync-zeit', 0); },

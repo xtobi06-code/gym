@@ -1,6 +1,6 @@
 /* Hält die App-Dateien vor, damit sie im Studio auch ohne Netz startet.
    Mit Netz kommt immer die frische Fassung; dauert das länger als 2,5 s, springt der Vorrat ein. */
-const VORRAT = 'gym-v2';
+const VORRAT = 'gym-v3';
 const BILDER = 'gym-bilder';
 const DATEIEN = ['./', 'gym.css', 'manifest.json', 'icons/gym-180.png', 'icons/gym-512.png',
   'js/util.js', 'js/store.js', 'js/bibliothek.js', 'js/sync.js', 'js/blatt.js', 'js/satz.js', 'js/live.js', 'js/plan.js', 'js/studio.js', 'js/info.js', 'js/fortschritt.js', 'js/mehr.js', 'js/vorlage.js', 'js/main.js'];
