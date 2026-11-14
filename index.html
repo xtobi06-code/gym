@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Gym">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#09090a">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f2f2f5">
+<meta name="color-scheme" content="dark light">
+<title>Gym</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/gym-180.png">
+<link rel="icon" href="icons/gym-512.png">
+<!--CSS--><link rel="stylesheet" href="gym.css"><!--/CSS-->
+</head>
+<body>
+<main id="ansicht"><div id="inhalt"></div></main>
+
+<nav class="tabbar glas" id="tabs" aria-label="Bereiche">
+  <button data-akt="tab" data-tab="training"><i data-ic="hantel"></i><span>Training</span></button>
+  <button data-akt="tab" data-tab="studio"><i data-ic="studio"></i><span>Studio</span></button>
+  <button data-akt="tab" data-tab="fortschritt"><i data-ic="verlauf"></i><span>Fortschritt</span></button>
+  <button data-akt="tab" data-tab="mehr"><i data-ic="mehr"></i><span>Mehr</span></button>
+</nav>
+
+<section id="live" hidden aria-label="Laufendes Training"></section>
+<div id="blaetter"></div>
+<div id="toast" role="status"></div>
+
+<!--JS-->
+<script src="js/util.js"></script>
+<script src="js/store.js"></script>
+<script src="js/bibliothek.js"></script>
+<script src="js/sync.js"></script>
+<script src="js/blatt.js"></script>
+<script src="js/satz.js"></script>
+<script src="js/live.js"></script>
+<script src="js/plan.js"></script>
+<script src="js/studio.js"></script>
+<script src="js/info.js"></script>
+<script src="js/fortschritt.js"></script>
+<script src="js/mehr.js"></script>
+<script src="js/vorlage.js"></script>
+<script src="js/main.js"></script>
+<!--/JS-->
+</body>
+</html>
