@@ -31,7 +31,7 @@ const EQUIP = {
   koerper: { name: 'Körpergewicht', kat: 'Körpergewicht', typ: 'koerper' },
   sonst: { name: 'Sonstiges', kat: 'Sonstiges', typ: 'frei' },
 };
-const TYPEN = { kurzhantel: 'Kurzhanteln', scheiben: 'Langhantel', stack: 'Steckgewicht', koerper: 'Körpergewicht', frei: 'Sonstiges' };
+const TYPEN = { kurzhantel: 'Kurzhanteln', scheiben: 'Scheiben', stack: 'Steckgewicht', koerper: 'Körpergewicht', frei: 'Sonstiges' };
 // Standardwerte für alles, was ein Gewicht hat: Gerät oder Freihantel-Übung
 const GEWICHT_STD = { typ: 'kurzhantel', start: 5, schritt: 5, anzahl: 20, zusatz: 0, stufen: '', stange: 20, beidseitig: true, kmin: 2, kmax: 40, kschritt: 2 };
 // Farben der Trainingstage: geprüfte Reihenfolge, auch bei Farbsehschwäche unterscheidbar
