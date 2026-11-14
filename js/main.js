@@ -13,10 +13,10 @@ function zeichne() {
 Object.assign(Akt, {
   tab(el) {
     const neu = el.dataset.tab;
-    if (neu === tab) { $('#ansicht').scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    if (neu === tab) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
     tab = neu; lager.set('gym-tab', tab);
     zeichne();
-    $('#ansicht').scrollTop = 0;
+    window.scrollTo(0, 0);
   },
   blattZu(el) {
     const huelle = el.closest('.blatt-huelle');
