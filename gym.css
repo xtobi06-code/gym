@@ -222,11 +222,11 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 #live { position: fixed; inset: 0; z-index: 30; background: var(--bg); display: flex; flex-direction: column; transform: translateY(100%); transition: transform .5s var(--ease-drawer); --c: var(--pin); }
 #live.offen { transform: none; }
 .live-kopf { display: flex; align-items: center; gap: 10px; padding: calc(var(--oben) + 32px) 14px 4px; flex: none; }
-.live-kopf .mitte { flex: 1; min-width: 0; display: flex; flex-direction: row; align-items: baseline; justify-content: center; gap: 10px; }
-.live-kopf .mitte b { display: flex; align-items: center; flex: 0 1 auto; min-width: 0; gap: 8px; max-width: 100%; min-width: 0; font-family: var(--titel); font-size: 24px; line-height: 1.1; font-weight: 400; letter-spacing: .03em; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.live-kopf .mitte { flex: 1; min-width: 0; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 10px; }
+.live-kopf .mitte b { display: flex; align-items: center; flex: 0 1 auto; min-width: 0; gap: 8px; max-width: 100%; min-width: 0; font-family: var(--titel); font-size: 26px; line-height: 1.1; font-weight: 400; letter-spacing: .03em; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .live-kopf .mitte b span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tagpunkt { width: 11px; height: 11px; border-radius: 50%; background: var(--c); flex: none; }
-.live-kopf .mitte small { color: var(--t2); font-size: 15px; font-family: var(--zahl); font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+.live-kopf .mitte small { color: var(--t2); font-size: 20px; line-height: 1.1; font-family: var(--zahl); font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
 .streifen { display: flex; gap: 4px; padding: 6px 16px 8px; flex: none; }
 .streifen button { position: relative; flex: 1; height: 22px; display: flex; align-items: center; }
 .streifen button::after { content: ""; position: absolute; left: 0; right: 0; top: 8px; height: 6px; border-radius: 2px; background: var(--karte2); }
