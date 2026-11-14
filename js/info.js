@@ -23,8 +23,8 @@ const bildUrl = (id, n = 0) => `${BIB_CDN}${encodeURIComponent(id)}/${n}.jpg`;
 
 // Kleines Vorschaubild für Listen, eigenes Foto geht vor
 function vorschau(u, r = null) {
-  const rr = r || bibVon(u), id = bildId(rr), gif = id ? null : gifVon(u, rr);
-  const src = u && u.foto ? u.foto : id ? bildUrl(id, 0) : gif ? gif.url : '';
+  const rr = r || bibVon(u), gif = gifVon(u, rr), id = gif ? null : bildId(rr);
+  const src = u && u.foto ? u.foto : gif ? gif.url : id ? bildUrl(id, 0) : '';
   return src ? `<img class="vorschau" src="${esc(src)}" alt="" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'vorschau leer'}))">` : '<span class="vorschau leer"></span>';
 }
 

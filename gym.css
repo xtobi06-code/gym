@@ -558,3 +558,8 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 #toast:has(.toast-knopf) { white-space: nowrap; }
 
 .geheim { -webkit-text-security: disc; }
+
+/* Animationen sind klein (etwa 180 px), deshalb nicht über die volle Breite ziehen */
+.animation { width: min(100%, 230px); margin: 4px auto 16px; background: #fff; border-radius: 16px; padding: 8px; }
+.animation img { display: block; width: 100%; aspect-ratio: 1; object-fit: contain; }
+.vorschau[src$=".gif"] { object-fit: contain; }
