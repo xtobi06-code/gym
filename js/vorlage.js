@@ -47,47 +47,47 @@ const VORLAGE_ALPHACLUB = (() => {
    sie ohne Abgleich bekommen. bild: false = kein Bild aus der Bibliothek, weil keines zum Gerät passt
    (lieber ein eigenes Foto als ein falsches Bild). */
 const VORLAGE_INFO = {
-  'ac-u-seitheben': { bild: false, anleitung: [
+  'ac-u-seitheben': { gif: 'dRTfGZT', bild: false, anleitung: [
     'Sitzhöhe so einstellen, dass die Drehachse auf Höhe deiner Schultergelenke liegt.',
     'Unterarme gegen die Polster legen, Rücken an die Lehne.',
     'Ellbogen seitlich anheben, bis die Oberarme etwa waagerecht sind. Nicht mit Schwung arbeiten.',
     'Oben kurz halten, dann kontrolliert und langsam absenken, ohne das Gewicht abzulegen.'] },
-  'ac-u-schulter': { anleitung: [
+  'ac-u-schulter': { gif: '67n3r98', anleitung: [
     'Sitz so stellen, dass die Griffe auf Höhe der Schultern starten.',
     'Rücken fest an die Lehne, Schulterblätter leicht zusammen.',
     'Griffe nach oben drücken, bis die Arme fast gestreckt sind. Ellbogen nicht ganz durchdrücken.',
     'Kontrolliert wieder auf Schulterhöhe absenken.'] },
-  'ac-u-brust-schraeg': { anleitung: [
+  'ac-u-brust-schraeg': { gif: 'jHAnWmT', anleitung: [
     'Sitz so stellen, dass die Griffe auf Höhe der unteren Brust starten.',
     'Schulterblätter zusammenziehen und an die Lehne drücken.',
     'Griffe schräg nach oben wegdrücken, bis die Arme fast gestreckt sind.',
     'Langsam zurückführen, bis du ein leichtes Dehnen in der Brust spürst.'] },
-  'ac-u-brust': { anleitung: [
+  'ac-u-brust': { gif: 'DOoWcnA', anleitung: [
     'Sitz so stellen, dass die Griffe auf Höhe der Brustmitte liegen.',
     'Schulterblätter zusammenziehen, Rücken an der Lehne lassen.',
     'Griffe gerade nach vorne drücken, Arme fast strecken.',
     'Kontrolliert zurückführen, ohne dass die Gewichte aufsetzen.'] },
-  'ac-u-latzug': { bild: false, anleitung: [
+  'ac-u-latzug': { gif: '7F1DVzn', bild: false, anleitung: [
     'Oberschenkelpolster so einstellen, dass du fest sitzt und nicht nach oben gezogen wirst.',
     'Griffe fassen, Brust leicht heraus, Schulterblätter nach unten.',
     'Griffe zu den Schultern ziehen, Ellbogen dabei nach unten und leicht nach hinten führen.',
     'Oben kurz halten, dann Arme langsam wieder ganz strecken, bis du den Lat dehnst.'] },
-  'ac-u-kabel-latzug': { anleitung: [
+  'ac-u-kabel-latzug': { gif: 'RVwzP10', anleitung: [
     'Polster auf die Oberschenkel stellen, Stange etwas weiter als schulterbreit fassen.',
     'Oberkörper leicht nach hinten lehnen, Brust heraus.',
     'Stange zur oberen Brust ziehen, Ellbogen nach unten führen. Nicht mit dem Rücken schwingen.',
     'Langsam wieder nach oben lassen, bis die Arme gestreckt sind.'] },
-  'ac-u-kabel-rudern': { anleitung: [
+  'ac-u-kabel-rudern': { gif: 'A3P4O0R', anleitung: [
     'Aufrecht sitzen, Füße fest abstützen, Knie leicht gebeugt.',
     'Griff zum Bauchnabel ziehen und die Schulterblätter dabei zusammenführen.',
     'Oberkörper bleibt aufrecht, kein Schwung aus dem unteren Rücken.',
     'Arme langsam wieder strecken und die Schulterblätter nach vorne gleiten lassen.'] },
-  'ac-u-kabel-trizeps': { anleitung: [
+  'ac-u-kabel-trizeps': { gif: 'dU605di', anleitung: [
     'Seil an der oberen Rolle befestigen, Ellbogen eng an den Körper.',
     'Oberarme bleiben fest, nur die Unterarme bewegen sich.',
     'Seil nach unten drücken und am Ende die Enden leicht auseinanderziehen.',
     'Langsam zurück, bis die Hände etwa auf Brusthöhe sind.'] },
-  'ac-u-rudern-breit': { anleitung: [
+  'ac-u-rudern-breit': { gif: '7I6LNUG', aehnlich: true, anleitung: [
     'Brustpolster so einstellen, dass du die Griffe mit fast gestreckten Armen erreichst.',
     'Brust fest anlegen, Schultern nicht hochziehen.',
     'Griffe nach hinten ziehen, Ellbogen breit, und die Schulterblätter zusammenführen.',
@@ -97,17 +97,17 @@ const VORLAGE_INFO = {
     'Nur die Schulterblätter zusammenziehen, Arme bleiben gestreckt. Das ist keine Ruderbewegung.',
     'Oben eine Sekunde halten und die Schulterblätter bewusst zusammendrücken.',
     'Langsam wieder nach vorne lassen. Gewicht eher moderat wählen.'] },
-  'ac-u-beinstrecker': { anleitung: [
+  'ac-u-beinstrecker': { gif: 'my33uHU', anleitung: [
     'Rückenlehne so stellen, dass die Knie an der Kante der Sitzfläche abknicken.',
     'Polster knapp über den Knöcheln anlegen.',
     'Beine strecken, bis sie fast gerade sind, und oben kurz anspannen.',
     'Langsam wieder beugen, ohne dass die Gewichte aufsetzen.'] },
-  'ac-u-dips': { anleitung: [
+  'ac-u-dips': { gif: 'BRImeP8', anleitung: [
     'Sitz so einstellen, dass die Griffe auf Höhe der Brust beginnen.',
     'Schultern nach unten, Ellbogen eng am Körper.',
     'Griffe nach unten drücken, bis die Arme fast gestreckt sind.',
     'Kontrolliert zurückkommen, die Schultern nicht nach vorne fallen lassen.'] },
-  'ac-u-vsquat': { bild: false, anleitung: [
+  'ac-u-vsquat': { gif: 'Qa55kX1', aehnlich: true, bild: false, anleitung: [
     'Schultern unter die Polster, Rücken an die Lehne, Füße etwa schulterbreit auf die Plattform.',
     'Sicherungen lösen und tief beugen, die Knie zeigen in Richtung der Füße.',
     'Aus den Fersen und dem ganzen Fuß wieder hochdrücken.',
@@ -117,12 +117,12 @@ const VORLAGE_INFO = {
     'Griffe fassen, Schulterblätter zusammenziehen.',
     'Griffe nach oben drücken, bis sie sich oben fast treffen.',
     'Langsam wieder absenken, bis du ein Dehnen in der Brust spürst.'] },
-  'ac-u-beinpresse': { bild: false, anleitung: [
+  'ac-u-beinpresse': { gif: '10Z2DXU', aehnlich: true, bild: false, anleitung: [
     'Sitz so einstellen, dass die Knie etwa 90° gebeugt sind, wenn du startest.',
     'Füße schulterbreit auf die Platte, Rücken und Gesäß bleiben an der Lehne.',
     'Beine kräftig strecken, Knie oben nicht ganz durchdrücken.',
     'Langsam zurückkommen, ohne dass das Becken abhebt.'] },
-  'ac-u-waden-beinpresse': { bild: false, anleitung: [
+  'ac-u-waden-beinpresse': { gif: 'qCNVnaU', aehnlich: true, bild: false, anleitung: [
     'Mit den Fußballen auf den unteren Rand der Platte, Beine fast gestreckt.',
     'Aus den Sprunggelenken die Platte wegdrücken, Knie bleiben fast gestreckt.',
     'Oben kurz halten, dann Fersen langsam so weit wie möglich absenken.'] },

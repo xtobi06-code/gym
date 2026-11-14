@@ -14,7 +14,7 @@ function zeigeMehr() {
       ${feld('Token', 'data-ein="syncFeld" data-f="token" type="text" class="geheim" placeholder="github_pat_…" autocapitalize="none" autocorrect="off" spellcheck="false"', c.token)}
     </div>
     <button class="knopf haupt breit" data-akt="syncJetzt">Jetzt synchronisieren</button>
-    ${window.GYM_VORSCHAU ? '' : `<button class="knopf zweit breit" data-akt="appNeu">Synchronisieren und App neu laden</button>`}
+    ${window.GYM_VORSCHAU ? '' : `<button class="knopf zweit breit" data-akt="appNeu">App neu laden</button>`}
     <p class="hinweis">Neue Daten von einem anderen Gerät erscheinen nach „Jetzt synchronisieren“ sofort. „App neu laden“ holt zusätzlich die neueste Version der App. Deine Daten liegen als eine Datei im privaten Repo. Das Token braucht Lese- und Schreibrecht auf „Contents“ dieses Repos, dasselbe wie beim Panel. Es bleibt nur auf diesem Gerät.</p>
 
 ${window.GYM_VORSCHAU ? '' : `    <div class="gruppe-titel">Sicherung</div>

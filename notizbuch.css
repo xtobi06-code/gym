@@ -1,0 +1,211 @@
+/* Notizbuch: ein gedrucktes Trainingsbuch, von Hand ausgefüllt.
+   Gedruckt (Systemschrift, grau): Beschriftungen, Hinweise, Knöpfe.
+   Handschrift (Caveat): alles, was du einträgst, also Namen, Übungen, Gewichte, Notizen.
+   Alles liegt auf einem Zeilenraster von 28 px, die Linien scrollen mit der Seite mit.
+   Glas bleibt für das, was über dem Papier schwebt: Blätter, Pausenleiste, Hinweise. */
+
+@font-face { font-family: "Caveat Gym"; src: url("fonts/caveat.woff2") format("woff2"); font-weight: 400 700; font-display: swap; }
+
+:root {
+  --z: 28px;
+  --hand: "Caveat Gym", "Bradley Hand", cursive;
+  --papier: #f7f3ea; --linie-papier: rgba(64, 110, 180, .2); --rand: rgba(214, 72, 58, .45);
+  --tinte: #1d2433; --tinte2: #5c6170; --bleistift: #8d8f97;
+  --marker: rgba(255, 138, 61, .42);
+  --zettel: #ffd9a8; --zettel-tinte: #2a2116; --zettel-schatten: 0 1px 1px rgba(60, 40, 10, .12), 0 12px 18px -10px rgba(60, 40, 10, .35);
+  --reiter: #e6dcc6; --reiter-tinte: #5e5444;
+  --bg: var(--papier); --text: var(--tinte); --t2: var(--tinte2); --t3: var(--bleistift);
+  --karte: #fffdf7; --karte2: #efe8d8; --karte3: #ddd3bd; --linie: rgba(29, 36, 51, .14);
+  --blatt: rgba(250, 247, 240, .82); --glas: rgba(250, 247, 240, .7); --glas-rand: rgba(29, 36, 51, .1);
+  --pin: #e2471f; --pin-leise: rgba(226, 71, 31, .1);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --papier: #1a1917; --linie-papier: rgba(214, 200, 170, .085); --rand: rgba(230, 95, 75, .3);
+    --tinte: #ece5d6; --tinte2: #a9a293; --bleistift: #77736a;
+    --marker: rgba(255, 128, 50, .3);
+    --reiter: #2c2a26; --reiter-tinte: #b7ae9c;
+    --karte: #23211e; --karte2: #2e2c28; --karte3: #3b3934; --linie: rgba(236, 229, 214, .12);
+    --blatt: rgba(36, 34, 31, .8); --glas: rgba(40, 38, 35, .66); --glas-rand: rgba(255, 255, 255, .1);
+    --pin: #ff6a3d; --pin-leise: rgba(255, 106, 61, .14);
+  }
+}
+
+/* Papier: Linien und roter Rand gehören zur Seite und scrollen mit */
+body { background: var(--papier); }
+#ansicht { background: var(--papier); }
+#inhalt {
+  padding: calc(var(--oben) + var(--z)) 42px calc(var(--unten) + var(--z) * 4) 48px;
+  background:
+    linear-gradient(to right, transparent 35px, var(--rand) 35px, var(--rand) 36.5px, transparent 36.5px) 0 0 / 100% 100% no-repeat border-box,
+    linear-gradient(to bottom, transparent 21px, var(--linie-papier) 21px, var(--linie-papier) 22px, transparent 22px) 0 0 / 100% var(--z) repeat-y content-box;
+  min-height: 100%;
+  line-height: var(--z);
+}
+#inhalt > * { margin-top: 0; }
+
+/* Seitenkopf: gedrucktes Datum, darunter der Titel in Handschrift mit Markerstrich */
+.kopf { margin: 0 0 var(--z); }
+.kopf .info { font-size: 13px; line-height: var(--z); color: var(--t3); letter-spacing: .02em; }
+.kopf h1 { font-family: var(--hand); font-weight: 700; font-size: 50px; line-height: calc(var(--z) * 2); letter-spacing: 0; text-transform: none; color: var(--text); }
+.kopf h1 { background: linear-gradient(transparent 58%, var(--marker) 58%, var(--marker) 86%, transparent 86%) no-repeat 0 0 / 100% 100%; display: inline; padding: 0 4px; margin-left: -4px; -webkit-box-decoration-break: clone; }
+.kopf-streak { align-items: flex-end; }
+.streak-marke { padding: 0; height: calc(var(--z) * 2); align-items: flex-end; }
+.streak-marke .zahl { font-family: var(--hand); font-size: 40px; line-height: calc(var(--z) * 1.5); font-weight: 700; }
+
+/* Überschriften von Abschnitten: gedruckt, klein, so wie im Vordruck */
+.gruppe-titel, .woche-kopf b { font-family: -apple-system, system-ui, sans-serif; font-size: 12px; font-weight: 650; letter-spacing: .12em; text-transform: uppercase; color: var(--t3); line-height: var(--z); margin: 0; }
+.gruppe-titel .zahl-klein { font-family: var(--hand); font-size: 20px; color: var(--t2); }
+.gruppe-titel.klein { font-size: 12px; color: var(--t3); margin: 0; }
+.woche-kopf { margin: 0; line-height: var(--z); align-items: center; }
+.woche-kopf span { font-family: var(--hand); font-size: 20px; color: var(--t2); }
+
+/* Diese Woche: von Hand gezogene Kreise, trainierte Tage mit Marker gefüllt und abgehakt */
+.woche { margin: 0 0 var(--z); }
+.wtage { gap: 2px; height: calc(var(--z) * 2); }
+.wtag { gap: 0; }
+.wtag .scheibchen { width: 34px; height: 34px; margin-top: 3px; border: 1.6px solid var(--bleistift); background: none; color: var(--tinte);
+  border-radius: 52% 48% 55% 45% / 47% 55% 45% 53%; }
+.wtag:nth-child(2n) .scheibchen { border-radius: 46% 54% 48% 52% / 55% 45% 55% 45%; transform: rotate(8deg); }
+.wtag small { font-size: 11px; line-height: 19px; color: var(--t3); }
+.wtag.an .scheibchen { background: var(--marker); border-color: var(--tinte); color: var(--tinte); }
+.wtag.heute .scheibchen { border-color: var(--pin); border-width: 2.2px; }
+.wtag.heute small { color: var(--pin); font-weight: 700; }
+.wtag.heute.an .scheibchen { box-shadow: none; border-color: var(--pin); }
+.wtag.spaeter .scheibchen { border-style: dotted; border-color: var(--bleistift); opacity: .6; }
+.pausenknopf { min-height: var(--z); padding: 0; font-size: 13px; line-height: var(--z); }
+
+/* Split-Auswahl als Feld im Vordruck: gedruckte Beschriftung, Eintrag in Handschrift auf der Linie */
+.splitzeile { background: none; box-shadow: none; border-radius: 0; padding: 0; margin: 0 0 var(--z); height: calc(var(--z) * 2); align-items: flex-end; }
+.splitzeile small { font-size: 12px; line-height: var(--z); color: var(--t3); }
+.splitzeile b { font-family: var(--hand); font-size: 26px; font-weight: 700; line-height: var(--z); }
+.splitzeile .ic { margin-bottom: 6px; color: var(--t2); }
+
+/* Als Nächstes: ein Klebezettel, leicht schief, mit Klebeband */
+.kacheln { gap: 0; margin: 0 0 var(--z); }
+.hero, .hero.dran { background: var(--zettel); color: var(--zettel-tinte); border-radius: 2px 2px 3px 18px / 2px 2px 3px 10px; box-shadow: var(--zettel-schatten);
+  transform: rotate(-1.2deg); margin: 8px 2px calc(var(--z) + 6px); padding: 22px 18px 18px; }
+.hero.dran::before { content: ""; position: absolute; top: -11px; left: 50%; width: 92px; height: 24px; margin-left: -46px; transform: rotate(2deg);
+  background: rgba(255, 255, 255, .55); box-shadow: 0 1px 2px rgba(0, 0, 0, .08); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); }
+.hero small, .hero-marke { color: rgba(42, 33, 22, .65); }
+.hero-marke { font-size: 13px; font-weight: 600; }
+.hero-marke .tagpunkt { background: var(--pin); }
+.hero-nr { display: none; }
+.hero.dran h2 { font-family: var(--hand); font-size: 58px; line-height: 1; font-weight: 700; margin: 6px 0 2px; text-transform: none; letter-spacing: 0; }
+.hero.dran p { font-family: var(--hand); font-size: 22px; line-height: 1.15; color: var(--zettel-tinte); margin-top: 4px; }
+.hero.dran small { font-size: 13px; margin: 6px 0 16px; }
+.hero .knopf.haupt { background: var(--zettel-tinte); color: var(--zettel); border-radius: 12px; }
+
+/* Weitere Trainingstage: eingetragen wie eine Liste im Heft */
+.kachel, .kachel.klein { background: none; box-shadow: none; border-radius: 0; padding: 0; margin: 0; min-height: calc(var(--z) * 3); align-items: flex-start; gap: 10px; opacity: 1; }
+.kachel:active { background: var(--pin-leise); }
+.kachel h2, .kachel.klein h2 { font-family: var(--hand); font-size: 34px; line-height: calc(var(--z) * 1.5); font-weight: 700; text-transform: none; letter-spacing: 0; display: block; margin: 0; }
+.kachel p { font-family: var(--hand); font-size: 20px; line-height: var(--z); color: var(--t2); opacity: 1; margin: -6px 0 0; -webkit-line-clamp: 1; }
+.kachel small, .kachel.klein small { font-size: 12px; line-height: 14px; margin: 0; color: var(--t3); }
+.kachel.klein { min-height: calc(var(--z) * 2); }
+.kachel.klein h2 { font-size: 28px; line-height: var(--z); margin-top: 0; }
+.kachel .scheibe, .kachel.klein .scheibe { width: 46px; height: 46px; margin-top: 8px; background: none; color: var(--pin); box-shadow: none; padding-left: 3px;
+  border: 2px solid var(--pin); border-radius: 55% 45% 52% 48% / 46% 54% 46% 54%; }
+.trenner { margin: 0; height: var(--z); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--t3); }
+.trenner::before, .trenner::after { background: var(--t3); opacity: .5; height: 1px; }
+
+/* Knöpfe: gezeichnete Kästchen in Tinte, der Hauptknopf voll */
+.knopf { border-radius: 14px 18px 13px 17px / 17px 13px 18px 14px; }
+.knopf.zweit { background: none; color: var(--text); box-shadow: inset 0 0 0 1.6px var(--tinte); }
+.knopfzeile { margin-top: 0; }
+.laeuft { border-radius: 14px 18px 13px 17px / 17px 13px 18px 14px; }
+.laeuft b { font-family: var(--hand); font-size: 30px; text-transform: none; letter-spacing: 0; }
+
+/* Listen: keine eigenen Trennstriche, die Linien vom Papier reichen. Einträge in Handschrift */
+.liste { border: 0; margin: 0 0 var(--z); }
+.liste .zeile + .zeile::before { display: none; }
+.liste .zeile, .liste .zeile.mitbild { min-height: calc(var(--z) * 2); padding: 0; align-items: center; }
+.liste .zeile .haupt b { font-family: var(--hand); font-size: 26px; font-weight: 600; line-height: var(--z); }
+.liste .zeile small { font-size: 12px; line-height: var(--z); color: var(--t3); margin-top: -6px; }
+.liste .zeile:active { background: var(--pin-leise); }
+.vorschau { width: 44px; height: 44px; border-radius: 2px; border: 3px solid #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .25); transform: rotate(-2deg); background: #fff; }
+.liste .zeile:nth-child(2n) .vorschau { transform: rotate(1.6deg); }
+.vorschau.leer { background: var(--karte2); border-color: var(--karte); }
+
+/* Suchfeld, Umschalter und Auswahl-Chips wie gedruckte Felder */
+.suchfeld { background: none; box-shadow: inset 0 -1.6px 0 var(--tinte); border-radius: 0; margin: 0 0 var(--z); padding: 0 2px; height: calc(var(--z) * 1.5); }
+.suchfeld input { height: 100%; font-family: var(--hand); font-size: 22px; }
+.segment { background: none; box-shadow: inset 0 0 0 1.6px var(--tinte); border-radius: 14px 18px 13px 17px / 17px 13px 18px 14px; margin: 0 0 var(--z); }
+.segment button.an { background: var(--tinte); color: var(--papier); border-radius: 11px 15px 10px 14px / 14px 10px 15px 11px; }
+.chip { background: none; box-shadow: inset 0 0 0 1.3px var(--t3); border-radius: 15px 12px 16px 11px / 12px 16px 11px 15px; color: var(--t2); }
+.chip.an { background: var(--marker); box-shadow: inset 0 0 0 1.6px var(--tinte); color: var(--tinte); }
+
+/* Gruppen (Formulare, Einstellungen): eingeklebte Karteikarten */
+.gruppe { background: var(--karte); border-radius: 3px; box-shadow: 0 1px 2px rgba(0, 0, 0, .08), 0 6px 14px -8px rgba(0, 0, 0, .25); margin-bottom: var(--z); }
+.zeile small { line-height: 1.3; }
+.notizzeile textarea, textarea[data-f="notiz"], .merkzettel p, .zeile.merk small { font-family: var(--hand); font-size: 22px; line-height: 1.25; }
+
+/* Register-Reiter am rechten Rand, wie bei einem Notizbuch mit Trennblättern */
+nav.tabbar, nav.tabbar.glas { left: auto; right: 0; top: auto; bottom: calc(var(--unten) + 70px); width: auto; flex-direction: column; gap: 6px; padding: 0;
+  background: none; border: 0; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; align-items: flex-end; }
+.tabbar button { flex: none; max-width: none; width: 30px; min-height: 92px; padding: 12px 0; gap: 6px; border-radius: 12px 0 0 12px;
+  background: var(--reiter); color: var(--reiter-tinte); box-shadow: -1px 1px 3px rgba(0, 0, 0, .14), inset 1px 0 0 rgba(255, 255, 255, .25);
+  writing-mode: vertical-rl; transform: rotate(180deg); font-size: 12px; font-weight: 650; letter-spacing: .04em; justify-content: center;
+  transition: width .32s var(--ease-drawer), background-color .2s, color .2s; }
+.tabbar button .ic { display: none; }
+.tabbar button.an { width: 38px; background: var(--pin); color: #fff; box-shadow: -2px 2px 6px rgba(0, 0, 0, .22); }
+.tabbar button.an::before { display: none; }
+.tabbar button.an .ic { color: inherit; }
+.tabbar button:active { transform: rotate(180deg) translateX(2px); opacity: 1; }
+
+/* Glas über dem Papier */
+.blatt { background: var(--blatt); -webkit-backdrop-filter: blur(28px) saturate(160%); backdrop-filter: blur(28px) saturate(160%); }
+#toast { bottom: calc(var(--unten) + 22px); }
+.hero.dran h2, .kachel h2 { text-transform: uppercase; }
+.hero.dran h2 { font-size: 52px; }
+
+/* Fortschritt: Serie als Klebezettel, Kalender in Handschrift */
+.hero.streak { color: var(--zettel-tinte); }
+.hero.streak p, .hero.streak small, .hero-zahlen small, .hero-zahlen span { color: rgba(42, 33, 22, .7) !important; }
+.hero.streak .zahl, .hero-zahlen b { font-family: var(--hand); color: var(--zettel-tinte); }
+.hero-zahlen, .hero-zahlen > div + div { border-color: rgba(42, 33, 22, .2) !important; }
+.jahrwahl b { font-family: var(--hand); font-size: 38px; }
+.monat h4 { font-family: var(--hand); font-size: 26px; text-transform: none; letter-spacing: 0; }
+.monat h4 span { font-family: var(--hand); font-size: 20px; }
+
+/* Laufendes Training: ein Blatt im Heft. Übung als Überschrift, Sätze als Zeilen, Haken mit Rotstift */
+#live { background: var(--papier); }
+.live-liste { padding-left: 46px; padding-right: 14px;
+  background:
+    linear-gradient(to right, transparent 33px, var(--rand) 33px, var(--rand) 34.5px, transparent 34.5px) 0 0 / 100% 100% no-repeat,
+    linear-gradient(to bottom, transparent 21px, var(--linie-papier) 21px, var(--linie-papier) 22px, transparent 22px) 0 12px / 100% var(--z) repeat-y;
+  background-attachment: local; }
+.live-kopf .mitte b { font-family: var(--hand); font-size: 30px; text-transform: none; letter-spacing: 0; }
+.live-kopf .mitte small { font-family: var(--hand); font-size: 20px; font-weight: 600; }
+.uekarte { background: none; box-shadow: none; border-radius: 0; margin-bottom: var(--z); overflow: visible; }
+.uek-kopf { padding: 0 0 4px; }
+.uek-kopf h2 { font-family: var(--hand); font-size: 36px; line-height: 1.05; text-transform: uppercase; letter-spacing: 0;
+  background: linear-gradient(transparent 60%, var(--marker) 60%, var(--marker) 88%, transparent 88%); display: inline; padding: 0 3px; margin-left: -3px; -webkit-box-decoration-break: clone; }
+.uek-kopf small { font-size: 12px; color: var(--t3); }
+.uek-inhalt { padding: 0; }
+.uek-fertig { background: none; color: var(--pin); border: 2px solid var(--pin); border-radius: 52% 48% 55% 45% / 47% 55% 45% 53%; }
+.uekarte .notizkarte { background: var(--zettel); color: var(--zettel-tinte); border-radius: 2px; transform: rotate(-.6deg); box-shadow: var(--zettel-schatten); }
+.uekarte .notizkarte * { color: var(--zettel-tinte); }
+.zeile.satz { min-height: calc(var(--z) * 2); padding: 0 2px 0 0; }
+.satz .nr { font-family: var(--hand); font-size: 26px; color: var(--t3); }
+.zeile.satz.warm .nr { color: var(--pin); }
+.satz .z { font-family: var(--hand); font-weight: 700; font-size: 44px; line-height: 1; }
+.zeile.satz.warm .z { font-size: 34px; }
+.satz .e { font-family: var(--hand); font-size: 20px; color: var(--t2); }
+.satz .mal { font-family: var(--hand); font-size: 24px; }
+.satz small { font-size: 11px; color: var(--t3); margin-top: -2px; }
+.satz.ok { background: none; }
+.satz.ok .nr { color: var(--pin); }
+.satz.ok .werte .z { text-decoration: none; }
+.haken { width: 46px; height: 46px; border-radius: 6px 9px 5px 8px / 8px 5px 9px 6px; border: 2px solid var(--bleistift); background: none; }
+.haken.an { background: none; border-color: var(--pin); color: var(--pin); }
+.haken.an .ic { stroke-width: 3.2; transform: rotate(-6deg) scale(1.25); }
+.live-fortschritt { background: var(--linie); }
+
+/* Etwas kürzere Beschriftung passt auf eine Zeile */
+.knopf { font-size: 15px; }
+.blatt-kopf h3 { font-family: var(--hand); font-size: 28px; font-weight: 700; }
+.info-text { font-family: var(--hand); font-size: 23px; line-height: 1.25; }
+
+.animation { background: #fff; border-radius: 4px; padding: 6px; box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 10px 20px -12px rgba(0,0,0,.4); transform: rotate(-.8deg); margin: 6px 4px 18px; }
+.animation img { display: block; width: 100%; aspect-ratio: 1; object-fit: contain; }

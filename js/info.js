@@ -11,12 +11,20 @@ const bibVon = (u) => (u && !(typeof VORLAGE_INFO !== 'undefined' && VORLAGE_INF
 // Bild und Anleitung gibt es nur bei Einträgen aus der Datenbank; Ergänzungen haben höchstens ein ähnliches Bild
 const bildId = (r) => (r ? r[5] || (r[0].startsWith('x-') ? null : r[0]) : null);
 const anleitungId = (r) => (r && !r[0].startsWith('x-') ? r[0] : null);
+// Animation: bei Vorlage-Übungen von Hand gewählt, sonst über den Bibliothekseintrag
+function gifVon(u, r) {
+  const v = u && typeof VORLAGE_INFO !== 'undefined' ? VORLAGE_INFO[u.id] : null;
+  if (v && v.gif) return { url: GIF_CDN + v.gif + '.gif', aehnlich: !!v.aehnlich };
+  if (u && v && v.bild === false) return null;
+  const rr = r || bibVon(u);
+  return rr && GIF[rr[0]] ? { url: GIF_CDN + GIF[rr[0]] + '.gif', aehnlich: GIF_AEHNLICH.has(rr[0]) } : null;
+}
 const bildUrl = (id, n = 0) => `${BIB_CDN}${encodeURIComponent(id)}/${n}.jpg`;
 
 // Kleines Vorschaubild für Listen, eigenes Foto geht vor
 function vorschau(u, r = null) {
-  const id = bildId(r || bibVon(u));
-  const src = u && u.foto ? u.foto : id ? bildUrl(id, 0) : '';
+  const rr = r || bibVon(u), id = bildId(rr), gif = id ? null : gifVon(u, rr);
+  const src = u && u.foto ? u.foto : id ? bildUrl(id, 0) : gif ? gif.url : '';
   return src ? `<img class="vorschau" src="${esc(src)}" alt="" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'vorschau leer'}))">` : '<span class="vorschau leer"></span>';
 }
 
@@ -47,7 +55,9 @@ const UeInfo = {
     const id = bildId(r), equip = u ? equipVon(u) : r ? r[2] : 'sonst';
     const muskel = u ? u.muskel : r ? r[3] : '', mit = u ? u.muskeln2 || [] : r ? r[4] : [];
     let bild = '';
+    const gif = gifVon(u, r);
     if (u && u.foto) bild = `<div class="ablauf eins"><img src="${esc(u.foto)}" alt="Eigenes Foto"></div>`;
+    else if (gif) bild = `<div class="animation"><img src="${esc(gif.url)}" alt="Bewegungsablauf" onerror="this.parentNode.outerHTML='<p class=&quot;hinweis oben&quot;>Die Animation lädt nur mit Internet.</p>'"></div>${gif.aehnlich ? '<p class="hinweis oben">Animation einer ähnlichen Übung.</p>' : ''}`;
     else if (id) bild = `<div class="ablauf"><img src="${bildUrl(id, 0)}" alt="Startposition"><img class="zwei" src="${bildUrl(id, 1)}" alt="Endposition"></div>${r && r[5] ? '<p class="hinweis oben">Bild einer ähnlichen Übung.</p>' : ''}`;
     const g = u ? geraetVon(u) : null;
     if (!bild && u) bild = '<p class="hinweis oben">Kein passendes Bild in der Bibliothek. Mit „Eigenes Foto“ unten kannst du das Gerät selbst fotografieren.</p>';
