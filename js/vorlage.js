@@ -20,6 +20,15 @@ const VORLAGE_ALPHACLUB = (() => {
     g('vsquat', 'V-Squat', PLATTE, { marke: '', notiz: 'Leergewicht prüfen' }),
     g('brust-platte', 'Brustpresse Plate-Loaded', PLATTE, { marke: '', notiz: 'Im Liegen auf einer Bank, Griffe laufen eng zusammen. Leergewicht prüfen' }),
     g('egym-beinpresse', 'Beinpresse eGym', { typ: 'frei' }, { marke: 'eGym', bereich: 'eGym' }),
+    g('egym-bizeps', 'Bizeps-Curl eGym', { typ: 'frei' }, { marke: 'eGym', bereich: 'eGym' }),
+    g('egym-rudern', 'Ruderzug eGym', { typ: 'frei' }, { marke: 'eGym', bereich: 'eGym' }),
+    g('egym-ruecken', 'Rückentrainer eGym', { typ: 'frei' }, { marke: 'eGym', bereich: 'eGym' }),
+    g('egym-beinbeuger', 'Beinbeuger eGym', { typ: 'frei' }, { marke: 'eGym', bereich: 'eGym' }),
+    g('egym-schulter', 'Schulterpresse eGym', { typ: 'frei' }, { marke: 'eGym', bereich: 'eGym' }),
+    g('egym-latzug', 'Latzug eGym', { typ: 'frei' }, { marke: 'eGym', bereich: 'eGym' }),
+    g('egym-hipthrust', 'Hip Thrust eGym', { typ: 'frei' }, { marke: 'eGym', bereich: 'eGym' }),
+    g('egym-brust', 'Brustpresse eGym', { typ: 'frei' }, { marke: 'eGym', bereich: 'eGym' }),
+    g('egym-bauch', 'Bauchtrainer eGym', { typ: 'frei' }, { marke: 'eGym', bereich: 'eGym' }),
   ];
   const u = (id, name, equip, muskel, muskeln2, geraet, bib) => ({ id: 'ac-u-' + id, u: 1, name, equip, muskel, muskeln2, geraet: 'ac-g-' + geraet, notiz: '', ...(bib ? { bib } : {}) });
   const uebungen = [
@@ -39,6 +48,15 @@ const VORLAGE_ALPHACLUB = (() => {
     u('brust-platte', 'Konvergierende Brustpresse', 'plate', 'Brust', ['Trizeps', 'Vordere Schulter'], 'brust-platte'),
     u('beinpresse', 'Beinpresse', 'maschine', 'Quadrizeps', ['Gesäß', 'Beinbeuger'], 'egym-beinpresse'),
     u('waden-beinpresse', 'Wadenheben an der Beinpresse', 'maschine', 'Waden', [], 'egym-beinpresse'),
+    u('egym-bizeps', 'Bizeps-Curl eGym', 'maschine', 'Bizeps', [], 'egym-bizeps'),
+    u('egym-rudern', 'Rudern eGym', 'maschine', 'Oberer Rücken', ['Lat', 'Bizeps', 'Hintere Schulter'], 'egym-rudern'),
+    u('egym-ruecken', 'Rückenstrecker eGym', 'maschine', 'Unterer Rücken', ['Gesäß'], 'egym-ruecken'),
+    u('egym-beinbeuger', 'Beinbeuger eGym', 'maschine', 'Beinbeuger', ['Waden'], 'egym-beinbeuger'),
+    u('egym-schulter', 'Schulterpresse eGym', 'maschine', 'Vordere Schulter', ['Seitliche Schulter', 'Trizeps'], 'egym-schulter'),
+    u('egym-latzug', 'Latzug eGym', 'maschine', 'Lat', ['Bizeps', 'Oberer Rücken'], 'egym-latzug'),
+    u('egym-hipthrust', 'Hip Thrust eGym', 'maschine', 'Gesäß', ['Beinbeuger'], 'egym-hipthrust'),
+    u('egym-brust', 'Brustpresse eGym', 'maschine', 'Brust', ['Trizeps', 'Vordere Schulter'], 'egym-brust'),
+    u('egym-bauch', 'Bauchtrainer eGym', 'maschine', 'Bauch', [], 'egym-bauch'),
   ];
   return { geraete, uebungen };
 })();
@@ -66,6 +84,15 @@ const VORLAGE_INFO = {
   'ac-u-brust-platte': { bib: 'chest-press-machine', aehnlich: true },
   'ac-u-beinpresse': { bib: 'horizontal-leg-press' },
   'ac-u-waden-beinpresse': { bib: 'machine-calf-raise', aehnlich: true },
+  'ac-u-egym-bizeps': { bib: 'machine-preacher-curl' },
+  'ac-u-egym-rudern': { bib: 'chest-supported-machine-row' },
+  'ac-u-egym-ruecken': { bib: 'machine-back-extension' },
+  'ac-u-egym-beinbeuger': { bib: 'seated-leg-curl' },
+  'ac-u-egym-schulter': { bib: 'machine-shoulder-press' },
+  'ac-u-egym-latzug': { bib: 'lat-pulldown', aehnlich: true },
+  'ac-u-egym-hipthrust': { bib: 'plate-loaded-glute-drive', aehnlich: true },
+  'ac-u-egym-brust': { bib: 'chest-press-machine' },
+  'ac-u-egym-bauch': { bib: 'machine-seated-crunch' },
 };
 
 // Die Studio-Geräte sind von Anfang an da. Gefahrlos bei jedem Start: Die Vorlage hat den ältesten Zeitstempel,
