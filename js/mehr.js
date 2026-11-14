@@ -14,7 +14,8 @@ function zeigeMehr() {
       ${feld('Token', 'data-ein="syncFeld" data-f="token" type="password" placeholder="github_pat_…" autocapitalize="none" autocorrect="off" spellcheck="false"', c.token)}
     </div>
     <button class="knopf haupt breit" data-akt="syncJetzt">Jetzt synchronisieren</button>
-    <p class="hinweis">Deine Daten liegen als eine Datei im privaten Repo. Das Token braucht Lese- und Schreibrecht auf „Contents“ dieses Repos, dasselbe wie beim Panel. Es bleibt nur auf diesem Gerät.</p>
+    ${window.GYM_VORSCHAU ? '' : `<button class="knopf zweit breit" data-akt="appNeu">Synchronisieren und App neu laden</button>`}
+    <p class="hinweis">Neue Daten von einem anderen Gerät erscheinen nach „Jetzt synchronisieren“ sofort. „App neu laden“ holt zusätzlich die neueste Version der App. Deine Daten liegen als eine Datei im privaten Repo. Das Token braucht Lese- und Schreibrecht auf „Contents“ dieses Repos, dasselbe wie beim Panel. Es bleibt nur auf diesem Gerät.</p>
 
 ${window.GYM_VORSCHAU ? '' : `    <div class="gruppe-titel">Sicherung</div>
     <div class="gruppe">
@@ -37,6 +38,18 @@ ${window.GYM_VORSCHAU ? '' : `    <div class="gruppe-titel">Sicherung</div>
 
 Object.assign(Akt, {
   syncJetzt() { Sync.abgleich(true); },
+  // Erst abgleichen, damit nichts verloren geht, dann die neueste App-Fassung holen und neu starten
+  async appNeu(el) {
+    el.disabled = true;
+    if (Sync.bereit) await Sync.abgleich();
+    if (Sync.bereit && Sync.fehler && Sync.offen && !confirm('Der Abgleich hat nicht geklappt, neue Änderungen sind nur auf diesem Gerät. Trotzdem neu laden? Die Daten bleiben erhalten.')) { el.disabled = false; return; }
+    try {
+      const reg = 'serviceWorker' in navigator ? await navigator.serviceWorker.getRegistration() : null;
+      if (reg) await reg.update();
+      for (const k of await caches.keys()) if (k.startsWith('gym-v')) await caches.delete(k);
+    } catch { /* offline: dann eben nur neu laden */ }
+    location.reload();
+  },
   exportieren() {
     const blob = new Blob([JSON.stringify(D, null, 2)], { type: 'application/json' });
     const a = document.createElement('a');

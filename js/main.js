@@ -63,7 +63,7 @@ if (Aktiv.t) Live.auf();
 if (Sync.bereit) Sync.abgleich();
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') {
-    if (Sync.bereit && Date.now() - Sync.zeit > 5 * 60000) Sync.abgleich();
+    if (Sync.bereit && Date.now() - Sync.zeit > 60000) Sync.abgleich();
     if (Aktiv.t && !$('#live').hidden) Live.wach(true);
     if (tab === 'training' && !Blatt.stapel.length) zeichne();
   } else if (Sync.offen && Sync.bereit) {
