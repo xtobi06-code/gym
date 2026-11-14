@@ -27,8 +27,8 @@ jobs:
                       if not daten: break
                       alle += daten; off += len(daten)
                       print(basis, off, flush=True)
-                      if len(daten) < 100: break
-                      time.sleep(0.4)
+                      if off > 3000: break
+                      time.sleep(0.6)
                   if alle: quelle = basis; break
               except Exception as e:
                   print('Fehler', basis, e)
