@@ -22,9 +22,9 @@ ${window.GYM_VORSCHAU ? '' : `    <div class="gruppe-titel">Sicherung</div>
       <button class="zeile" data-akt="exportieren"><div class="haupt"><b>Als Datei sichern</b><small>${D.trainings.length} Trainings, ${D.geraete.length} Geräte, ${D.uebungen.length} Übungen</small></div>${ic('chevR', 16)}</button>
       <label class="zeile"><div class="haupt"><b>Aus Datei einlesen</b><small>Wird mit dem jetzigen Stand zusammengeführt</small></div>${ic('chevR', 16)}<input type="file" accept="application/json,.json" data-ein="importieren" hidden></label>
     </div>`}
-    <div class="gruppe-titel">Aufwärmen</div>
+    <div class="gruppe-titel">Aufwärmen, Standard</div>
     <div class="muskelchips">${[1, 2].map((n) => `<button class="chip ${aufwaermAnzahl() === n ? 'an' : ''}" data-akt="aufwaermAnzahl" data-n="${n}" aria-pressed="${aufwaermAnzahl() === n}">${n} ${n === 1 ? 'Aufwärmsatz' : 'Aufwärmsätze'}</button>`).join('')}</div>
-    <p class="hinweis oben">Gilt für Übungen mit Aufwärmen, die du ab jetzt startest.</p>
+    <p class="hinweis oben">Standard für neue Übungen mit Aufwärmen. Pro Übung stellst du es im Trainingstag ein.</p>
     <div class="gruppe-titel">Studio</div>
     <p class="hinweis oben">Was es im Studio gibt. Ausgeschaltetes Equipment blendet die Bibliothek aus.</p>
     <div class="muskelchips">${Object.entries(EQUIP).filter(([k]) => k !== 'sonst').map(([k, q]) => { const an = !ohneEquip().includes(k); return `<button class="chip ${an ? 'an' : ''}" data-akt="equipDa" data-k="${k}" aria-pressed="${an}">${esc(q.name)}</button>`; }).join('')}</div>

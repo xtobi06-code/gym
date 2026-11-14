@@ -255,7 +255,7 @@ const Aktiv = {
       id: neuId(), plan: plan ? plan.id : '', name: plan ? plan.name.toUpperCase() : 'FREIES TRAINING', farbe: plan ? plan.farbe : -1,
       start: Date.now(), pause: 0, punkte: [],
     };
-    if (plan) for (const pp of plan.punkte) if (finde('uebungen', pp.ue)) this.t.punkte.push(this.punkt(pp.ue, pp.saetze, pp.wmin, pp.wmax, !!pp.warm));
+    if (plan) for (const pp of plan.punkte) if (finde('uebungen', pp.ue)) this.t.punkte.push(this.punkt(pp.ue, pp.saetze, pp.wmin, pp.wmax, pp.warm ? (pp.warmN || aufwaermAnzahl()) : 0));
     this.sichern();
   },
 
@@ -268,7 +268,7 @@ const Aktiv = {
       liste.push(a ? { g: a.g, w: a.w, ok: false, ...(a.sch ? { sch: [...a.sch] } : {}), ...(a.zu ? { zu: 1 } : {}) } : { g: null, w: null, ok: false });
     }
     const p = { ue: ueId, wmin, wmax, saetze: liste };
-    if (warm) p.saetze.unshift(...Array.from({ length: aufwaermAnzahl() }, () => ({ ...aufwaermSatz(finde('uebungen', ueId), liste[0] && liste[0].g), w: 10, ok: false, auf: 1 })));
+    if (warm) p.saetze.unshift(...Array.from({ length: warm === true ? aufwaermAnzahl() : warm }, () => ({ ...aufwaermSatz(finde('uebungen', ueId), liste[0] && liste[0].g), w: 10, ok: false, auf: 1 })));
     return p;
   },
 };

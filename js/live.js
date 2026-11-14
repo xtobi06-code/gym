@@ -248,7 +248,7 @@ const Tausch = {
   async wahl(id, merken = false) {
     const t = Aktiv.t, p = t.punkte[this.pi], orig = p.statt || p.ue;
     if (p.saetze.some((s) => s.ok) && !(await frage('Bereits abgehakte Sätze dieser Übung gehen beim Tauschen verloren.', 'Tauschen', false))) return;
-    const warm = p.saetze.some((s) => s.auf);
+    const warm = p.saetze.filter((s) => s.auf).length;
     const n = Aktiv.punkt(id, arbeitsSaetze(p).length || 3, p.wmin, p.wmax, warm);
     if (id !== orig) n.statt = orig;
     t.punkte[this.pi] = n;
