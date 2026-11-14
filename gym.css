@@ -64,7 +64,7 @@ button:disabled { opacity: .3; }
 /* Tab-Leiste: schwebende Liquid-Glass-Kapsel; darüber löst sich der Inhalt in Unschärfe auf */
 .tabfade { position: fixed; z-index: 19; left: 0; right: 0; bottom: 0; height: calc(var(--unten) + 70px); pointer-events: none;
   background: linear-gradient(to top, var(--bg) 20%, transparent); }
-.tabbar { position: fixed; z-index: 20; left: 50%; bottom: calc(var(--unten) * .4 + 6px); width: min(calc(100% - 28px), 420px); transform: translateX(-50%);
+.tabbar { position: fixed; z-index: 20; left: 14px; right: 14px; max-width: 420px; margin: 0 auto; bottom: max(8px, calc(var(--unten) - 22px)); transform: translateZ(0);
   display: flex; gap: 2px; padding: 5px; border-radius: 30px; justify-content: center;
   background: var(--glas); -webkit-backdrop-filter: blur(26px) saturate(190%); backdrop-filter: blur(26px) saturate(190%);
   border: .5px solid var(--glas-rand);
