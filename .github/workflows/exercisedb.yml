@@ -17,19 +17,29 @@ jobs:
           python3 - <<'PY'
           import json, urllib.request, time
           basis = 'https://oss.exercisedb.dev'
-          alle, off, fehler = [], 0, 0
-          while off < 3000 and fehler < 8:
-              url = f'{basis}/api/v1/exercises?offset={off}&limit=25'
+          url = f'{basis}/api/v1/exercises?limit=25'
+          alle, gesehen, fehler, seiten = [], set(), 0, 0
+          while url and fehler < 8 and seiten < 200:
               try:
                   with urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'gym-app'}), timeout=30) as r:
                       j = json.load(r)
               except Exception as e:
-                  fehler += 1; print('Fehler', off, e, flush=True); time.sleep(15 * fehler); continue
+                  fehler += 1; print('Fehler', url, e, flush=True); time.sleep(15 * fehler); continue
+              seiten += 1; fehler = 0
+              if seiten == 1: print('Schluessel', list(j.keys()) if isinstance(j, dict) else 'liste', json.dumps(j.get('metadata') if isinstance(j, dict) else None)[:500], flush=True)
               daten = j.get('data', []) if isinstance(j, dict) else j
-              if not daten: break
-              alle += daten; off += len(daten); fehler = 0
-              print(off, flush=True)
-              time.sleep(2)
+              neu = [x for x in daten if x.get('exerciseId') not in gesehen]
+              for x in neu: gesehen.add(x.get('exerciseId'))
+              alle += neu
+              m = j.get('metadata') or j.get('meta') or {} if isinstance(j, dict) else {}
+              nxt = m.get('nextPage') or m.get('next') or m.get('nextUrl')
+              cur = m.get('nextCursor') or m.get('cursor')
+              if nxt: url = nxt if nxt.startswith('http') else basis + nxt
+              elif cur: url = f'{basis}/api/v1/exercises?limit=25&after={cur}'
+              else: url = None
+              if not neu: url = None
+              print(len(alle), url, flush=True)
+              time.sleep(1.5)
           json.dump({'quelle': basis, 'uebungen': alle}, open('werkzeug/exercisedb.json', 'w'), ensure_ascii=False)
           print('gesamt', len(alle))
           PY
