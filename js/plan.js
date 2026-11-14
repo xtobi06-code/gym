@@ -34,7 +34,8 @@ function kachelHtml(p, art) {
   const letzt = [...D.trainings].reverse().find((x) => x.plan === p.id);
   const namen = p.punkte.map((x) => finde('uebungen', x.ue)).filter(Boolean).map((u) => u.name);
   const vorschau = namen.length ? namen.slice(0, 3).join(', ') + (namen.length > 3 ? ` und ${namen.length - 3} weitere` : '') : 'Noch keine Übungen';
-  const info = `${namen.length} ${namen.length === 1 ? 'Übung' : 'Übungen'}, ${letzt ? 'zuletzt ' + vorWieLang(letzt.start) : 'noch nie trainiert'}`;
+  const saetze = p.punkte.reduce((a, x) => a + (finde('uebungen', x.ue) ? x.saetze || 0 : 0), 0);
+  const info = `${namen.length} ${namen.length === 1 ? 'Übung' : 'Übungen'}, ${saetze} ${saetze === 1 ? 'Satz' : 'Sätze'}, ${letzt ? 'zuletzt ' + vorWieLang(letzt.start) : 'noch nie trainiert'}`;
   if (art === 'dran') return `<div class="hero dran" data-akt="planAuf" data-id="${p.id}" role="button" tabindex="0">
       <div class="hero-kopf"><span class="hero-marke"><i class="tagpunkt"></i>Als Nächstes</span><span class="hero-nr zahl">${String(D.plaene.filter((x) => splitKey(x.split) === splitKey(p.split)).findIndex((x) => x.id === p.id) + 1).padStart(2, '0')}</span></div>
       <h2>${esc(p.name)}</h2>
