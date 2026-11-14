@@ -304,7 +304,7 @@ Object.assign(Akt, {
     if (p.saetze.some((s) => s.auf)) p.saetze = p.saetze.filter((s) => !s.auf);
     else {
       const a = arbeitsSaetze(p)[0];
-      p.saetze.unshift(...[0, 1].map(() => ({ ...aufwaermSatz(finde('uebungen', p.ue), a && a.g), w: 10, ok: false, auf: 1 })));
+      p.saetze.unshift(...Array.from({ length: aufwaermAnzahl() }, () => ({ ...aufwaermSatz(finde('uebungen', p.ue), a && a.g), w: 10, ok: false, auf: 1 })));
     }
     Aktiv.sichern(); Live.neu(pi);
   },

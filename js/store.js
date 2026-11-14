@@ -268,10 +268,13 @@ const Aktiv = {
       liste.push(a ? { g: a.g, w: a.w, ok: false, ...(a.sch ? { sch: [...a.sch] } : {}), ...(a.zu ? { zu: 1 } : {}) } : { g: null, w: null, ok: false });
     }
     const p = { ue: ueId, wmin, wmax, saetze: liste };
-    if (warm) p.saetze.unshift(...[0, 1].map(() => ({ ...aufwaermSatz(finde('uebungen', ueId), liste[0] && liste[0].g), w: 10, ok: false, auf: 1 })));
+    if (warm) p.saetze.unshift(...Array.from({ length: aufwaermAnzahl() }, () => ({ ...aufwaermSatz(finde('uebungen', ueId), liste[0] && liste[0].g), w: 10, ok: false, auf: 1 })));
     return p;
   },
 };
+
+// Anzahl Aufwärmsätze pro Übung, einstellbar unter Mehr (Standard 1)
+const aufwaermAnzahl = () => { const e = D.einst.find((x) => x.id === 'einst'); return e && e.aufwaerm === 2 ? 2 : 1; };
 
 // Aufwärmsatz: etwa 45 bis 50 % vom ersten Arbeitsgewicht, gerundet auf das, was es am Gerät wirklich gibt
 function aufwaermSatz(ue, arbeit) {
