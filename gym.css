@@ -544,3 +544,15 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 .anleitung { margin: 0 0 18px; padding-left: 22px; line-height: 1.45; }
 .anleitung li { margin-bottom: 8px; }
 .anleitung li::marker { color: var(--pin); font-weight: 700; }
+
+/* Wischen zum Löschen */
+.liste:has([data-wisch]) { overflow: hidden; }
+[data-wisch] { touch-action: pan-y; }
+[data-wisch]::after { content: "Löschen"; position: absolute; top: 0; bottom: 0; left: 100%; width: 100vw; display: flex; align-items: center; padding-left: 22px;
+  background: var(--rot, #ff453a); color: #fff; font-weight: 650; font-size: 16px; opacity: .85; transition: opacity .15s; }
+[data-wisch].bereit::after { opacity: 1; }
+[data-wisch]:not(.wischt) { transition: transform .35s var(--ease-out); }
+[data-wisch].weg { transition: transform .22s var(--ease-out); }
+#toast.an:has(.toast-knopf) { pointer-events: auto; }
+.toast-knopf { margin-left: 14px; color: var(--pin); font-weight: 650; font-size: inherit; }
+#toast:has(.toast-knopf) { white-space: nowrap; }

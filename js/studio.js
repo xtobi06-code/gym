@@ -20,7 +20,7 @@ function zeigeStudio() {
       const bereiche = [...m.entries()].sort((a, b) => KATEGORIEN.indexOf(a[0]) - KATEGORIEN.indexOf(b[0]));
       h += bereiche.map(([b, liste]) => `<div class="gruppe-titel">${esc(b)}<span class="zahl-klein">${liste.length}</span></div><div class="liste">${liste.sort((x, y) => x.name.localeCompare(y.name, 'de')).map((g) => {
         const n = D.uebungen.filter((u) => u.geraet === g.id).length;
-        return `<button class="zeile" data-akt="geraetAuf" data-id="${g.id}"><div class="haupt"><b>${esc(g.name)}</b><small>${esc([typText(g), g.bereich].filter(Boolean).join(', '))}</small></div><span class="neben">${n ? n + (n === 1 ? ' Übung' : ' Übungen') : ''}</span>${ic('chevR', 16)}</button>`;
+        return `<button class="zeile" data-akt="geraetAuf" data-id="${g.id}" data-wisch="geraete"><div class="haupt"><b>${esc(g.name)}</b><small>${esc([typText(g), g.bereich].filter(Boolean).join(', '))}</small></div><span class="neben">${n ? n + (n === 1 ? ' Übung' : ' Übungen') : ''}</span>${ic('chevR', 16)}</button>`;
       }).join('')}</div>`).join('');
       h += `<button class="knopf zweit breit" data-akt="geraetNeu">${ic('plus', 18)} Gerät eintragen</button>`;
     }
@@ -49,7 +49,7 @@ function uebungsListe(treffer) {
   if (!treffer.length) return `<p class="hinweis oben">Keine Übung passt zur Suche.</p>`;
   return nachMuskel(treffer).map(([mk, liste]) => `<div class="gruppe-titel">${esc(mk)}<span class="zahl-klein">${liste.length}</span></div><div class="liste">${liste.map((u) => {
     const o = ortVon(u);
-    return `<button class="zeile mitbild" data-akt="ueInfo" data-id="${u.id}">${vorschau(u)}<div class="haupt"><b>${esc(u.name)}</b>${o ? `<small>${esc(o)}</small>` : ''}</div>${u.notiz ? `<span class="neben">${ic('notiz', 16)}</span>` : ''}${ic('chevR', 16)}</button>`;
+    return `<button class="zeile mitbild" data-akt="ueInfo" data-id="${u.id}" data-wisch="uebungen">${vorschau(u)}<div class="haupt"><b>${esc(u.name)}</b>${o ? `<small>${esc(o)}</small>` : ''}</div>${u.notiz ? `<span class="neben">${ic('notiz', 16)}</span>` : ''}${ic('chevR', 16)}</button>`;
   }).join('')}</div>`).join('');
 }
 Object.assign(Ein, {

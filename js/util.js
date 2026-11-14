@@ -91,10 +91,13 @@ function wachse(ta) {
 }
 
 let toastTimer = null;
-function toast(text) {
+let toastRueck = null;
+function toast(text, rueck = null) {
   const t = $('#toast');
-  t.textContent = text;
+  toastRueck = rueck;
+  t.innerHTML = rueck ? `${esc(text)}<button class="toast-knopf" data-akt="toastRueck">Rückgängig</button>` : '';
+  if (!rueck) t.textContent = text;
   t.classList.add('an');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('an'), 2600);
+  toastTimer = setTimeout(() => { t.classList.remove('an'); toastRueck = null; }, rueck ? 6000 : 2600);
 }
