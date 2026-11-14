@@ -11,7 +11,7 @@ function zeigeMehr() {
       ${feld('Konto', 'data-ein="syncFeld" data-f="owner" autocapitalize="none" autocorrect="off" spellcheck="false"', c.owner)}
       ${feld('Repo', 'data-ein="syncFeld" data-f="repo" autocapitalize="none" autocorrect="off" spellcheck="false"', c.repo)}
       ${feld('Datei', 'data-ein="syncFeld" data-f="pfad" autocapitalize="none" autocorrect="off" spellcheck="false"', c.pfad)}
-      ${feld('Token', 'data-ein="syncFeld" data-f="token" type="password" placeholder="github_pat_…" autocapitalize="none" autocorrect="off" spellcheck="false"', c.token)}
+      ${feld('Token', 'data-ein="syncFeld" data-f="token" type="text" class="geheim" placeholder="github_pat_…" autocapitalize="none" autocorrect="off" spellcheck="false"', c.token)}
     </div>
     <button class="knopf haupt breit" data-akt="syncJetzt">Jetzt synchronisieren</button>
     ${window.GYM_VORSCHAU ? '' : `<button class="knopf zweit breit" data-akt="appNeu">Synchronisieren und App neu laden</button>`}
@@ -37,9 +37,10 @@ ${window.GYM_VORSCHAU ? '' : `    <div class="gruppe-titel">Sicherung</div>
 }
 
 Object.assign(Akt, {
-  syncJetzt() { Sync.abgleich(true); },
+  syncJetzt() { syncFelderLesen(); Sync.abgleich(true); },
   // Erst abgleichen, damit nichts verloren geht, dann die neueste App-Fassung holen und neu starten
   async appNeu(el) {
+    syncFelderLesen();
     el.disabled = true;
     if (Sync.bereit) await Sync.abgleich();
     if (Sync.bereit && Sync.fehler && Sync.offen && !confirm('Der Abgleich hat nicht geklappt, neue Änderungen sind nur auf diesem Gerät. Trotzdem neu laden? Die Daten bleiben erhalten.')) { el.disabled = false; return; }
@@ -59,6 +60,11 @@ Object.assign(Akt, {
     setTimeout(() => URL.revokeObjectURL(a.href), 5000);
   },
 });
+function syncFelderLesen() {
+  const c = Sync.cfg();
+  for (const el of $$('[data-ein="syncFeld"]')) c[el.dataset.f] = el.value.trim();
+  Sync.speichereCfg({ owner: c.owner, repo: c.repo, pfad: c.pfad, token: c.token });
+}
 Object.assign(Ein, {
   syncFeld(el) {
     const c = Sync.cfg();

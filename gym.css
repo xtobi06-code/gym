@@ -557,44 +557,4 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 .toast-knopf { margin-left: 14px; color: var(--pin); font-weight: 650; font-size: inherit; }
 #toast:has(.toast-knopf) { white-space: nowrap; }
 
-/* ===== Notizbuch =====
-   Die Seite ist Papier mit Linien und Lochung, die Bereiche sind Register-Reiter unten.
-   Glas bleibt für alles, was darüber schwebt: Reiter, Blätter, Pausenleiste, Hinweise. */
-:root {
-  --bg: #0f1013; --karte: #181a1f; --karte2: #22242b; --karte3: #30333b; --blatt: #15161a; --bar: rgba(15, 16, 19, .8);
-  --rule: rgba(150, 170, 215, .13); --loch: #060607; --lochrand: rgba(255, 255, 255, .1);
-  --papier-schatten: 0 1px 0 rgba(255, 255, 255, .04) inset, 0 8px 22px rgba(0, 0, 0, .35);
-  --hand: "Bradley Hand", "Noteworthy", "Segoe Print", "Comic Sans MS", cursive;
-}
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg: #f3f0e7; --karte: #fcfaf4; --karte2: #e9e5d8; --karte3: #d4cfbe; --blatt: #f3f0e7; --bar: rgba(243, 240, 231, .86);
-    --rule: rgba(70, 115, 190, .24); --loch: #cdc7b3; --lochrand: rgba(0, 0, 0, .14);
-    --linie: rgba(70, 60, 40, .2); --hover: #ebe7da;
-    --glas: rgba(252, 250, 244, .66); --glas-rand: rgba(70, 60, 40, .14);
-    --papier-schatten: 0 1px 1px rgba(60, 50, 30, .06), 0 8px 20px rgba(60, 50, 30, .08);
-    --schatten: var(--papier-schatten);
-  }
-}
-body::before { content: ""; position: fixed; z-index: 6; left: 5px; top: 0; bottom: 0; width: 14px; pointer-events: none;
-  background: radial-gradient(circle at 7px 7px, var(--loch) 0 4.5px, var(--lochrand) 5px 6px, transparent 6.6px) 0 calc(var(--oben) + 20px) / 14px 76px repeat-y; }
-#ansicht { background-image: linear-gradient(to bottom, transparent calc(100% - 1px), var(--rule) 100%); background-size: 100% 32px; background-attachment: local; background-position: 0 6px; }
-#inhalt { padding-left: 30px; }
-.gruppe, .kachel, .suchfeld, .segment { box-shadow: var(--papier-schatten); }
-.liste { border-color: var(--linie); }
-.zeile + .zeile::before, .punkt + .punkt::before { border-color: var(--linie); }
-.notizzeile textarea, .merk small, textarea[data-f="notiz"] { font-family: var(--hand); font-size: 19px; line-height: 1.3; }
-.hero.dran::after { content: ""; position: absolute; top: -9px; left: 50%; width: 84px; height: 20px; margin-left: -42px; transform: rotate(-2.5deg);
-  background: rgba(255, 214, 120, .5); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); box-shadow: 0 1px 2px rgba(0, 0, 0, .15); pointer-events: none; }
-
-/* Register-Reiter */
-:root { --tab-glas: rgba(34, 36, 43, .82); }
-@media (prefers-color-scheme: light) { :root { --tab-glas: rgba(233, 229, 216, .84); } }
-nav.tabbar.glas { background: none; -webkit-backdrop-filter: none; backdrop-filter: none; border: 0; box-shadow: none; gap: 5px; padding: 0 12px; align-items: flex-end; }
-.tabbar button { max-width: none; margin-top: 9px; padding: 9px 2px calc(8px + var(--unten)); border-radius: 15px 15px 0 0; color: var(--t2);
-  background: var(--tab-glas); -webkit-backdrop-filter: blur(20px) saturate(170%); backdrop-filter: blur(20px) saturate(170%);
-  border: .5px solid var(--glas-rand); border-bottom: 0; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12);
-  transition: margin-top .3s var(--ease-drawer), padding .3s var(--ease-drawer), background-color .2s; }
-.tabbar button.an { margin-top: 0; padding-top: 14px; background: var(--karte); color: var(--text); box-shadow: 0 -8px 20px rgba(0, 0, 0, .12), inset 0 1px 0 rgba(255, 255, 255, .18); }
-.tabbar button.an::before { top: -.5px; left: -.5px; right: -.5px; height: 4px; border-radius: 15px 15px 0 0; background: var(--pin); }
-.tabbar button:active { opacity: .7; }
+.geheim { -webkit-text-security: disc; }

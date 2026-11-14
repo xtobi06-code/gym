@@ -38,7 +38,8 @@ const eingabe = (e) => {
   if (el && Ein[el.dataset.ein]) Ein[el.dataset.ein](el, e);
 };
 document.addEventListener('input', (e) => { if (e.target.type !== 'file') eingabe(e); });
-document.addEventListener('change', (e) => { if (e.target.type === 'file') eingabe(e); });
+document.addEventListener('change', (e) => { if (e.target.type === 'file' || e.target.dataset.ein === 'syncFeld') eingabe(e); });
+document.addEventListener('focusout', (e) => { if (e.target.dataset && e.target.dataset.ein === 'syncFeld') eingabe(e); });
 // Zeilen, die wie Knöpfe wirken, auch per Tastatur auslösen
 document.addEventListener('keydown', (e) => {
   if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[role="button"][data-akt]')) { e.preventDefault(); e.target.click(); }
