@@ -154,8 +154,9 @@ function ortVon(ue) {
   if (!ue) return '';
   const g = geraetVon(ue);
   const e = EQUIP[equipVon(ue)].name;
-  if (g) return [g.name === ue.name ? e : g.name, g.bereich].filter(Boolean).join(', ');
-  return e;
+  const arm = ue.einarmig ? 'einarmig' : '';
+  if (g) return [g.name === ue.name ? e : g.name, g.bereich, arm].filter(Boolean).join(', ');
+  return [e, arm].filter(Boolean).join(', ');
 }
 
 // Wählbare Gewichte eines Geräts (Steckgewicht oder Kurzhanteln)

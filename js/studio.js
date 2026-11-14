@@ -13,7 +13,7 @@ function zeigeStudio() {
   if (ui.studio === 'geraete') {
     if (!D.geraete.length) {
       h += `<div class="leer"><h2>Noch keine Geräte</h2><p>Geräte brauchst du nur für Maschinen mit eigener Einstellung, etwa Steckgewicht oder Sitzhöhe. Kurzhantel- und Langhantelübungen legst du direkt unter Übungen an.</p>
-        <div class="knopfzeile"><button class="knopf haupt" data-akt="vorlage">AlphaClub-Liste übernehmen</button><button class="knopf zweit" data-akt="geraetNeu">${ic('plus', 18)} Gerät</button></div></div>`;
+        <div class="knopfzeile"><button class="knopf haupt" data-akt="geraetNeu">${ic('plus', 18)} Gerät</button></div></div>`;
     } else {
       const m = new Map();
       for (const g of D.geraete) { const k = katVonGeraet(g); if (!m.has(k)) m.set(k, []); m.get(k).push(g); }
@@ -27,7 +27,7 @@ function zeigeStudio() {
   } else {
     if (!D.uebungen.length) {
       h += `<div class="leer"><h2>Noch keine Übungen</h2><p>Übernimm die bekannten Maschinen aus dem AlphaClub oder such dir Übungen aus der Bibliothek mit rund 600 Einträgen.</p>
-        <div class="knopfzeile"><button class="knopf haupt" data-akt="vorlage">AlphaClub-Liste</button><button class="knopf zweit" data-akt="ueBib">${ic('suche', 18)} Bibliothek</button></div></div>`;
+        <div class="knopfzeile"><button class="knopf haupt" data-akt="ueBib">${ic('suche', 18)} Bibliothek</button></div></div>`;
     } else {
       const vorhanden = KATEGORIEN.filter((k) => D.uebungen.some((u) => katVon(u) === k));
       if (ui.kat !== 'alle' && !vorhanden.includes(ui.kat)) ui.kat = 'alle';
@@ -194,6 +194,11 @@ const UeEd = {
     out.stufen = q.stufen || '';
     return out;
   },
+  bildZeile() {
+    const u = this.u, r = bibVon(u);
+    return `<div class="gruppe"><button class="zeile mitbild" data-akt="ueBild">${r ? vorschau(u, r) : '<span class="vorschau leer"></span>'}<div class="haupt"><b>Bild und Anleitung</b><small>${r ? esc(r[1]) : 'Aus der Bibliothek wählen'}</small></div>${ic('chevron', 18)}</button></div>
+      ${r && u.bib ? '<button class="textknopf mittig" data-akt="ueBildWeg">Bild entfernen</button>' : ''}`;
+  },
   html() {
     const u = this.u, q = EQUIP[u.equip], g = geraetVon(u);
     const passend = D.geraete.filter((x) => equipVon({ geraet: x.id }) === u.equip || /egym/i.test(x.marke || ''));
@@ -211,6 +216,8 @@ const UeEd = {
       </div>
       ${geraetTeil}
       ${felder ? `<div class="gruppe-titel">Gewicht</div>${felder}` : studioweit ? `<p class="hinweis oben">${esc(typText(gewichtVon(u)))}. Gilt für alle Übungen mit ${esc(EQUIP[u.equip].name)} und lässt sich unter Mehr, Studio ändern.</p>` : ''}
+      <div class="gruppe"><label class="zeile feldzeile"><span>Einarmig, Sätze zählen pro Arm</span><input type="checkbox" class="schalter" data-ein="uSchalter" data-f="einarmig" ${u.einarmig ? 'checked' : ''}></label></div>
+      ${this.bildZeile()}
       <div class="gruppe-titel">Muskeln</div>
       <div class="gruppe">${muskelAuswahl('data-ein="uFeld" data-f="muskel"', u.muskel)}</div>
       <p class="hinweis oben">Mittrainiert</p>
@@ -224,6 +231,8 @@ const UeEd = {
 };
 Object.assign(Akt, {
   ueNeu() { UeEd.auf(null); },
+  ueBild() { Bib.auf(null, UeEd.u.name, true); },
+  ueBildWeg() { UeEd.u.bib = ''; UeEd.b.setze(UeEd.html()); },
   ueBib() { Bib.auf(null); },
   ueAuf(el) { UeEd.auf(el.dataset.id); },
   uMuskel2(el) {
@@ -277,8 +286,8 @@ const studioEinst = () => D.einst.find((x) => x.id === 'einst') || { id: 'einst'
 const ohneEquip = () => studioEinst().ohne || [];
 const Bib = {
   b: null, cb: null, q: '', equip: 'alle', muskel: '',
-  auf(cb, q = '') {
-    this.cb = cb; this.q = q; this.equip = 'alle'; this.muskel = '';
+  auf(cb, q = '', bildModus = false) {
+    this.cb = cb; this.q = q; this.bildModus = bildModus; this.equip = 'alle'; this.muskel = '';
     this.b = Blatt.auf({ titel: 'Bibliothek', voll: true, html: this.html(), neu: () => this.html() });
   },
   html() {
@@ -315,6 +324,7 @@ Object.assign(Akt, {
     const r = BIBLIOTHEK.find((x) => x[0] === el.dataset.id);
     if (!r) return;
     const [, name, equip, muskel, muskeln2] = r;
+    if (Bib.bildModus) { UeEd.u.bib = r[0]; Bib.b.zu(); UeEd.b.setze(UeEd.html()); return; }
     const hab = D.uebungen.find((u) => u.name.toLowerCase() === name.toLowerCase() && equipVon(u) === equip);
     const cb = Bib.cb;
     if (hab) { Bib.b.zu(); if (cb) cb(hab.id); else UeEd.auf(hab.id); return; }
