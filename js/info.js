@@ -1,41 +1,40 @@
 'use strict';
-/* Bilder und Anleitungen: Fotos (Start- und Endposition) und Anleitung aus free-exercise-db,
-   bei Bedarf aus dem Netz geladen und vom Service Worker für offline gemerkt. Dazu eigene Fotos. */
+/* Bilder und Anleitungen aus RepDB (repdb.co, freie Version): einheitliche Illustrationen in Start- und Endposition,
+   deutsche Beschreibung, Anleitung und Tipps. Bilder kommen bei Bedarf aus dem Netz und werden für offline gemerkt. */
 
-const BIB_CDN = 'https://cdn.jsdelivr.net/gh/yuhonas/free-exercise-db@main/exercises/';
+const BIB_CDN = 'https://cdn.jsdelivr.net/gh/sergei-argutin/exercise-dataset@main/images/flat/';
 const BIB_ID = new Map(BIBLIOTHEK.map((r) => [r[0], r]));
 const BIB_NAME = new Map(BIBLIOTHEK.flatMap((r) => [[`${r[6].toLowerCase()}|${r[2]}`, r], [`${r[1].toLowerCase()}|${r[2]}`, r]]));
+const vorlageInfo = (u) => (u && typeof VORLAGE_INFO !== 'undefined' ? VORLAGE_INFO[u.id] || null : null);
 
-// Bibliothekseintrag einer Übung: über die gemerkte id oder über Name und Equipment
-const bibVon = (u) => (u && !(typeof VORLAGE_INFO !== 'undefined' && VORLAGE_INFO[u.id] && VORLAGE_INFO[u.id].bild === false) && ((u.bib && BIB_ID.get(u.bib)) || BIB_NAME.get(`${u.name.toLowerCase()}|${equipVon(u)}`))) || null;
-// Bild und Anleitung gibt es nur bei Einträgen aus der Datenbank; Ergänzungen haben höchstens ein ähnliches Bild
-const bildId = (r) => (r ? r[5] || (r[0].startsWith('x-') ? null : r[0]) : null);
-const anleitungId = (r) => (r && !r[0].startsWith('x-') ? r[0] : null);
-// Animation: bei Vorlage-Übungen von Hand gewählt, sonst über den Bibliothekseintrag
-function gifVon(u, r) {
-  const v = u && typeof VORLAGE_INFO !== 'undefined' ? VORLAGE_INFO[u.id] : null;
-  if (v && v.gif) return { url: GIF_CDN + v.gif + '.gif', aehnlich: !!v.aehnlich };
-  if (u && v && v.bild === false) return null;
-  const rr = r || bibVon(u);
-  return rr && GIF[rr[0]] ? { url: GIF_CDN + GIF[rr[0]] + '.gif', aehnlich: GIF_AEHNLICH.has(rr[0]) } : null;
+// Bibliothekseintrag einer Übung: Vorlage, gemerkte id (auch aus der früheren Bibliothek) oder Name und Equipment
+function bibVon(u) {
+  if (!u) return null;
+  const v = vorlageInfo(u);
+  if (v) return BIB_ID.get(v.bib) || null;
+  if (u.bib) { const r = BIB_ID.get(u.bib) || BIB_ID.get(BIB_ALT[u.bib]); if (r) return r; }
+  return BIB_NAME.get(`${u.name.toLowerCase()}|${equipVon(u)}`) || null;
 }
-const bildUrl = (id, n = 0) => `${BIB_CDN}${encodeURIComponent(id)}/${n}.jpg`;
+const istAehnlich = (u) => !!(vorlageInfo(u) || {}).aehnlich;
+const bildUrl = (r, pose) => `${BIB_CDN}${encodeURIComponent(r[0])}-${pose}.webp`;
+const posen = (r) => (r[5] === 'sp' ? ['start', 'peak'] : ['main']);
 
 // Kleines Vorschaubild für Listen, eigenes Foto geht vor
 function vorschau(u, r = null) {
-  const rr = r || bibVon(u), gif = gifVon(u, rr), id = gif ? null : bildId(rr);
-  const src = u && u.foto ? u.foto : gif ? gif.url : id ? bildUrl(id, 0) : '';
+  const rr = r || bibVon(u);
+  const src = u && u.foto ? u.foto : rr ? bildUrl(rr, posen(rr)[0]) : '';
   return src ? `<img class="vorschau" src="${esc(src)}" alt="" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'vorschau leer'}))">` : '<span class="vorschau leer"></span>';
 }
 
-const anleitungen = new Map();
-async function anleitungLaden(id) {
-  if (anleitungen.has(id)) return anleitungen.get(id);
-  const r = await fetch(`${BIB_CDN}${encodeURIComponent(id)}.json`);
-  if (!r.ok) throw new Error(r.status);
-  const l = (await r.json()).instructions || [];
-  anleitungen.set(id, l);
-  return l;
+// Beschreibung, Anleitung und Tipps liegen in einer Datei, die erst beim ersten Öffnen geladen wird
+let bibDetails = null;
+async function detailsLaden(id) {
+  if (!bibDetails) {
+    const r = await fetch('daten/uebungen.json');
+    if (!r.ok) throw new Error(r.status);
+    bibDetails = await r.json();
+  }
+  return bibDetails[id] || null;
 }
 
 /* Ansicht einer Übung: Bild im Wechsel wie ein kurzes Video, Muskeln, Anleitung.
@@ -52,15 +51,15 @@ const UeInfo = {
   },
   html() {
     const u = this.ueId ? finde('uebungen', this.ueId) : null, r = this.bibId ? BIB_ID.get(this.bibId) : bibVon(u);
-    const id = bildId(r), equip = u ? equipVon(u) : r ? r[2] : 'sonst';
+    const equip = u ? equipVon(u) : r ? r[2] : 'sonst';
     const muskel = u ? u.muskel : r ? r[3] : '', mit = u ? u.muskeln2 || [] : r ? r[4] : [];
     let bild = '';
-    const gif = gifVon(u, r);
     if (u && u.foto) bild = `<div class="ablauf eins"><img src="${esc(u.foto)}" alt="Eigenes Foto"></div>`;
-    else if (gif) bild = `<div class="animation"><img src="${esc(gif.url)}" alt="Bewegungsablauf" onerror="this.parentNode.outerHTML='<p class=&quot;hinweis oben&quot;>Die Animation lädt nur mit Internet.</p>'"></div>${gif.aehnlich ? '<p class="hinweis oben">Animation einer ähnlichen Übung.</p>' : ''}`;
-    else if (id) bild = `<div class="ablauf"><img src="${bildUrl(id, 0)}" alt="Startposition"><img class="zwei" src="${bildUrl(id, 1)}" alt="Endposition"></div>${r && r[5] ? '<p class="hinweis oben">Bild einer ähnlichen Übung.</p>' : ''}`;
+    else if (r) {
+      const p = posen(r);
+      bild = `<div class="ablauf${p.length === 1 ? ' eins' : ''}">${p.map((x, i) => `<img${i ? ' class="zwei"' : ''} src="${bildUrl(r, x)}" alt="${i ? 'Endposition' : 'Startposition'}">`).join('')}</div>${istAehnlich(u) ? '<p class="hinweis oben">Bild und Anleitung einer ähnlichen Übung.</p>' : ''}`;
+    }
     const g = u ? geraetVon(u) : null;
-    if (!bild && u) bild = '<p class="hinweis oben">Kein passendes Bild in der Bibliothek. Mit „Eigenes Foto“ unten kannst du das Gerät selbst fotografieren.</p>';
     return `${bild}
       <div class="info-zeile"><span class="chip klein">${esc(EQUIP[equip].name)}</span>${g ? `<span class="chip klein">${esc(g.name)}</span>` : ''}</div>
       <div class="gruppe-titel klein">Muskeln</div>
@@ -74,17 +73,18 @@ const UeInfo = {
   },
   async anleitung() {
     const u = this.ueId ? finde('uebungen', this.ueId) : null, r = this.bibId ? BIB_ID.get(this.bibId) : bibVon(u);
-    const id = anleitungId(r), el = $('#anleitung', this.b.el);
-    const eigen = u && typeof VORLAGE_INFO !== 'undefined' && VORLAGE_INFO[u.id] && VORLAGE_INFO[u.id].anleitung;
-    if (eigen && el) { el.innerHTML = `<div class="gruppe-titel klein">Anleitung</div><ol class="anleitung">${eigen.map((x) => `<li>${esc(x)}</li>`).join('')}</ol>`; return; }
-    if (!id || !el) return;
+    const el = $('#anleitung', this.b.el), eigen = (vorlageInfo(u) || {}).anleitung;
+    if (!el) return;
+    const liste = (titel, l, tag = 'ol') => (l && l.length ? `<div class="gruppe-titel klein">${titel}</div><${tag} class="anleitung">${l.map((x) => `<li>${esc(x)}</li>`).join('')}</${tag}>` : '');
+    if (eigen) { el.innerHTML = liste('Anleitung', eigen); return; }
+    if (!r) return;
     el.innerHTML = '<p class="hinweis oben">Anleitung lädt …</p>';
     try {
-      const l = await anleitungLaden(id);
-      if (l.length) el.innerHTML = `<div class="gruppe-titel klein">Anleitung</div><ol class="anleitung">${l.map((x) => `<li>${esc(x)}</li>`).join('')}</ol>`;
-      else el.innerHTML = '';
+      const d = await detailsLaden(r[0]);
+      el.innerHTML = d ? `${d.b ? `<p class="info-text">${esc(d.b)}</p>` : ''}${liste('Anleitung', d.a)}${liste('Tipps', d.t, 'ul')}` : '';
     } catch { el.innerHTML = '<p class="hinweis oben">Die Anleitung lädt nur mit Internet.</p>'; }
   },
+
 };
 
 // Eigenes Foto: verkleinert gespeichert, damit Sync-Datei und Browser-Speicher klein bleiben

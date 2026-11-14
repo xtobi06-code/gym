@@ -1,9 +1,9 @@
 /* Hält die App-Dateien vor, damit sie im Studio auch ohne Netz startet.
    Mit Netz kommt immer die frische Fassung; dauert das länger als 2,5 s, springt der Vorrat ein. */
-const VORRAT = 'gym-v12';
+const VORRAT = 'gym-v13';
 const BILDER = 'gym-bilder';
-const DATEIEN = ['./', 'gym.css', 'manifest.json', 'icons/gym-180.png', 'icons/gym-512.png',
-  'js/util.js', 'js/store.js', 'js/bibliothek.js', 'js/sync.js', 'js/blatt.js', 'js/satz.js', 'js/live.js', 'js/plan.js', 'js/studio.js', 'js/animationen.js', 'js/info.js', 'js/fortschritt.js', 'js/mehr.js', 'js/vorlage.js', 'js/wisch.js', 'js/main.js'];
+const DATEIEN = ['./', 'gym.css', 'manifest.json', 'daten/uebungen.json', 'icons/gym-180.png', 'icons/gym-512.png',
+  'js/util.js', 'js/store.js', 'js/bibliothek.js', 'js/sync.js', 'js/blatt.js', 'js/satz.js', 'js/live.js', 'js/plan.js', 'js/studio.js', 'js/info.js', 'js/fortschritt.js', 'js/mehr.js', 'js/vorlage.js', 'js/wisch.js', 'js/main.js'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(VORRAT).then((c) => c.addAll(DATEIEN)).then(() => self.skipWaiting()));
@@ -14,7 +14,7 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   const u = new URL(e.request.url);
   // Übungsbilder und Anleitungen: einmal geladen, danach aus dem Vorrat, auch ohne Netz
-  if (e.request.method === 'GET' && (u.hostname === 'cdn.jsdelivr.net' || u.hostname === 'static.exercisedb.dev')) {
+  if (e.request.method === 'GET' && (u.hostname === 'cdn.jsdelivr.net')) {
     e.respondWith(caches.open(BILDER).then(async (c) => (await c.match(e.request)) || fetch(e.request).then((r) => { if (r.ok || r.type === 'opaque') c.put(e.request, r.clone()); return r; })));
     return;
   }

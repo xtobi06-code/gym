@@ -32,8 +32,8 @@ ${window.GYM_VORSCHAU ? '' : `    <div class="gruppe-titel">Sicherung</div>
       ${zahlfeld('Langhantel leer', 'data-ein="hantelFeld" data-f="stange"', h.stange, 'kg')}
       ${zahlfeld('SZ-Stange leer', 'data-ein="hantelFeld" data-f="sz"', h.sz, 'kg')}
     </div>`; })()}
-    <div class="gruppe"><button class="zeile" data-akt="vorlage"><div class="haupt"><b>AlphaClub-Geräteliste übernehmen</b><small>Bekannte Maschinen mit passenden Übungen. Schon Vorhandenes bleibt, wie es ist.</small></div>${ic('chevR', 16)}</button></div>
-    <p class="hinweis">Tipp fürs iPhone: Öffne die Seite in Safari und wähle „Zum Home-Bildschirm“. Dann startet sie wie eine App und funktioniert im Studio auch ohne Netz.</p>`;
+    <p class="hinweis">Tipp fürs iPhone: Öffne die Seite in Safari und wähle „Zum Home-Bildschirm“. Dann startet sie wie eine App und funktioniert im Studio auch ohne Netz.</p>
+    <p class="hinweis">Übungsbilder und Anleitungen: Exercise data by <a href="https://repdb.co" target="_blank" rel="noopener">RepDB (repdb.co)</a></p>`;
 }
 
 Object.assign(Akt, {

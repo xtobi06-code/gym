@@ -57,6 +57,7 @@ if (window.visualViewport) {
 // Symbole in der Reiterleiste
 $$('[data-ic]').forEach((el) => { el.outerHTML = ic(el.dataset.ic, 24); });
 
+vorlageSicherstellen();
 zeichne();
 if (Aktiv.t) Live.auf();
 

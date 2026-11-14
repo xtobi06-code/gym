@@ -533,8 +533,8 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 .uek-bild { flex: none; padding: 0; border-radius: 10px; }
 .uek-bild .vorschau { width: 52px; height: 52px; }
 .uek-bild .vorschau.leer { display: none; }
-.ablauf { position: relative; aspect-ratio: 3 / 2; border-radius: var(--rund); overflow: hidden; background: #fff; margin: 0 0 14px; }
-.ablauf img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.ablauf { position: relative; aspect-ratio: 1; max-width: 380px; margin-left: auto !important; margin-right: auto !important; border-radius: var(--rund); overflow: hidden; background: #fff; margin: 0 0 14px; }
+.ablauf img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .ablauf.eins img { object-fit: cover; }
 .ablauf .zwei { animation: wechsel 2.4s steps(1, end) infinite; }
 @keyframes wechsel { 0% { opacity: 0; } 50% { opacity: 1; } }
@@ -558,8 +558,3 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 #toast:has(.toast-knopf) { white-space: nowrap; }
 
 .geheim { -webkit-text-security: disc; }
-
-/* Animationen sind klein (etwa 180 px), deshalb nicht über die volle Breite ziehen */
-.animation { width: min(100%, 230px); margin: 4px auto 16px; background: #fff; border-radius: 16px; padding: 8px; }
-.animation img { display: block; width: 100%; aspect-ratio: 1; object-fit: contain; }
-.vorschau[src$=".gif"] { object-fit: contain; }
