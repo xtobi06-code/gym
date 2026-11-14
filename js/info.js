@@ -7,7 +7,7 @@ const BIB_ID = new Map(BIBLIOTHEK.map((r) => [r[0], r]));
 const BIB_NAME = new Map(BIBLIOTHEK.flatMap((r) => [[`${r[6].toLowerCase()}|${r[2]}`, r], [`${r[1].toLowerCase()}|${r[2]}`, r]]));
 
 // Bibliothekseintrag einer Übung: über die gemerkte id oder über Name und Equipment
-const bibVon = (u) => (u && ((u.bib && BIB_ID.get(u.bib)) || BIB_NAME.get(`${u.name.toLowerCase()}|${equipVon(u)}`))) || null;
+const bibVon = (u) => (u && !(typeof VORLAGE_INFO !== 'undefined' && VORLAGE_INFO[u.id] && VORLAGE_INFO[u.id].bild === false) && ((u.bib && BIB_ID.get(u.bib)) || BIB_NAME.get(`${u.name.toLowerCase()}|${equipVon(u)}`))) || null;
 // Bild und Anleitung gibt es nur bei Einträgen aus der Datenbank; Ergänzungen haben höchstens ein ähnliches Bild
 const bildId = (r) => (r ? r[5] || (r[0].startsWith('x-') ? null : r[0]) : null);
 const anleitungId = (r) => (r && !r[0].startsWith('x-') ? r[0] : null);
@@ -50,6 +50,7 @@ const UeInfo = {
     if (u && u.foto) bild = `<div class="ablauf eins"><img src="${esc(u.foto)}" alt="Eigenes Foto"></div>`;
     else if (id) bild = `<div class="ablauf"><img src="${bildUrl(id, 0)}" alt="Startposition"><img class="zwei" src="${bildUrl(id, 1)}" alt="Endposition"></div>${r && r[5] ? '<p class="hinweis oben">Bild einer ähnlichen Übung.</p>' : ''}`;
     const g = u ? geraetVon(u) : null;
+    if (!bild && u) bild = '<p class="hinweis oben">Kein passendes Bild in der Bibliothek. Mit „Eigenes Foto“ unten kannst du das Gerät selbst fotografieren.</p>';
     return `${bild}
       <div class="info-zeile"><span class="chip klein">${esc(EQUIP[equip].name)}</span>${g ? `<span class="chip klein">${esc(g.name)}</span>` : ''}</div>
       <div class="gruppe-titel klein">Muskeln</div>
@@ -64,6 +65,8 @@ const UeInfo = {
   async anleitung() {
     const u = this.ueId ? finde('uebungen', this.ueId) : null, r = this.bibId ? BIB_ID.get(this.bibId) : bibVon(u);
     const id = anleitungId(r), el = $('#anleitung', this.b.el);
+    const eigen = u && typeof VORLAGE_INFO !== 'undefined' && VORLAGE_INFO[u.id] && VORLAGE_INFO[u.id].anleitung;
+    if (eigen && el) { el.innerHTML = `<div class="gruppe-titel klein">Anleitung</div><ol class="anleitung">${eigen.map((x) => `<li>${esc(x)}</li>`).join('')}</ol>`; return; }
     if (!id || !el) return;
     el.innerHTML = '<p class="hinweis oben">Anleitung lädt …</p>';
     try {
