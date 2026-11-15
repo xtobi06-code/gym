@@ -3,7 +3,7 @@
    Übernehmen nichts verdoppelt. u = 1, damit eigene Änderungen und Löschungen immer gewinnen. */
 
 const VORLAGE_ALPHACLUB = (() => {
-  const STECK = { typ: 'stack', start: 5, schritt: 5, anzahl: 20, zusatz: 0, stufen: '', marke: 'Technogym' };
+  const STECK = { typ: 'stack', start: 5, schritt: 5, anzahl: 20, zusatz: 2.5, stufen: '', marke: 'Technogym' };
   const PLATTE = { typ: 'scheiben', stange: 0, beidseitig: true };
   const pruefen = 'Gewichtsstufen beim nächsten Training prüfen';
   const g = (id, name, art, extra = {}) => ({ id: 'ac-g-' + id, u: 1, name, bereich: '', modell: '', notiz: '', ...art, ...extra });
@@ -99,6 +99,9 @@ const VORLAGE_INFO = {
 // eigene Änderungen und Löschungen gewinnen also immer.
 function vorlageSicherstellen() {
   const neu = mischen(D, { ...VORLAGE_ALPHACLUB, weg: {} });
-  if (kern(neu) === kern(D)) return;
+  // Zusatzgewicht 2,5 kg nachtragen, aber nur bei Vorlage-Geräten, die noch nie bearbeitet wurden (u = 1)
+  let zusatz = false;
+  for (const g of neu.geraete) if (g.u === 1 && g.typ === 'stack' && !g.zusatz && String(g.id).startsWith('ac-g-')) { g.zusatz = 2.5; g.u = Date.now(); zusatz = true; }
+  if (!zusatz && kern(neu) === kern(D)) return;
   D = neu; migriere(); sichern();
 }
