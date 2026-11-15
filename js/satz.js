@@ -64,10 +64,11 @@ const Satz = {
   bild() {
     const s = this.s, g = this.g;
     if (this.typ === 'stack') {
-      const st = stufenVon(g), sel = this.stackIndex(st);
+      const st = stufenVon(g), sel = this.stackIndex(st), lb = (w) => Math.round(w * 2.20462);
       return `<div class="stack" id="pk-stack"><div class="st-turm">
-          <span class="st-kopf"></span>
-          ${st.map((w, i) => `<button class="platte ${i <= sel ? 'oben' : 'unten'}" data-akt="stackWahl" data-i="${i}" aria-label="${kg(w)} Kilo stecken"><span class="aufkleber">${kg(w)}</span></button>`).join('')}
+          <span class="st-stange l"></span><span class="st-stange r"></span><span class="st-stange m" id="pk-wahlstab"></span>
+          <span class="st-kopf">${g.zusatz > 0 ? `<span class="st-zusatz ${s.zu ? 'an' : ''}">+${kg(g.zusatz)}</span>` : ''}</span>
+          ${st.map((w, i) => `<button class="platte ${i <= sel ? 'oben' : 'unten'} ${i === sel ? 'pin' : ''}" data-akt="stackWahl" data-i="${i}" aria-label="${kg(w)} Kilo stecken"><span class="aufkleber">${kg(w)}</span><span class="lb">${lb(w)}</span></button>`).join('')}
           <span class="st-stift" id="pk-stift"></span>
         </div></div>
         ${g.zusatz > 0 ? `<button class="chip ${s.zu ? 'an' : ''}" data-akt="stackZusatz" aria-pressed="${!!s.zu}">${ic('plus', 15)} ${kg(g.zusatz)} kg Zusatzgewicht</button>` : ''}`;
@@ -114,7 +115,8 @@ const Satz = {
     rollen($('#pk-wdh', this.b.el), s.w, String(s.w));
     if (this.typ === 'stack') {
       const st = stufenVon(this.g), sel = this.stackIndex(st), box = $('#pk-stack', this.b.el), platten = $$('.platte', box);
-      platten.forEach((el, i) => { el.classList.toggle('oben', i <= sel); el.classList.toggle('unten', i > sel); });
+      platten.forEach((el, i) => { el.classList.toggle('oben', i <= sel); el.classList.toggle('unten', i > sel); el.classList.toggle('pin', i === sel); });
+      const z = $('.st-zusatz', box); if (z) z.classList.toggle('an', !!this.s.zu);
       const el = platten[sel];
       if (el && start) box.scrollTop += el.getBoundingClientRect().top - box.getBoundingClientRect().top - (box.clientHeight - el.offsetHeight) / 2;
       if (el) this.stiftSetzen(el, !start);
@@ -135,11 +137,12 @@ const Satz = {
     const alt = this.stiftY;
     this.stiftY = y;
     stift.style.transform = `translateY(${y}px)`;
+    $('#pk-wahlstab', this.b.el).style.height = `${600 + y}px`;   // der Wählstab reicht bis zur gesteckten Platte
     if (!bewegt || alt == null || alt === y || !stift.animate || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     stift.animate([
       { transform: `translateY(${alt}px) scale(1)`, easing: 'cubic-bezier(.3, 0, .3, 1)' },
-      { transform: `translateY(${alt}px) scale(1.3)`, offset: 0.24, easing: 'cubic-bezier(.45, 0, .2, 1)' },
-      { transform: `translateY(${y}px) scale(1.3)`, offset: 0.76, easing: 'cubic-bezier(.3, 0, .3, 1)' },
+      { transform: `translateY(${alt}px) scale(1.45)`, offset: 0.22, easing: 'cubic-bezier(.45, 0, .2, 1)' },
+      { transform: `translateY(${y}px) scale(1.45)`, offset: 0.74, easing: 'cubic-bezier(.3, 0, .3, 1)' },
       { transform: `translateY(${y}px) scale(1)` },
     ], { duration: Math.min(560, 300 + Math.abs(y - alt) * 0.8) });
     // Der Turm ruckt kurz an, sobald der Stift sitzt
