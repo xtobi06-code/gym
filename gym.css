@@ -431,6 +431,8 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 .wdh-mitte small { color: var(--t2); font-size: 14px; margin-top: 4px; text-align: center; }
 .wdh-mitte small + small { margin-top: 0; font-size: 13px; }
 .satzblatt .knopf.breit { margin-bottom: 0; }
+.satzblatt.tippt .pk-bild, .satzblatt.tippt .wdh { display: none; }
+.satzblatt.tippt .wert { margin: 12px 0 18px; }
 
 /* Fortschritt */
 .jahrwahl { display: flex; align-items: center; justify-content: center; gap: 18px; margin: 0 0 18px; }

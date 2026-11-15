@@ -254,9 +254,11 @@ Object.assign(Akt, {
     const span = $('.zahl', el);
     span.innerHTML = `<input inputmode="decimal" enterkeyhint="done" value="${kg(Satz.s.g)}" aria-label="Gewicht in Kilo">`;
     const inp = $('input', span);
+    Satz.b.el.classList.add('tippt');   // Gewichtsbild und Wiederholungen weg, solange die Tastatur offen ist
     inp.focus(); inp.select();
     const fertig = () => {
       const n = zahl(inp.value);
+      Satz.b.el.classList.remove('tippt');
       span.textContent = kg(Satz.s.g);
       if (n != null && n !== Satz.s.g) Satz.setzeGewicht(n);
     };
