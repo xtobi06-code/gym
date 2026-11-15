@@ -197,7 +197,7 @@ const UeEd = {
   bildZeile() {
     const u = this.u, r = bibVon(u);
     return `<div class="gruppe"><button class="zeile mitbild" data-akt="ueBild">${r ? vorschau(u, r) : '<span class="vorschau leer"></span>'}<div class="haupt"><b>Bild und Anleitung</b><small>${r ? esc(r[1]) : 'Aus der Bibliothek wählen'}</small></div>${ic('chevR', 16)}</button></div>
-      ${bibEigen(u) && !vorlageGilt(u) ? `<button class="textknopf mittig" data-akt="ueBildWeg">${vorlageInfo(u) ? 'Standardbild wiederherstellen' : 'Bild entfernen'}</button>` : ''}`;
+      ${r && u.bib ? '<button class="textknopf mittig" data-akt="ueBildWeg">Bild entfernen</button>' : ''}`;
   },
   html() {
     const u = this.u, q = EQUIP[u.equip], g = geraetVon(u);

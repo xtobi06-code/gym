@@ -7,26 +7,15 @@ const BIB_ID = new Map(BIBLIOTHEK.map((r) => [r[0], r]));
 const BIB_NAME = new Map(BIBLIOTHEK.flatMap((r) => [[`${r[6].toLowerCase()}|${r[2]}`, r], [`${r[1].toLowerCase()}|${r[2]}`, r]]));
 const vorlageInfo = (u) => (u && typeof VORLAGE_INFO !== 'undefined' ? VORLAGE_INFO[u.id] || null : null);
 
-// Selbst gewählter Bibliothekseintrag (auch ids aus der früheren Bibliothek)
-function bibEigen(u) {
-  if (!u || !u.bib) return null;
-  return BIB_ID.get(u.bib) || BIB_ID.get(BIB_ALT[u.bib]) || null;
-}
-// Bibliothekseintrag einer Übung: zuerst das selbst gewählte Bild, dann die Vorlage, sonst Name und Equipment
+// Bibliothekseintrag einer Übung: Vorlage, gemerkte id (auch aus der früheren Bibliothek) oder Name und Equipment
 function bibVon(u) {
   if (!u) return null;
-  const e = bibEigen(u);
-  if (e) return e;
   const v = vorlageInfo(u);
   if (v) return BIB_ID.get(v.bib) || null;
+  if (u.bib) { const r = BIB_ID.get(u.bib) || BIB_ID.get(BIB_ALT[u.bib]); if (r) return r; }
   return BIB_NAME.get(`${u.name.toLowerCase()}|${equipVon(u)}`) || null;
 }
-// Gilt für die Übung noch das Bild der Vorlage (nichts Eigenes gewählt)?
-function vorlageGilt(u) {
-  const v = vorlageInfo(u), e = bibEigen(u);
-  return !!v && (!e || e[0] === v.bib);
-}
-const istAehnlich = (u) => vorlageGilt(u) && !!vorlageInfo(u).aehnlich;
+const istAehnlich = (u) => !!(vorlageInfo(u) || {}).aehnlich;
 const bildUrl = (r, pose) => `${BIB_CDN}${encodeURIComponent(r[0])}-${pose}.webp`;
 const posen = (r) => (r[5] === 'sp' ? ['start', 'peak'] : ['main']);
 
@@ -79,7 +68,7 @@ const UeInfo = {
   },
   async anleitung() {
     const u = this.ueId ? finde('uebungen', this.ueId) : null, r = this.bibId ? BIB_ID.get(this.bibId) : bibVon(u);
-    const el = $('#anleitung', this.b.el), eigen = vorlageGilt(u) ? vorlageInfo(u).anleitung : null;
+    const el = $('#anleitung', this.b.el), eigen = (vorlageInfo(u) || {}).anleitung;
     if (!el) return;
     const liste = (titel, l, tag = 'ol') => (l && l.length ? `<div class="gruppe-titel klein">${titel}</div><${tag} class="anleitung">${l.map((x) => `<li>${esc(x)}</li>`).join('')}</${tag}>` : '');
     if (eigen) { el.innerHTML = liste('Anleitung', eigen); return; }
