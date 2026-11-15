@@ -128,3 +128,33 @@ Läuft die Pause ab, kommt ein kurzer Doppelton (und auf Geräten, die es könne
 Commit `88fef90`
 
 Die Zusammenfassung nach dem Training nennt jetzt, wie viel mehr oder weniger Gewicht bewegt wurde als beim letzten Mal desselben Trainingstags, mehr wird grün hervorgehoben.
+
+## 22. Tab-Leiste: Glas-Kapsel gleitet zum gewählten Reiter
+
+Commit `92610e0`
+
+Wie in der Panel-App springt die Markierung nicht mehr, sondern gleitet mit leichtem Nachfedern zum neuen Reiter.
+
+## 23. Satz-Eingabe: Gewicht und Wiederholungen rollen wie ein Zählwerk
+
+Commit `58013a1`
+
+Ändert sich ein Wert, rollt die neue Zahl herein: von unten bei mehr, von oben bei weniger. So sieht man auch aus dem Augenwinkel, in welche Richtung man gerade geändert hat.
+
+## 24. Reiterwechsel: Inhalt gleitet in Fahrtrichtung herein
+
+Commit `90c8ea2`
+
+Beim Wechsel des Reiters blendet der neue Inhalt kurz ein und kommt von der Seite, in die die Kapsel fährt. Mit „Bewegung reduzieren“ ohne Animation.
+
+## 25. Abhaken: Haken zeichnet sich
+
+Commit `f01febb`
+
+Beim Abhaken eines Satzes erscheint der Haken nicht einfach, sondern wird wie mit einem Stift gezogen, zusätzlich zum kurzen Aufploppen.
+
+## 26. Training beendet: Tageskreis füllt sich mit kleiner Welle
+
+Commit `5296c56`
+
+Nach dem Beenden füllt sich der heutige Kreis unter „Diese Woche“ sichtbar, sobald die Live-Ansicht weggeklappt ist, eine Welle läuft nach außen. Nur einmal direkt nach dem Training.
