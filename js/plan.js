@@ -3,8 +3,8 @@
 
 // Kopf jeder Seite: Datum mit Einstellungen rechts, darunter der Titel (rechts optional etwas wie die Serie)
 function kopf(titel, rechts = '') {
-  return `<div class="kopf"><div class="kopf-oben"><p class="info">${esc(fmtLang.format(new Date()))}</p><button class="zahnrad" data-akt="einstellungen" aria-label="Einstellungen">${ic('zahnrad', 22)}</button></div>
-    <div class="kopf-titel"><h1>${esc(titel)}</h1>${rechts}</div></div>`;
+  return `<div class="kopf"><p class="info">${esc(fmtLang.format(new Date()))}</p>
+    <div class="kopf-titel"><h1>${esc(titel)}</h1>${rechts}<button class="zahnrad" data-akt="einstellungen" aria-label="Einstellungen">${ic('zahnrad', 24)}</button></div></div>`;
 }
 // Alle Trainingstage teilen sich die Kontrastfarbe: im Kalender zählt nur, ob trainiert wurde
 const planFarbe = () => 'var(--pin)';
@@ -24,8 +24,9 @@ function wocheHtml() {
     return `<div class="wtag ${t ? 'an' : ''} ${frisch ? 'frisch' : ''} ${von === heute ? 'heute' : ''} ${von > heute ? 'spaeter' : ''}" ${t ? `style="--c:${planFarbe(t.farbe)}"` : ''}><span class="scheibchen">${t ? ic('check', 16) : ''}</span><small>${name}</small></div>`;
   }).join('');
   ui.neuTag = null;   // die Füll-Animation nur einmal zeigen
-  const info = pause ? 'Pause, die Serie bleibt' : n === 0 ? 'noch kein Training' : n === 1 ? '1 Training' : n + ' Trainings';
-  return `<div class="woche ${pause ? 'pausiert' : ''}"><div class="woche-kopf"><b>Diese Woche</b><span>${info}</span></div><div class="wtage">${tage}</div>
+  // Rechts die Serie: Wochen in Folge mit Training, bei Pause der Hinweis, dass sie hält
+  const info = D.trainings.length ? `<span class="streak-marke" title="Wochen in Folge aktiv">${pause ? '<small>Pause, die Serie bleibt</small>' : ''}<span class="zahl">${serie()}</span>${ic('flamme', 20)}</span>` : '';
+  return `<div class="woche ${pause ? 'pausiert' : ''}"><div class="woche-kopf"><b>Diese Woche</b>${info}</div><div class="wtage">${tage}</div>
     <button class="textknopf leise pausenknopf" data-akt="wochePause">${pause ? 'Pause aufheben' : 'Krank oder im Urlaub? Woche pausieren'}</button></div>`;
 }
 Akt.wochePause = () => {
@@ -76,7 +77,7 @@ function kachelHtml(p, art) {
 }
 
 function zeigeTraining() {
-  let h = kopf('Training', D.trainings.length ? `<div class="streak-marke" title="Wochen in Folge aktiv"><span class="zahl">${serie()}</span>${ic('flamme', 22)}</div>` : '');
+  let h = kopf('Training');
   const t = Aktiv.t;
   if (t) {
     const fertig = t.punkte.reduce((a, p) => a + arbeitsSaetze(p).filter((s) => s.ok).length, 0), alle = t.punkte.reduce((a, p) => a + arbeitsSaetze(p).length, 0);

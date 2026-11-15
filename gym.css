@@ -60,10 +60,9 @@ button:disabled { opacity: .3; }
 .kopf { margin: 8px 2px 20px; }
 .kopf .info { color: var(--t2); font-size: 15px; font-weight: 550; margin-bottom: 0; }
 .kopf h1 { font-family: var(--titel); font-size: 50px; line-height: 1; font-weight: 400; letter-spacing: .01em; text-transform: uppercase; }
-.kopf-oben { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.kopf-titel { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.kopf-titel { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 /* Einstellungen: bewusst unauffällig, nur das Symbol */
-.zahnrad { display: grid; place-items: center; width: 40px; height: 40px; margin: -10px -9px -10px 0; border-radius: 50%; color: var(--t2); }
+.zahnrad { display: grid; place-items: center; width: 44px; height: 44px; margin: 0 -10px 0 auto; border-radius: 50%; color: var(--t2); }
 .zahnrad:active { color: var(--text); }
 
 /* Tab-Leiste: schwebende Liquid-Glass-Kapsel; darüber löst sich der Inhalt in Unschärfe auf */
@@ -526,8 +525,9 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 .hero-zahlen > div { flex: 1; display: flex; flex-direction: column; align-items: center; }
 .hero-zahlen > div + div { border-left: .5px solid rgba(255, 255, 255, .16); }
 .hero-zahlen b { font-size: 36px; line-height: 1; font-weight: 700; }
-.streak-marke { display: inline-flex; align-items: center; gap: 4px; padding-bottom: 6px; }
-.streak-marke .zahl { font-size: 34px; line-height: 1; }
+.streak-marke { display: inline-flex; align-items: center; gap: 4px; }
+.streak-marke small { color: var(--t2); font-size: 13px; margin-right: 6px; }
+.streak-marke .zahl { font-size: 26px; line-height: 1; color: var(--text); }
 .streak-marke .ic { color: var(--pin); }
 .pausenknopf { margin: 6px 0 0 -6px; min-height: 36px; font-size: 14px; }
 .woche.pausiert .wtage { opacity: .45; }
