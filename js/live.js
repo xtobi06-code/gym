@@ -249,6 +249,7 @@ const Live = {
     const vVol = vorher ? volumen(vorher) : 0, diff = vVol > 0 ? (volumen(fertig) - vVol) / vVol : null;
     const vergleich = diff == null ? '' : `<p class="vergleich ${diff > 0.005 ? 'mehr' : ''}">${Math.abs(diff) < 0.005 ? 'Genauso viel bewegt' : `${Math.round(Math.abs(diff) * 100)} % ${diff > 0 ? 'mehr' : 'weniger'} bewegt`} als beim letzten ${esc(t.name)} (${vorWieLang(vorher.start)})</p>`;
     Aktiv.t = null; Aktiv.sichern();
+    ui.neuTag = tagKey(fertig.start);
     this.zu();
     Sync.abgleich();
     const min = Math.round((fertig.ende - fertig.start) / 60000);

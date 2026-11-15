@@ -18,8 +18,10 @@ function wocheHtml() {
     const von = d.getTime();
     const t = D.trainings.find((x) => tagStart(x.start) === von);
     if (t) n++;
-    return `<div class="wtag ${t ? 'an' : ''} ${von === heute ? 'heute' : ''} ${von > heute ? 'spaeter' : ''}" ${t ? `style="--c:${planFarbe(t.farbe)}"` : ''}><span class="scheibchen">${t ? ic('check', 16) : ''}</span><small>${name}</small></div>`;
+    const frisch = t && ui.neuTag === tagKey(von);
+    return `<div class="wtag ${t ? 'an' : ''} ${frisch ? 'frisch' : ''} ${von === heute ? 'heute' : ''} ${von > heute ? 'spaeter' : ''}" ${t ? `style="--c:${planFarbe(t.farbe)}"` : ''}><span class="scheibchen">${t ? ic('check', 16) : ''}</span><small>${name}</small></div>`;
   }).join('');
+  ui.neuTag = null;   // die Füll-Animation nur einmal zeigen
   const info = pause ? 'Pause, die Serie bleibt' : n === 0 ? 'noch kein Training' : n === 1 ? '1 Training' : n + ' Trainings';
   return `<div class="woche ${pause ? 'pausiert' : ''}"><div class="woche-kopf"><b>Diese Woche</b><span>${info}</span></div><div class="wtage">${tage}</div>
     <button class="textknopf leise pausenknopf" data-akt="wochePause">${pause ? 'Pause aufheben' : 'Krank oder im Urlaub? Woche pausieren'}</button></div>`;

@@ -172,6 +172,12 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 .wtag.heute .scheibchen { border-color: var(--text); }
 .wtag.heute.an .scheibchen { border-color: var(--c); box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--text); }
 .wtag.spaeter .scheibchen { border-style: dashed; border-color: var(--karte2); }
+/* Gerade beendetes Training: der Kreis füllt sich, sobald die Live-Ansicht weg ist */
+.wtag.frisch .scheibchen { position: relative; animation: tag-fuellen .6s .45s cubic-bezier(.3, 1.4, .5, 1) backwards; }
+.wtag.frisch .scheibchen::after { content: ""; position: absolute; inset: -2px; border-radius: 50%; border: 2px solid var(--c); opacity: 0; animation: tag-welle .9s .55s ease-out; }
+.wtag.frisch .scheibchen .ic { animation: tag-fuellen .5s .7s cubic-bezier(.3, 1.6, .5, 1) backwards; }
+@keyframes tag-fuellen { from { transform: scale(.3); opacity: 0; } }
+@keyframes tag-welle { 0% { opacity: .9; transform: scale(1); } 100% { opacity: 0; transform: scale(1.7); } }
 
 .kacheln { display: flex; flex-direction: column; gap: 10px; margin: 0 0 14px; }
 .kachel { box-shadow: var(--schatten); display: flex; align-items: center; gap: 14px; background: var(--karte); border-radius: var(--rund); padding: 16px 16px 16px 20px; cursor: pointer; position: relative; transition: background-color .15s; }
