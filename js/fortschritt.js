@@ -126,7 +126,7 @@ const Kraft = {
       <div class="kennzahlen">
         <div><span class="zahl">${l ? rund1(l.y) : '–'}</span><small>aktuell, ${einheit}</small></div>
         <div><span class="zahl">${best ? rund1(best.y) : '–'}</span><small>Bestwert</small></div>
-        <div><span class="zahl">${echtBest ? kg(echtBest) : '–'}</span><small>gemessen</small></div>
+        ${modus === 'kg' ? `<div><span class="zahl">${echtBest ? kg(echtBest) : '–'}</span><small>gemessen</small></div>` : `<div><span class="zahl">${punkte.length}</span><small>${punkte.length === 1 ? 'Training' : 'Trainings'}</small></div>`}
       </div>
       ${punkte.length + echte.length ? `<div class="diagramm" id="diagramm">${this.diagramm(punkte, echte, i, modus)}</div>
         <p class="ablesung" id="ablesung">${p ? this.ablesung(p, modus) : ''}</p>
@@ -136,13 +136,15 @@ const Kraft = {
       ${punkte.length ? `<div class="gruppe-titel">Alle Trainings</div>
         <div class="gruppe tabelle">
           <div class="zeile tkopf"><span>Datum</span><span>Bester Satz</span><span>${modus === 'kg' ? 'Geschätzt' : 'Meiste Wdh.'}</span></div>
-          ${[...punkte].reverse().map((r) => `<div class="zeile"><span>${fmtMitJahr.format(r.ts)}</span><span>${kg(r.g)} kg × ${r.w}</span><span>${rund1(r.y)}${modus === 'kg' ? ' kg' : ''}</span></div>`).join('')}
+          ${[...punkte].reverse().map((r) => `<div class="zeile"><span>${fmtMitJahr.format(r.ts)}</span><span>${this.satzText(r, true)}</span><span>${rund1(r.y)}${modus === 'kg' ? ' kg' : ''}</span></div>`).join('')}
         </div>` : ''}`;
   },
 
   ablesung(p, modus) {
-    return `${fmtWochentag.format(p.ts)}: bester Satz ${kg(p.g)} kg × ${p.w}` + (modus === 'kg' ? `, geschätzt ${rund1(p.y)} kg` : '');
+    return `${fmtWochentag.format(p.ts)}: bester Satz ${this.satzText(p)}` + (modus === 'kg' ? `, geschätzt ${rund1(p.y)} kg` : '');
   },
+  // Ohne Gewicht (Körpergewichtsübung ohne Zusatz) steht kein „0 kg“ da
+  satzText(r, kurz = false) { return r.g > 0 ? `${vz(this.id)}${kg(r.g)} kg × ${r.w}` : kurz ? `${r.w} Wdh.` : `Körpergewicht × ${r.w}`; },
 
   // Liniendiagramm: eine Achse, Zeit nach rechts
   diagramm(punkte, echte, wahl, modus) {
