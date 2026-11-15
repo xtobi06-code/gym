@@ -321,23 +321,21 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 
 /* Steckgewicht: Plattenturm mit Stift */
 .stack { position: relative; width: min(100%, 290px); flex: 1 1 auto; min-height: 150px; max-height: 340px; overflow-y: auto; overscroll-behavior: contain; padding: 30px 22px 10px; border-radius: 18px;
-  background: #0b0b0c; scrollbar-width: none; }
+  scrollbar-width: none;
+  /* Führungsstangen links und rechts, Wählstab in der Mitte: Hintergrund des Kastens, scrollt nicht mit und endet deshalb nie */
+  background:
+    linear-gradient(90deg, transparent calc(18% - 4px), #7d8187 calc(18% - 4px), #7d8187 calc(18% + 4px), transparent calc(18% + 4px)),
+    linear-gradient(90deg, transparent calc(50% - 5px), #8a8e94 calc(50% - 5px), #8a8e94 calc(50% + 5px), transparent calc(50% + 5px)),
+    linear-gradient(90deg, transparent calc(82% - 4px), #7d8187 calc(82% - 4px), #7d8187 calc(82% + 4px), transparent calc(82% + 4px)),
+    #0b0b0c; }
 .stack::-webkit-scrollbar { display: none; }
 .st-turm { position: relative; padding: 0 0 4px; }
 /* Führungsstangen links und rechts, Wählstab in der Mitte: laufen über den Rand hinaus, damit beim Überziehen kein Ende zu sehen ist */
-.st-stange { position: absolute; top: 0; bottom: 0; width: 8px; margin-left: -4px; z-index: 0; background: #7d8187;
-  /* nach unten: Kopien als Schatten, die verlängern den Scrollbereich nicht */
-  box-shadow: 0 150px #7d8187, 0 300px #7d8187, 0 450px #7d8187, 0 600px #7d8187, 0 750px #7d8187, 0 900px #7d8187; }
-/* nach oben: ein Stück über dem Turm, oberhalb zählt es beim Scrollen nicht */
-.st-stange::before { content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 1200px; background: inherit; }
-.st-stange.l { left: 18%; }
-.st-stange.r { left: 82%; }
-.st-stange.m { left: 50%; bottom: auto; height: 0; width: 10px; margin-left: -5px; box-shadow: none; transition: height .45s var(--ease-out); }
 /* Kopfplatte: hier hängt das Seil, sie geht immer mit hoch */
 .st-kopf { position: relative; z-index: 1; display: block; height: 22px; margin: 0 6px 3px; border-radius: 7px 7px 4px 4px;
   background: linear-gradient(#9da1a8, #6b6f76 55%, #55595f); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 2px 4px rgba(0, 0, 0, .4); }
 /* Zusatzgewicht: kleine Platte, die auf die Kopfplatte gelegt wird */
-.st-zusatz { position: absolute; right: 10px; bottom: 100%; margin-bottom: -2px; padding: 1px 7px; border-radius: 4px 4px 2px 2px; font-family: var(--zahl); font-weight: 700; font-size: 12px; color: #111;
+.st-zusatz { position: absolute; left: 10px; bottom: 100%; margin-bottom: -2px; padding: 1px 7px; border-radius: 4px 4px 2px 2px; font-family: var(--zahl); font-weight: 700; font-size: 12px; color: #111;
   background: linear-gradient(#f0f1f3, #b9bcc2); box-shadow: 0 1px 2px rgba(0, 0, 0, .4); opacity: 0; transform: translateY(-14px); transition: opacity .2s, transform .35s cubic-bezier(.3, 1.4, .5, 1); }
 .st-zusatz.an { opacity: 1; transform: none; }
 /* Platten: glatter Stahl, Bohrung in der Mitte, links kg, rechts lb */

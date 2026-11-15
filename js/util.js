@@ -52,7 +52,7 @@ function uhr(ms) {
 /* Symbole: einfache Linien, 24er Raster */
 const SYMBOLE = {
   hantel: 'M6.5 7v10M3.5 9.5v5M17.5 7v10M20.5 9.5v5M6.5 12h11',
-  studio: 'M4 5h7v6H4zM13 5h7v6h-7zM4 13h7v6H4zM13 13h7v6h-7z',
+  studio: 'M5 21V3.5h14V21M3.5 21h17M5 7h14M12 7v4M9 11h6v3H9zM9 15.5h6v3H9z',
   verlauf: 'M4 5v14h16M8 15l3.5-4.5 3 2.5L19 7',
   mehr: 'M4 7h9M17 7h3M4 17h3M11 17h9M15 5.2a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6zM9 15.2a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6z',
   plus: 'M12 5v14M5 12h14',

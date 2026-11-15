@@ -66,7 +66,6 @@ const Satz = {
     if (this.typ === 'stack') {
       const st = stufenVon(g), sel = this.stackIndex(st), lb = (w) => Math.round(w * 2.20462);
       return `<div class="stack" id="pk-stack"><div class="st-turm">
-          <span class="st-stange l"></span><span class="st-stange r"></span><span class="st-stange m" id="pk-wahlstab"></span>
           <span class="st-kopf">${g.zusatz > 0 ? `<span class="st-zusatz ${s.zu ? 'an' : ''}">+${kg(g.zusatz)}</span>` : ''}</span>
           ${st.map((w, i) => `<button class="platte ${i <= sel ? 'oben' : 'unten'} ${i === sel ? 'pin' : ''}" data-akt="stackWahl" data-i="${i}" aria-label="${kg(w)} Kilo stecken"><span class="aufkleber">${kg(w)}</span><span class="lb">${lb(w)}</span></button>`).join('')}
           <span class="st-stift" id="pk-stift"></span>
@@ -137,7 +136,6 @@ const Satz = {
     const alt = this.stiftY;
     this.stiftY = y;
     stift.style.transform = `translateY(${y}px)`;
-    $('#pk-wahlstab', this.b.el).style.height = `${y}px`;   // der Wählstab reicht bis zur gesteckten Platte
     if (!bewegt || alt == null || alt === y || !stift.animate || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     stift.animate([
       { transform: `translateY(${alt}px) scale(1)`, easing: 'cubic-bezier(.3, 0, .3, 1)' },
