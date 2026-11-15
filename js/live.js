@@ -175,7 +175,7 @@ const Live = {
       const k = +satzLabel(p, si) - 1, a = alt ? alt.p.saetze[k] : null;
       unter = a ? `Letztes Mal ${vz(p.ue)}${kg(a.g)} kg × ${a.w}` : (p.wmin && p.wmax ? `Ziel ${p.wmin} bis ${p.wmax} Wiederholungen` : '');
     }
-    return `<div class="zeile satz ${s.ok ? 'ok' : ''} ${s.auf ? 'warm' : ''}" data-akt="satzAuf" data-si="${si}">
+    return `<div class="zeile satz ${s.ok ? 'ok' : ''} ${s.auf ? 'warm' : ''}" data-akt="satzAuf" data-si="${si}" data-wisch="satz">
       <span class="nr">${satzLabel(p, si)}</span>
       <div class="haupt">
         <div class="werte ${s.g == null ? 'offen' : ''}"><span class="z">${s.g == null ? '' : vz(p.ue)}${kg(s.g)}</span><span class="e">kg</span><span class="mal">×</span><span class="z">${s.w ?? '–'}</span></div>

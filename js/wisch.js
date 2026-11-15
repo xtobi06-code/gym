@@ -44,7 +44,22 @@ const Wisch = {
     el.classList.add('weg');
     el.style.transform = 'translateX(-110%)';
     const liste = el.dataset.wisch, id = el.dataset.id;
+    if (liste === 'satz') { setTimeout(() => this.satzWeg(el), 220); return; }
     setTimeout(() => this.loeschen(liste, id), 220);
+  },
+
+  // Satz im laufenden Training: nur dort, nicht in den gespeicherten Daten
+  satzWeg(el) {
+    const pi = +el.closest('.uekarte').dataset.i, si = +el.dataset.si, p = Aktiv.t && Aktiv.t.punkte[pi];
+    if (!p || !p.saetze[si]) return;
+    const [weg] = p.saetze.splice(si, 1);
+    Aktiv.sichern(); Live.neu(pi);
+    toast(weg.auf ? 'Aufwärmsatz entfernt' : 'Satz entfernt', () => {
+      const q = Aktiv.t && Aktiv.t.punkte[pi];
+      if (!q) return;
+      q.saetze.splice(Math.min(si, q.saetze.length), 0, weg);
+      Aktiv.sichern(); Live.neu(pi);
+    });
   },
 
   loeschen(liste, id) {
