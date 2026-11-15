@@ -55,9 +55,6 @@ if (window.visualViewport) {
   vv.addEventListener('scroll', messen);
 }
 
-// Symbole in der Reiterleiste
-$$('[data-ic]').forEach((el) => { el.outerHTML = ic(el.dataset.ic, 24); });
-
 vorlageSicherstellen();
 zeichne();
 if (tab === 'fortschritt') zumAktuellenMonat();
