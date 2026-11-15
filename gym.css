@@ -301,7 +301,7 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 .satzblatt .blatt-inhalt { display: flex; flex-direction: column; align-items: center; }
 .satzblatt .blatt-inhalt > * { width: 100%; }
 .wert { display: flex; align-items: baseline; justify-content: center; gap: 8px; padding: 0 0 6px; cursor: text; }
-.wert .zahl { font-size: 92px; line-height: .95; letter-spacing: 0; }
+.wert .zahl { display: inline-block; font-size: 92px; line-height: .95; letter-spacing: 0; }
 .wert .einheit { color: var(--t2); font-size: 20px; font-weight: 600; }
 .wert input { width: 3.4ch; font: inherit; font-size: 92px; letter-spacing: inherit; text-align: center; border: 0; outline: none; background: var(--karte2); border-radius: 16px; padding: 0; color: var(--pin); }
 .pk-bild { display: flex; flex-direction: column; align-items: center; gap: 12px; margin: 8px 0 18px; }
@@ -405,7 +405,7 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 
 .wdh { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--karte); border-radius: var(--rund); padding: 12px 14px; margin-bottom: 16px; }
 .wdh-mitte { display: flex; flex-direction: column; align-items: center; }
-.wdh-mitte .zahl { font-size: 62px; line-height: 1; }
+.wdh-mitte .zahl { display: inline-block; font-size: 62px; line-height: 1; }
 .wdh-mitte small { color: var(--t2); font-size: 14px; margin-top: 4px; text-align: center; }
 .wdh-mitte small + small { margin-top: 0; font-size: 13px; }
 .satzblatt .knopf.breit { margin-bottom: 0; }

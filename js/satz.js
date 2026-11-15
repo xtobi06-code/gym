@@ -2,6 +2,18 @@
 /* Satz-Eingabe: Gewicht so einstellen wie am Gerät (Stift umstecken, Scheiben aufstecken, Hantel greifen)
    und die Wiederholungen zählen. Änderungen landen sofort im laufenden Training. */
 
+// Zahl wechseln wie ein Zählwerk: größer rollt von unten herein, kleiner von oben
+function rollen(el, wert, text) {
+  if (!el) return;
+  const alt = parseFloat(el.dataset.v);
+  el.dataset.v = wert;
+  if (el.textContent === text) return;
+  el.textContent = text;
+  if (Number.isNaN(alt) || !el.animate) return;
+  const r = wert > alt ? 1 : -1;
+  el.animate([{ transform: `translateY(${r * 0.32}em)`, opacity: 0.2 }, { transform: 'none', opacity: 1 }], { duration: 220, easing: 'cubic-bezier(.2, .9, .3, 1)' });
+}
+
 const Satz = {
   pi: 0, si: 0, b: null, typ: 'frei', g: null, vorher: null,
 
@@ -98,8 +110,8 @@ const Satz = {
   // Nach einer Änderung nur das Nötige anfassen, damit nichts springt
   nachZeichnen(start = false) {
     const s = this.s;
-    const z = $('#pk-zahl', this.b.el); if (z) z.textContent = kg(s.g);
-    $('#pk-wdh', this.b.el).textContent = s.w;
+    const z = $('#pk-zahl', this.b.el); if (z && !$('input', z)) rollen(z, s.g, kg(s.g));
+    rollen($('#pk-wdh', this.b.el), s.w, String(s.w));
     if (this.typ === 'stack') {
       const st = stufenVon(this.g), sel = this.stackIndex(st), box = $('#pk-stack', this.b.el), platten = $$('.platte', box);
       platten.forEach((el, i) => { el.classList.toggle('oben', i <= sel); el.classList.toggle('unten', i > sel); });
@@ -146,7 +158,7 @@ const Satz = {
     $$('.kh.an', box).forEach((el) => el.classList.remove('an'));
     best.classList.add('an');
     this.s.g = zahl(best.dataset.g);
-    $('#pk-zahl', this.b.el).textContent = kg(this.s.g);
+    rollen($('#pk-zahl', this.b.el), this.s.g, kg(this.s.g));
     Aktiv.sichern();
   },
 
