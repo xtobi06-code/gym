@@ -315,7 +315,9 @@ Object.assign(Akt, {
     if (p.saetze.some((s) => s.auf)) p.saetze = p.saetze.filter((s) => !s.auf);
     else {
       const a = arbeitsSaetze(p)[0];
-      p.saetze.unshift(...Array.from({ length: aufwaermAnzahl() }, () => ({ ...aufwaermSatz(finde('uebungen', p.ue), a && a.g), w: 10, ok: false, auf: 1 })));
+      // So viele Aufwärmsätze, wie im Trainingstag für diese Übung eingestellt sind, sonst der Standard
+      const plan = Aktiv.t.plan ? finde('plaene', Aktiv.t.plan) : null, pp = plan ? plan.punkte.find((x) => x.ue === (p.statt || p.ue)) : null;
+      p.saetze.unshift(...Array.from({ length: (pp && pp.warmN) || aufwaermAnzahl() }, () => ({ ...aufwaermSatz(finde('uebungen', p.ue), a && a.g), w: 10, ok: false, auf: 1 })));
     }
     Aktiv.sichern(); Live.neu(pi);
   },
