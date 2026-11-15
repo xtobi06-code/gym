@@ -212,3 +212,39 @@ Die Monate stehen zu dritt nebeneinander mit kleineren Punkten, das Jahr passt s
 Commit `47909b4`
 
 Studio und Fortschritt haben wie Training das Datum über dem Titel. Rechts daneben sitzt ein schlichtes Zahnrad ohne Glas; es öffnet die bisherigen Mehr-Einstellungen als Blatt. Die Tab-Leiste hat dafür nur noch drei Reiter.
+
+## 36. Kopf: Serie neben „Diese Woche“, Zahnrad auf Höhe des Titels
+
+Commit `6de0557`
+
+Die Flamme mit der Wochenserie steht jetzt rechts neben „Diese Woche“ statt der Angabe „1 Training“, die doppelt war. Oben ist dadurch Platz, das Zahnrad sitzt auf allen Seiten mittig neben dem Titel.
+
+## 37. Blätter und Live-Training: Seite dahinter scrollt nicht mehr mit
+
+Commit `9d500d2`
+
+Seit die Seite als Ganzes scrollt, lief ein Wisch auf einem Blatt (etwa der Satz-Eingabe) an die Seite dahinter weiter, das Blatt schien außen zu scrollen. Solange ein Blatt oder das laufende Training offen ist, ist die Seite jetzt gesperrt. Die Scheiben-Ansicht ist außerdem etwas flacher, damit sie auch mit den iPhone-Rändern ohne Scrollen passt.
+
+## 38. Satz-Eingabe: beim Eintippen des Gewichts nichts mehr übereinander
+
+Commit `309064a`
+
+Tippt man die Gewichtszahl an, wird das Blatt durch die Tastatur niedriger und das Gewichtsbild schob sich über die Wiederholungen. Solange getippt wird, sind Gewichtsbild und Wiederholungen jetzt ausgeblendet, danach kommt alles wieder.
+
+## 39. Steckgewicht: kg-Beschriftung, Stangen ohne Scroll-Überhang, ein Glanzpunkt am Stift
+
+Commit `913e42c`
+
+Links steht jetzt „65 kg“ und rechts „143 lb“, beides in der breiteren Systemschrift. Die Stangen laufen optisch weiter, verlängern den Scrollbereich aber nicht mehr: unten endet das Scrollen an der letzten Platte. Der Stift hat nur noch einen Glanzpunkt statt zwei.
+
+## 40. Zusatzgewicht standardmäßig 2,5 kg
+
+Commit `50b19f7`
+
+Neue Steckgewicht-Geräte und die AlphaClub-Geräte haben jetzt 2,5 kg Zusatzgewicht voreingestellt. Bei bestehenden AlphaClub-Geräten wird es nur nachgetragen, wenn sie nie bearbeitet wurden; selbst geänderte Werte bleiben.
+
+## 41. Kalender: Quartale statt Jahre (z. B. 26Q4)
+
+Commit `a8d02cc`
+
+Der Kalender zeigt jeweils ein Quartal mit drei Monaten, umschaltbar mit den Pfeilen, beschriftet wie 26Q4. Trainings, pro Woche und „Letzte Trainings“ beziehen sich auf das gewählte Quartal; die Serie bleibt wie gehabt.
