@@ -14,9 +14,13 @@ Object.assign(Akt, {
   tab(el) {
     const neu = el.dataset.tab;
     if (neu === tab) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    const reihe = Object.keys(ANSICHTEN), r = Math.sign(reihe.indexOf(neu) - reihe.indexOf(tab));
     tab = neu; lager.set('gym-tab', tab);
     zeichne();
     window.scrollTo(0, 0);
+    // Inhalt gleitet aus der Richtung herein, in die die Kapsel fährt
+    const inh = $('#inhalt');
+    if (inh.animate && !matchMedia('(prefers-reduced-motion: reduce)').matches) inh.animate([{ opacity: 0, transform: `translateX(${r * 18}px)` }, { opacity: 1, transform: 'none' }], { duration: 260, easing: 'cubic-bezier(.2, .8, .3, 1)' });
     if (tab === 'fortschritt') zumAktuellenMonat();
   },
   blattZu(el) {
