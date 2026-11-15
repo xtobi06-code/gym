@@ -99,7 +99,7 @@ button:disabled { opacity: .3; }
 .feldzeile select { appearance: none; -webkit-appearance: none; color: var(--pin); direction: rtl; }
 .feldzeile em { font-style: normal; color: var(--t2); margin-left: -6px; }
 .feldzeile.suche input { text-align: left; }
-.feldzeile input[type="date"] { color-scheme: dark; flex: none; margin-left: auto; }
+.feldzeile input[type="date"] { flex: none; margin-left: auto; }
 .notizzeile { padding: 12px 16px; }
 textarea { display: block; width: 100%; border: 0; background: transparent; outline: none; resize: none; padding: 0; line-height: 1.4; overflow: hidden; }
 
