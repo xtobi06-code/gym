@@ -331,14 +331,24 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 @keyframes anheben { 40% { transform: translateY(-9px); } }
 
 /* Scheiben auf der Stange */
-.stange { position: relative; display: flex; align-items: center; width: 100%; height: 168px; padding: 0 4px; overflow: hidden; }
-.stange .griffstueck { flex: 0 0 34px; height: 14px; background: linear-gradient(#9a9da4, #5e6168); border-radius: 3px 0 0 3px; }
-.stange .bund { flex: 0 0 12px; height: 40px; background: linear-gradient(#b3b6bc, #6a6d74); border-radius: 3px; }
-.stange .aufgesteckt { display: flex; align-items: center; gap: 2px; padding-left: 2px; z-index: 1; }
-.stange .huelse { flex: 1; min-width: 20px; height: 22px; margin-left: -2px; background: linear-gradient(#b3b6bc, #6a6d74); border-radius: 0 4px 4px 0; }
-.sch { --b: 20px; --h: 150px; --c: #555; width: var(--b); height: var(--h); border-radius: 5px; background: var(--c); box-shadow: inset 2px 0 0 rgba(255, 255, 255, .22), inset -2px 0 0 rgba(0, 0, 0, .25); display: grid; place-items: center; flex: none; animation: aufstecken .28s var(--ease-out); }
+.stange { position: relative; display: flex; align-items: center; width: 100%; height: 172px; padding: 0 4px; overflow: hidden; }
+.stange::after { content: ""; position: absolute; left: 6%; right: 6%; bottom: 2px; height: 10px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0, 0, 0, .35), transparent); pointer-events: none; }
+.stange .griffstueck { flex: 0 0 34px; height: 14px; border-radius: 3px 0 0 3px;
+  background: repeating-linear-gradient(90deg, rgba(0, 0, 0, .18) 0 1px, transparent 1px 3px), linear-gradient(#b8bbc1, #6a6d74 60%, #55585e); }
+.stange .hebel { flex: 0 0 34px; height: 26px; border-radius: 4px 0 0 4px; background: linear-gradient(#5b5e65, #303236 60%, #26282b); }
+.stange .bund { flex: 0 0 12px; height: 40px; border-radius: 3px; background: linear-gradient(#d2d4d8, #8b8e95 50%, #5e6168); box-shadow: inset 1px 0 0 rgba(255, 255, 255, .4); }
+.stange .aufgesteckt { display: flex; align-items: center; gap: 1px; padding-left: 2px; z-index: 1; }
+.stange .huelse { flex: 1; min-width: 20px; height: 22px; margin-left: -2px; border-radius: 0 4px 4px 0;
+  background: linear-gradient(#e3e5e8, #a6a9af 35%, #6d7077 70%, #8a8d93); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5); }
+/* Scheiben von der Seite: gummierte Kante, nach oben und unten gerundet wie ein Zylinder */
+.sch { --b: 20px; --h: 150px; --c: #555; position: relative; width: var(--b); height: var(--h); border-radius: 4px; flex: none; display: grid; place-items: center;
+  background: linear-gradient(90deg, rgba(0, 0, 0, .28), transparent 22%, rgba(255, 255, 255, .16) 48%, transparent 74%, rgba(0, 0, 0, .32)), var(--c);
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, .12), inset 0 -3px 0 rgba(0, 0, 0, .25), 1px 0 2px rgba(0, 0, 0, .35); }
+.sch.neu { animation: aufstecken .34s var(--ease-out); }
 .sch span { writing-mode: vertical-rl; transform: rotate(180deg); font-family: var(--zahl); font-weight: 700; font-size: 12px; color: var(--tinte, #fff); }
-@keyframes aufstecken { from { transform: translateX(26px); opacity: 0; } }
+@keyframes aufstecken { from { transform: translateX(44px) rotate(-3deg); opacity: 0; } 70% { transform: translateX(-2px); opacity: 1; } }
+/* Federverschluss am Ende */
+.verschluss { flex: none; width: 9px; height: 34px; margin-left: 2px; border-radius: 3px; background: linear-gradient(90deg, #2b2d31, #6f7279 50%, #2b2d31); box-shadow: 0 0 0 1px rgba(0, 0, 0, .3); }
 .s25 { --c: #c9302a; --b: 26px; --h: 156px; }
 .s20 { --c: #2b62c9; --b: 23px; --h: 156px; }
 .s15 { --c: #e0a800; --b: 20px; --h: 140px; --tinte: #1d1600; }

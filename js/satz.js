@@ -62,9 +62,10 @@ const Satz = {
     }
     if (this.typ === 'scheiben') {
       const mult = g.beidseitig === false ? 1 : 2, summe = s.sch.reduce((a, b) => a + b, 0), stange = g.stange ?? 20;
-      const rechnung = [stange > 0 ? `${kg(stange)} kg ${mult === 2 ? 'Stange' : 'leer'}` : '', summe > 0 ? (mult === 2 ? `2 × ${kg(summe)} kg` : `${kg(summe)} kg Scheiben`) : ''].filter(Boolean).join(' + ') || 'Noch nichts aufgelegt';
-      return `<div class="stange"><span class="griffstueck"></span><span class="bund"></span>
-          <div class="aufgesteckt">${s.sch.map((w, i) => `<button class="sch ${this.schKlasse(w)}" data-akt="schWeg" data-i="${i}" aria-label="${kg(w)} Kilo abnehmen"><span>${kg(w)}</span></button>`).join('')}</div>
+      const rechnung = [stange > 0 ? `${kg(stange)} kg ${mult === 2 ? 'Stange' : 'leer'}` : '', summe > 0 ? (mult === 2 ? (stange > 0 ? `2 × ${kg(summe)} kg` : `je Seite ${kg(summe)} kg`) : `${kg(summe)} kg Scheiben`) : ''].filter(Boolean).join(' + ') || 'Noch nichts aufgelegt';
+      const neu = this.neuIdx; this.neuIdx = null;
+      return `<div class="stange ${stange > 0 ? '' : 'horn'}">${stange > 0 ? '<span class="griffstueck"></span>' : '<span class="hebel"></span>'}<span class="bund"></span>
+          <div class="aufgesteckt">${s.sch.map((w, i) => `<button class="sch ${this.schKlasse(w)} ${i === neu ? 'neu' : ''}" data-akt="schWeg" data-i="${i}" aria-label="${kg(w)} Kilo abnehmen"><span>${kg(w)}</span></button>`).join('')}${s.sch.length && stange > 0 ? '<span class="verschluss"></span>' : ''}</div>
           <span class="huelse"></span></div>
         <p class="rechnung">${rechnung}</p>
         <div class="schwahl">${SCHEIBEN.map((w) => `<button class="schknopf ${this.schKlasse(w)}" data-akt="schDazu" data-w="${w}" aria-label="${kg(w)} Kilo auflegen">${kg(w)}</button>`).join('')}</div>
@@ -200,10 +201,23 @@ Object.assign(Akt, {
     const s = Satz.s, g = Satz.g;
     if (s.sch.length >= 12) return toast('Mehr passt nicht auf die Stange');
     s.sch.push(+el.dataset.w); s.sch.sort((a, b) => b - a);
+    Satz.neuIdx = s.sch.lastIndexOf(+el.dataset.w);   // nur die neue Scheibe gleitet auf
     s.g = (g.stange ?? 20) + (g.beidseitig === false ? 1 : 2) * s.sch.reduce((a, b) => a + b, 0);
     $('#pk-bild', Satz.b.el).innerHTML = Satz.bild(); Satz.nachZeichnen(); Aktiv.sichern();
   },
   schWeg(el) {
+    const s = Satz.s, g = Satz.g;
+    if (el.classList.contains('runter')) return;
+    // Erst abziehen lassen, dann neu zeichnen
+    if (el.animate && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.classList.add('runter');
+      el.animate([{ transform: 'none', opacity: 1 }, { transform: 'translate(34px, 6px) rotate(4deg)', opacity: 0 }], { duration: 200, easing: 'cubic-bezier(.4, 0, 1, 1)', fill: 'forwards' })
+        .finished.then(() => Akt.schWegJetzt(el));
+      return;
+    }
+    Akt.schWegJetzt(el);
+  },
+  schWegJetzt(el) {
     const s = Satz.s, g = Satz.g;
     s.sch.splice(+el.dataset.i, 1);
     s.g = (g.stange ?? 20) + (g.beidseitig === false ? 1 : 2) * s.sch.reduce((a, b) => a + b, 0);
