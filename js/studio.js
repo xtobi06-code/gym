@@ -72,7 +72,8 @@ function gewichtFelder(o, p) {
       ${zahlfeld('Anzahl Platten', `data-ein="${p}Feld" data-f="anzahl"`, o.anzahl)}
       ${zahlfeld('Zusatzgewicht', `data-ein="${p}Feld" data-f="zusatz" placeholder="keins"`, o.zusatz || null, 'kg')}
       ${feld('Eigene Stufen', `data-ein="${p}Feld" data-f="stufen" placeholder="z. B. 5 10 15 22,5"`, o.stufen)}
-    </div><p class="hinweis" id="${p}-vorschau">${gewichtVorschau(o)}</p>`;
+    </div><p class="hinweis" id="${p}-vorschau">${gewichtVorschau(o)}</p>
+    <p class="hinweis">Zusatzgewicht ist das kleine Extra oben an vielen Maschinen, etwa 2,5 kg. Damit bleiben die Platten in 5er-Schritten und du schaltest die 2,5 kg im Satz dazu.</p>`;
   if (o.typ === 'scheiben') typFelder = `<div class="gruppe">
       ${zahlfeld('Leergewicht der Stange', `data-ein="${p}Feld" data-f="stange"`, o.stange, 'kg')}
       <label class="zeile feldzeile"><span>Scheiben auf beiden Seiten</span><input type="checkbox" class="schalter" data-ein="${p}Schalter" data-f="beidseitig" ${o.beidseitig !== false ? 'checked' : ''}></label>
