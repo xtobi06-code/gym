@@ -325,10 +325,14 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 .stack::-webkit-scrollbar { display: none; }
 .st-turm { position: relative; padding: 0 0 4px; }
 /* Führungsstangen links und rechts, Wählstab in der Mitte: laufen über den Rand hinaus, damit beim Überziehen kein Ende zu sehen ist */
-.st-stange { position: absolute; top: -600px; bottom: -600px; width: 8px; margin-left: -4px; z-index: 0; background: linear-gradient(90deg, #44474c, #9a9da3 45%, #55585e); }
+.st-stange { position: absolute; top: 0; bottom: 0; width: 8px; margin-left: -4px; z-index: 0; background: #7d8187;
+  /* nach unten: Kopien als Schatten, die verlängern den Scrollbereich nicht */
+  box-shadow: 0 150px #7d8187, 0 300px #7d8187, 0 450px #7d8187, 0 600px #7d8187, 0 750px #7d8187, 0 900px #7d8187; }
+/* nach oben: ein Stück über dem Turm, oberhalb zählt es beim Scrollen nicht */
+.st-stange::before { content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 1200px; background: inherit; }
 .st-stange.l { left: 18%; }
 .st-stange.r { left: 82%; }
-.st-stange.m { left: 50%; bottom: auto; height: 600px; width: 10px; margin-left: -5px; transition: height .45s var(--ease-out); }
+.st-stange.m { left: 50%; bottom: auto; height: 0; width: 10px; margin-left: -5px; box-shadow: none; transition: height .45s var(--ease-out); }
 /* Kopfplatte: hier hängt das Seil, sie geht immer mit hoch */
 .st-kopf { position: relative; z-index: 1; display: block; height: 22px; margin: 0 6px 3px; border-radius: 7px 7px 4px 4px;
   background: linear-gradient(#9da1a8, #6b6f76 55%, #55595f); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 2px 4px rgba(0, 0, 0, .4); }
@@ -345,8 +349,10 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
   background: radial-gradient(circle at 50% 40%, #050505 55%, #3d3f44 62%); transition: opacity .15s; }
 .platte.pin::after { opacity: 0; }
 .platte:active { transform: none; filter: brightness(1.25); }
-.platte .aufkleber, .platte .lb { min-width: 40px; padding: 1px 6px; border-radius: 3px; background: #4a4c51; color: #b9bcc2; font-family: var(--zahl); font-weight: 700; font-size: 15px; text-align: center; font-variant-numeric: tabular-nums; }
-.platte .lb { min-width: 34px; font-size: 12px; font-weight: 600; opacity: .8; }
+/* Beschriftung in der breiten Systemschrift: links kg, rechts lb */
+.platte .aufkleber, .platte .lb { min-width: 56px; padding: 2px 6px; border-radius: 3px; background: #4a4c51; color: #b9bcc2; font: 700 13px/1.15 -apple-system, BlinkMacSystemFont, system-ui, sans-serif; letter-spacing: .01em; text-align: center; font-variant-numeric: tabular-nums; }
+.platte .aufkleber::after { content: " kg"; font-weight: 600; font-size: 10px; }
+.platte .lb { font-weight: 600; opacity: .8; }
 .platte .lb::after { content: " lb"; font-size: 10px; }
 /* Was am Stift hängt, wird gehoben: heller, leicht angehoben, Lücke zum Rest */
 .platte.oben { background: linear-gradient(#8f939a, #676b72 55%, #555960); transform: translateY(-3px); }
@@ -356,7 +362,6 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 .st-stift { position: absolute; top: 0; left: 50%; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; pointer-events: none; z-index: 3;
   background: radial-gradient(circle at 38% 32%, #ff8a73, #d8361a 55%, #9e2410); box-shadow: inset 0 -2px 3px rgba(0, 0, 0, .3), 0 0 0 2px rgba(0, 0, 0, .35), 0 3px 8px rgba(0, 0, 0, .55);
   transition: transform .45s var(--ease-out); }
-.st-stift::after { content: ""; position: absolute; left: 7px; top: 5px; width: 8px; height: 5px; border-radius: 50%; background: rgba(255, 255, 255, .45); }
 .stack.probe .platte.oben, .stack.probe .st-kopf { animation: anheben .42s var(--ease-out); }
 @keyframes anheben { 40% { transform: translateY(-9px); } }
 /* Satz-Eingabe: der Turm gibt nach, damit das Blatt nicht scrollt */

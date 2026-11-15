@@ -137,7 +137,7 @@ const Satz = {
     const alt = this.stiftY;
     this.stiftY = y;
     stift.style.transform = `translateY(${y}px)`;
-    $('#pk-wahlstab', this.b.el).style.height = `${600 + y}px`;   // der Wählstab reicht bis zur gesteckten Platte
+    $('#pk-wahlstab', this.b.el).style.height = `${y}px`;   // der Wählstab reicht bis zur gesteckten Platte
     if (!bewegt || alt == null || alt === y || !stift.animate || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     stift.animate([
       { transform: `translateY(${alt}px) scale(1)`, easing: 'cubic-bezier(.3, 0, .3, 1)' },
