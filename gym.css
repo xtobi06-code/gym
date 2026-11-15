@@ -280,6 +280,8 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 .haken.an { background: var(--ok); border-color: var(--ok); color: #04210c; }
 .haken:active { transform: scale(.88); }
 .haken.frisch { animation: haken-pop .34s var(--ease-out); }
+.haken.frisch path { stroke-dasharray: 22; animation: haken-zeichnen .32s .06s cubic-bezier(.6, 0, .3, 1) backwards; }
+@keyframes haken-zeichnen { from { stroke-dashoffset: 22; } to { stroke-dashoffset: 0; } }
 @keyframes haken-pop { 0% { transform: scale(.8); } 55% { transform: scale(1.12); } 100% { transform: none; } }
 .liste.saetze { margin-bottom: 4px; }
 .pr-zeile { display: inline-flex; align-items: center; gap: 4px; color: var(--pin) !important; font-weight: 650; }
