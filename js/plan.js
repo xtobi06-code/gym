@@ -1,8 +1,10 @@
 'use strict';
 /* Training-Reiter: Trainingstage (Splits) anlegen, bearbeiten und starten. */
 
-function kopf(titel, zusatz = '') {
-  return `<div class="kopf">${zusatz ? `<p class="info">${esc(zusatz)}</p>` : ''}<h1>${esc(titel)}</h1></div>`;
+// Kopf jeder Seite: Datum mit Einstellungen rechts, darunter der Titel (rechts optional etwas wie die Serie)
+function kopf(titel, rechts = '') {
+  return `<div class="kopf"><div class="kopf-oben"><p class="info">${esc(fmtLang.format(new Date()))}</p><button class="zahnrad" data-akt="einstellungen" aria-label="Einstellungen">${ic('zahnrad', 22)}</button></div>
+    <div class="kopf-titel"><h1>${esc(titel)}</h1>${rechts}</div></div>`;
 }
 // Alle Trainingstage teilen sich die Kontrastfarbe: im Kalender zählt nur, ob trainiert wurde
 const planFarbe = () => 'var(--pin)';
@@ -74,7 +76,7 @@ function kachelHtml(p, art) {
 }
 
 function zeigeTraining() {
-  let h = `<div class="kopf kopf-streak"><div><p class="info">${esc(fmtLang.format(new Date()))}</p><h1>Training</h1></div>${D.trainings.length ? `<div class="streak-marke" title="Wochen in Folge aktiv"><span class="zahl">${serie()}</span>${ic('flamme', 22)}</div>` : ''}</div>`;
+  let h = kopf('Training', D.trainings.length ? `<div class="streak-marke" title="Wochen in Folge aktiv"><span class="zahl">${serie()}</span>${ic('flamme', 22)}</div>` : '');
   const t = Aktiv.t;
   if (t) {
     const fertig = t.punkte.reduce((a, p) => a + arbeitsSaetze(p).filter((s) => s.ok).length, 0), alle = t.punkte.reduce((a, p) => a + arbeitsSaetze(p).length, 0);

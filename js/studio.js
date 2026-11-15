@@ -338,7 +338,7 @@ Object.assign(Akt, {
   equipDa(el) {
     const e = studioEinst(), l = e.ohne || [], k = el.dataset.k;
     setze('einst', { ...e, ohne: l.includes(k) ? l.filter((x) => x !== k) : [...l, k] });
-    zeichne();
+    zeichne(); Blatt.frisch();
   },
 });
 Object.assign(Ein, {

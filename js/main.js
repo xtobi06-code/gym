@@ -2,7 +2,7 @@
 /* Start: Reiter, Klick-Verteilung, Abgleich beim Öffnen. */
 
 let tab = lager.get('gym-tab', 'training');
-const ANSICHTEN = { training: zeigeTraining, studio: zeigeStudio, fortschritt: zeigeFortschritt, mehr: zeigeMehr };
+const ANSICHTEN = { training: zeigeTraining, studio: zeigeStudio, fortschritt: zeigeFortschritt };
 
 function zeichne() {
   if (!ANSICHTEN[tab]) tab = 'training';

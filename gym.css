@@ -60,6 +60,11 @@ button:disabled { opacity: .3; }
 .kopf { margin: 8px 2px 20px; }
 .kopf .info { color: var(--t2); font-size: 15px; font-weight: 550; margin-bottom: 0; }
 .kopf h1 { font-family: var(--titel); font-size: 50px; line-height: 1; font-weight: 400; letter-spacing: .01em; text-transform: uppercase; }
+.kopf-oben { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.kopf-titel { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+/* Einstellungen: bewusst unauffällig, nur das Symbol */
+.zahnrad { display: grid; place-items: center; width: 40px; height: 40px; margin: -10px -9px -10px 0; border-radius: 50%; color: var(--t2); }
+.zahnrad:active { color: var(--text); }
 
 /* Tab-Leiste: schwebende Liquid-Glass-Kapsel; darüber löst sich der Inhalt in Unschärfe auf */
 .tabfade { position: fixed; z-index: 19; left: 0; right: 0; bottom: 0; height: calc(var(--unten) + 70px); pointer-events: none;
@@ -73,7 +78,7 @@ button:disabled { opacity: .3; }
   transition: background .3s var(--ease-out), color .2s; }
 .tabbar button.an { color: var(--pin); }
 /* Glas-Kapsel unter dem gewählten Reiter, gleitet mit leichtem Nachfedern */
-.tab-pille { position: absolute; top: 5px; bottom: 5px; left: 5px; width: calc((100% - 16px) / 4); border-radius: 25px; z-index: 0; pointer-events: none;
+.tab-pille { position: absolute; top: 5px; bottom: 5px; left: 5px; width: calc((100% - 14px) / 3); border-radius: 25px; z-index: 0; pointer-events: none;
   background: var(--kapsel); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 1px 6px rgba(0, 0, 0, .1);
   transform: translateX(calc((100% + 2px) * var(--i, 0))); transition: transform .48s cubic-bezier(.3, 1.35, .5, 1); }
 .tabbar button { z-index: 1; }
@@ -521,7 +526,6 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 .hero-zahlen > div { flex: 1; display: flex; flex-direction: column; align-items: center; }
 .hero-zahlen > div + div { border-left: .5px solid rgba(255, 255, 255, .16); }
 .hero-zahlen b { font-size: 36px; line-height: 1; font-weight: 700; }
-.kopf-streak { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
 .streak-marke { display: inline-flex; align-items: center; gap: 4px; padding-bottom: 6px; }
 .streak-marke .zahl { font-size: 34px; line-height: 1; }
 .streak-marke .ic { color: var(--pin); }

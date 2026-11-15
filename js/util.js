@@ -77,12 +77,13 @@ const SYMBOLE = {
   kamera: 'M4 8h3l2-2.5h6L17 8h3v11H4zM12 10.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z',
   info: 'M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17zM12 11v5.5M12 7.8v.01',
   bild: 'M4 5.5h16v13H4zM4 15.5l4.5-4.5 4 4 2.5-2.5 5 5M15.5 9h.01',
+  zahnrad: 'M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z',
   stern: 'M12 4l2.4 5 5.6.7-4.1 3.8 1 5.5L12 16.3 7.1 19l1-5.5L4 9.7 9.6 9z',
 };
 const GEFUELLT = new Set(['play']);
 function ic(name, groesse = 22) {
   const voll = GEFUELLT.has(name);
-  return `<svg class="ic" width="${groesse}" height="${groesse}" viewBox="0 0 24 24" fill="${voll ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="${voll ? 1.5 : name === 'punkte' ? 3.2 : 2}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${SYMBOLE[name] || ''}"/></svg>`;
+  return `<svg class="ic" width="${groesse}" height="${groesse}" viewBox="0 0 24 24" fill="${voll ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="${voll ? 1.5 : name === 'punkte' ? 3.2 : name === 'zahnrad' ? 1.7 : 2}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${SYMBOLE[name] || ''}"/></svg>`;
 }
 
 /* Textfelder wachsen mit ihrem Inhalt */

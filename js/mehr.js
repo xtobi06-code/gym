@@ -1,9 +1,10 @@
 'use strict';
 /* Mehr-Reiter: Abgleich mit GitHub und Sicherung als Datei. */
 
-function zeigeMehr() {
+/* Einstellungen: öffnen über das Zahnrad oben rechts als Blatt */
+function mehrHtml() {
   const c = Sync.cfg();
-  return kopf('Mehr') + `
+  return `
     ${window.GYM_VORSCHAU ? `<div class="merkzettel"><span class="mz-ic">${ic('notiz', 20)}</span><div><b>Vorschau mit Beispieldaten</b><p>Synchronisierung und Sicherung als Datei funktionieren erst in der Fassung auf GitHub.</p></div></div>` : ''}
     <div class="gruppe-titel">Synchronisierung</div>
     <div class="gruppe">
@@ -40,7 +41,8 @@ ${window.GYM_VORSCHAU ? '' : `    <div class="gruppe-titel">Sicherung</div>
 }
 
 Object.assign(Akt, {
-  aufwaermAnzahl(el) { setze('einst', { ...studioEinst(), aufwaerm: +el.dataset.n }); zeichne(); },
+  einstellungen() { Blatt.auf({ titel: 'Einstellungen', voll: true, html: mehrHtml(), neu: mehrHtml }); },
+  aufwaermAnzahl(el) { setze('einst', { ...studioEinst(), aufwaerm: +el.dataset.n }); zeichne(); Blatt.frisch(); },
   syncJetzt() { syncFelderLesen(); Sync.abgleich(true); },
   // Erst abgleichen, damit nichts verloren geht, dann die neueste App-Fassung holen und neu starten
   async appNeu(el) {
@@ -86,7 +88,7 @@ Object.assign(Ein, {
       D = mischen(D, fremd);
       migriere();
       sichern();
-      zeichne();
+      zeichne(); Blatt.frisch();
       toast('Datei eingelesen');
     } catch {
       toast('Diese Datei enthält keine Gym-Daten');
