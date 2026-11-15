@@ -1,6 +1,12 @@
 'use strict';
 /* Blätter: von unten einfahrende Flächen. Lassen sich am Kopf nach unten wegziehen. */
 
+// Solange ein Blatt oder das laufende Training offen ist, scrollt die Seite dahinter nicht mit
+function seiteSperren() {
+  const live = $('#live');
+  document.documentElement.classList.toggle('gesperrt', Blatt.stapel.length > 0 || !!(live && !live.hidden));
+}
+
 const Blatt = {
   stapel: [],
 
@@ -29,6 +35,7 @@ const Blatt = {
     $$('textarea', b.inhalt).forEach(wachse);
     huelle.getBoundingClientRect();   // Startzustand festhalten, damit die Bewegung läuft
     huelle.classList.add('offen');
+    seiteSperren();
     return b;
   },
 
@@ -41,6 +48,7 @@ const Blatt = {
     b.flaeche.style.transition = '';
     b.el.classList.remove('offen');
     setTimeout(() => b.el.remove(), 420);
+    seiteSperren();
     if (b.opt.onZu) b.opt.onZu();
   },
 

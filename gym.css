@@ -31,6 +31,7 @@
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html { -webkit-text-size-adjust: 100%; }
+html.gesperrt, html.gesperrt body { overflow: hidden; overscroll-behavior: none; }
 body { margin: 0; background: var(--bg); color: var(--text);
   font: 17px/1.35 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif; -webkit-font-smoothing: antialiased; letter-spacing: -.01em; }
 button, input, select, textarea { font: inherit; color: inherit; letter-spacing: inherit; }
@@ -362,7 +363,7 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 .satzblatt .pk-bild.t-stack { flex: 1 1 auto; min-height: 0; }
 
 /* Scheiben auf der Stange */
-.stange { position: relative; display: flex; align-items: center; width: 100%; height: 172px; padding: 0 4px; overflow: hidden; }
+.stange { position: relative; display: flex; align-items: center; width: 100%; height: 154px; padding: 0 4px; overflow: hidden; }
 .stange::after { content: ""; position: absolute; left: 6%; right: 6%; bottom: 2px; height: 10px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0, 0, 0, .35), transparent); pointer-events: none; }
 .stange .griffstueck { flex: 0 0 34px; height: 14px; border-radius: 3px 0 0 3px;
   background: repeating-linear-gradient(90deg, rgba(0, 0, 0, .18) 0 1px, transparent 1px 3px), linear-gradient(#b8bbc1, #6a6d74 60%, #55585e); }

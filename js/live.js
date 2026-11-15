@@ -12,6 +12,7 @@ const Live = {
     this.zeichne();
     this.el.getBoundingClientRect();
     this.el.classList.add('offen');
+    seiteSperren();
     if (i != null) this.zeige(i, false);
     clearInterval(this.takt);
     this.takt = setInterval(() => this.uhr(), 1000);
@@ -21,7 +22,7 @@ const Live = {
     this.el.classList.remove('offen');
     clearInterval(this.takt);
     this.wach(false);
-    setTimeout(() => { if (!this.el.classList.contains('offen')) { this.el.hidden = true; this.el.innerHTML = ''; } }, 420);
+    setTimeout(() => { if (!this.el.classList.contains('offen')) { this.el.hidden = true; this.el.innerHTML = ''; seiteSperren(); } }, 420);
     zeichne();
   },
   // Bildschirm während des Trainings anlassen, wo der Browser das erlaubt
