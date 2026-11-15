@@ -7,7 +7,7 @@ const ANSICHTEN = { training: zeigeTraining, studio: zeigeStudio, fortschritt: z
 function zeichne() {
   if (!ANSICHTEN[tab]) tab = 'training';
   $('#inhalt').innerHTML = ANSICHTEN[tab]();
-  $$('#tabs button').forEach((b) => { const an = b.dataset.tab === tab; b.classList.toggle('an', an); if (an) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
+  $$('#tabs button').forEach((b, i) => { const an = b.dataset.tab === tab; b.classList.toggle('an', an); if (an) { b.setAttribute('aria-current', 'page'); $('#tabs').style.setProperty('--i', i); } else b.removeAttribute('aria-current'); });
 }
 
 Object.assign(Akt, {

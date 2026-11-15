@@ -69,9 +69,14 @@ button:disabled { opacity: .3; }
   background: var(--glas); -webkit-backdrop-filter: blur(26px) saturate(190%); backdrop-filter: blur(26px) saturate(190%);
   border: .5px solid var(--glas-rand);
   box-shadow: 0 10px 34px rgba(0, 0, 0, .34), inset 0 1px 0 rgba(255, 255, 255, .22), inset 0 -1px 0 rgba(255, 255, 255, .05); }
-.tabbar button { position: relative; flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 2px 7px; border-radius: 25px; color: var(--t2); font-size: 10.5px; font-weight: 600; letter-spacing: .01em;
+.tabbar button { position: relative; flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 2px 7px; border-radius: 25px; color: var(--t2); font-size: 10.5px; font-weight: 600; letter-spacing: .01em;
   transition: background .3s var(--ease-out), color .2s; }
-.tabbar button.an { color: var(--pin); background: var(--kapsel); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 1px 6px rgba(0, 0, 0, .1); }
+.tabbar button.an { color: var(--pin); }
+/* Glas-Kapsel unter dem gewählten Reiter, gleitet mit leichtem Nachfedern */
+.tab-pille { position: absolute; top: 5px; bottom: 5px; left: 5px; width: calc((100% - 16px) / 4); border-radius: 25px; z-index: 0; pointer-events: none;
+  background: var(--kapsel); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 1px 6px rgba(0, 0, 0, .1);
+  transform: translateX(calc((100% + 2px) * var(--i, 0))); transition: transform .48s cubic-bezier(.3, 1.35, .5, 1); }
+.tabbar button { z-index: 1; }
 .tabbar button:active { transform: scale(.94); opacity: .75; }
 
 /* Gruppen und Zeilen */
