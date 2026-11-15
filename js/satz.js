@@ -29,6 +29,7 @@ const Satz = {
     this.vorher = JSON.stringify([s.g, s.w]);
     this.b = Blatt.auf({ titel: `${ue ? ue.name : 'Übung'}, ${s.auf ? 'Aufwärmen' : 'Satz ' + satzLabel(this.p, si)}`, html: this.html(), onZu: () => this.fertig() });
     this.b.el.classList.add('satzblatt');
+    this.stiftY = null;
     this.nachZeichnen(true);
   },
 
@@ -52,7 +53,11 @@ const Satz = {
     const s = this.s, g = this.g;
     if (this.typ === 'stack') {
       const st = stufenVon(g), sel = this.stackIndex(st);
-      return `<div class="stack" id="pk-stack">${st.map((w, i) => `<button class="platte ${i <= sel ? 'oben' : ''} ${i === sel ? 'pin' : ''}" data-akt="stackWahl" data-i="${i}" aria-label="${kg(w)} Kilo stecken"><span class="aufkleber">${kg(w)}</span></button>`).join('')}</div>
+      return `<div class="stack" id="pk-stack"><div class="st-turm">
+          <span class="st-kopf"></span>
+          ${st.map((w, i) => `<button class="platte ${i <= sel ? 'oben' : 'unten'}" data-akt="stackWahl" data-i="${i}" aria-label="${kg(w)} Kilo stecken"><span class="aufkleber">${kg(w)}</span></button>`).join('')}
+          <span class="st-stift" id="pk-stift"></span>
+        </div></div>
         ${g.zusatz > 0 ? `<button class="chip ${s.zu ? 'an' : ''}" data-akt="stackZusatz" aria-pressed="${!!s.zu}">${ic('plus', 15)} ${kg(g.zusatz)} kg Zusatzgewicht</button>` : ''}`;
     }
     if (this.typ === 'scheiben') {
@@ -95,9 +100,11 @@ const Satz = {
     const z = $('#pk-zahl', this.b.el); if (z) z.textContent = kg(s.g);
     $('#pk-wdh', this.b.el).textContent = s.w;
     if (this.typ === 'stack') {
-      const st = stufenVon(this.g), sel = this.stackIndex(st);
-      $$('.platte', this.b.el).forEach((el, i) => { el.classList.toggle('oben', i <= sel); el.classList.toggle('pin', i === sel); });
-      if (start) { const el = $$('.platte', this.b.el)[sel], box = $('#pk-stack', this.b.el); if (el) box.scrollTop = el.offsetTop - box.clientHeight / 2 + el.offsetHeight / 2; }
+      const st = stufenVon(this.g), sel = this.stackIndex(st), box = $('#pk-stack', this.b.el), platten = $$('.platte', box);
+      platten.forEach((el, i) => { el.classList.toggle('oben', i <= sel); el.classList.toggle('unten', i > sel); });
+      const el = platten[sel];
+      if (el && start) box.scrollTop += el.getBoundingClientRect().top - box.getBoundingClientRect().top - (box.clientHeight - el.offsetHeight) / 2;
+      if (el) this.stiftSetzen(el, !start);
     }
     if (this.typ === 'kurzhantel') {
       const box = $('#pk-kh', this.b.el);
@@ -108,6 +115,23 @@ const Satz = {
         box.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => this.khMitte(box)); }, { passive: true });
       }
     }
+  },
+  // Steckstift umstecken: herausziehen, zur neuen Platte fahren, wieder einstecken
+  stiftSetzen(platte, bewegt) {
+    const stift = $('#pk-stift', this.b.el), y = platte.offsetTop + platte.offsetHeight / 2 - 3;   // gehobene Platte sitzt 3 px höher
+    const alt = this.stiftY;
+    this.stiftY = y;
+    stift.style.transform = `translateY(${y}px)`;
+    if (!bewegt || alt == null || alt === y || !stift.animate || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    stift.animate([
+      { transform: `translateY(${alt}px) scale(1)`, easing: 'cubic-bezier(.3, 0, .3, 1)' },
+      { transform: `translateY(${alt}px) scale(1.3)`, offset: 0.24, easing: 'cubic-bezier(.45, 0, .2, 1)' },
+      { transform: `translateY(${y}px) scale(1.3)`, offset: 0.76, easing: 'cubic-bezier(.3, 0, .3, 1)' },
+      { transform: `translateY(${y}px) scale(1)` },
+    ], { duration: Math.min(560, 300 + Math.abs(y - alt) * 0.8) });
+    // Der Turm ruckt kurz an, sobald der Stift sitzt
+    const box = $('#pk-stack', this.b.el);
+    box.classList.remove('probe'); void box.offsetWidth; box.classList.add('probe');
   },
   // Die Hantel in der Mitte der Leiste ist die gewählte
   khMitte(box) {
