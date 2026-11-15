@@ -74,3 +74,57 @@ Bei Übungen ohne Zusatzgewicht stand überall „0 kg × 10“. Jetzt steht „
 Commit `c93f034`
 
 Die geschätzte Dauer stand groß direkt über dem Namen und kam langen Namen wie POSTERIOR sehr nah. Sie steht jetzt etwas kleiner in der Kopfzeile, der Name hat Luft.
+
+## 13. Steckgewicht realistischer: Stahlplatten, Kopfplatte, Steckstift mit Umsteck-Animation
+
+Commit `94cf3c1`
+
+Platten mit gebürsteter Oberfläche und Bohrung, Kopfplatte oben, gehobene Platten hell mit Lücke zum Rest. Der Stift ist ein eigenes Element mit rotem Griff: beim Umstecken wird er herausgezogen, fährt zur neuen Platte und steckt ein, danach ruckt der Turm kurz an. Mit „Bewegung reduzieren“ springt er ohne Animation.
+
+## 14. Scheiben realistischer: gerundete Gummischeiben, Verschluss, Maschinenarm bei Plate-Loaded
+
+Commit `de444a0`
+
+Scheiben mit Zylinder-Schattierung und Schatten am Boden, Stange mit Rändelung und glänzender Hülse, Federverschluss am Ende. Nur die neu aufgelegte Scheibe gleitet auf (vorher flogen alle neu herein), abgenommene rutschen seitlich herunter. Bei Plate-Loaded-Maschinen ist statt der Hantelstange ein Maschinenarm zu sehen und die Rechnung lautet „je Seite … kg“.
+
+## 15. Satz-Eingabe: Satznummer vorne im Titel
+
+Commit `6537c2a`
+
+Bei langen Übungsnamen wurde „Satz 1“ hinten abgeschnitten. Jetzt steht „Satz 1: Konvergierende Brustpresse“ da, abgeschnitten wird höchstens der Name.
+
+## 16. Kurzhanteln realistischer: Hex-Hanteln auf der Ablage
+
+Commit `6265b9f`
+
+Statt stilisierter „H“ jetzt Hex-Hanteln mit gummierten Köpfen, Chromringen und gerändeltem Griff, die auf einer Stahlschiene liegen. Schwere Hanteln haben größere und breitere Köpfe. Die gewählte wird angehoben und wirft einen Schatten.
+
+## 17. Live-Training: Hinweis, wann mehr Gewicht dran ist (doppelte Progression)
+
+Commit `1cfd1d2`
+
+Hast du letztes Mal in allen Arbeitssätzen das obere Ende des Wiederholungsbereichs geschafft, erscheint über den Sätzen „Zeit für mehr Gewicht“ mit dem nächsten Schritt, den es am Gerät gibt (nächste Platte, nächste Kurzhantel, +2,5 kg an der Stange). Antippen setzt das Gewicht für alle offenen Sätze, die Wiederholungen beginnen wieder am unteren Ende und das Aufwärmen passt sich an.
+
+## 18. Live-Training: neuer Bestwert schon beim Abhaken
+
+Commit `6cd4da2`
+
+Schlägt ein abgehakter Satz das bisherige geschätzte Maximum der Übung, steht in der Zeile „Neuer Bestwert“ mit Stern, die Zeile leuchtet kurz auf und eine Meldung nennt den neuen Wert. Vorher gab es das erst nach dem Beenden. Wird der Satz wieder geöffnet, verschwindet die Markierung.
+
+## 19. Fortschritt: neuer Bereich „Muskeln“ mit Sätzen pro Muskel und Woche
+
+Commit `aaa0216`
+
+Pro Woche zeigt ein Balken für jeden Muskel die Arbeitssätze, mittrainierte zählen halb. Ein helles Band markiert 10 bis 20 Sätze. Muskeln ohne Sätze bleiben sichtbar, damit auffällt, was zu kurz kommt. Mit den Pfeilen lassen sich frühere Wochen ansehen.
+
+## 20. Pausentimer: Doppelton und kurzes Pulsieren am Ende der Pause
+
+Commit `b98c3a6`
+
+Läuft die Pause ab, kommt ein kurzer Doppelton (und auf Geräten, die es können, eine Vibration), die Pausenleiste pulsiert einmal. Der Ton lässt sich unter Mehr, Training abschalten. Hinweis: iOS spielt ihn nur, solange die App offen ist, und im Lautlos-Modus nicht.
+
+## 21. Trainingsabschluss: Vergleich mit dem letzten Mal
+
+Commit `88fef90`
+
+Die Zusammenfassung nach dem Training nennt jetzt, wie viel mehr oder weniger Gewicht bewegt wurde als beim letzten Mal desselben Trainingstags, mehr wird grün hervorgehoben.
