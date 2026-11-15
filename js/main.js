@@ -59,6 +59,7 @@ if (window.visualViewport) {
 }
 
 vorlageSicherstellen();
+themaAnwenden();
 zeichne();
 if (Aktiv.t) Live.auf();
 bilderVorladen();

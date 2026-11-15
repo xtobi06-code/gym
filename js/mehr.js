@@ -1,11 +1,25 @@
 'use strict';
 /* Mehr-Reiter: Abgleich mit GitHub und Sicherung als Datei. */
 
+/* Erscheinungsbild gilt nur für dieses Gerät und liegt deshalb nicht im Sync */
+const thema = () => { const t = lager.get('gym-thema', 'auto'); return t === 'hell' || t === 'dunkel' ? t : 'auto'; };
+function themaAnwenden() {
+  const t = thema(), de = document.documentElement;
+  if (t === 'auto') delete de.dataset.thema; else de.dataset.thema = t;
+  let m = document.getElementById('thema-fest');
+  if (t === 'auto') { if (m) m.remove(); return; }
+  if (!m) { m = document.createElement('meta'); m.name = 'theme-color'; m.id = 'thema-fest'; document.head.prepend(m); }
+  m.content = t === 'hell' ? '#f2f2f5' : '#09090a';
+}
+
 /* Einstellungen: öffnen über das Zahnrad oben rechts als Blatt */
 function mehrHtml() {
   const c = Sync.cfg();
   return `
     ${window.GYM_VORSCHAU ? `<div class="merkzettel"><span class="mz-ic">${ic('notiz', 20)}</span><div><b>Vorschau mit Beispieldaten</b><p>Synchronisierung und Sicherung als Datei funktionieren erst in der Fassung auf GitHub.</p></div></div>` : ''}
+    <div class="gruppe-titel">Erscheinungsbild</div>
+    <div class="segment" role="group" aria-label="Erscheinungsbild">${[['auto', 'Automatisch'], ['hell', 'Hell'], ['dunkel', 'Dunkel']].map(([k, l]) => `<button class="${thema() === k ? 'an' : ''}" data-akt="thema" data-k="${k}" aria-pressed="${thema() === k}">${l}</button>`).join('')}</div>
+    <p class="hinweis oben">Automatisch folgt der Einstellung deines iPhones. Gilt nur für dieses Gerät.</p>
     <div class="gruppe-titel">Synchronisierung</div>
     <div class="gruppe">
       <div class="zeile"><span class="sync-ic">${ic('wolke', 20)}</span><div class="haupt"><small id="sync-status">${esc(Sync.text())}</small></div></div>
@@ -41,6 +55,7 @@ ${window.GYM_VORSCHAU ? '' : `    <div class="gruppe-titel">Sicherung</div>
 }
 
 Object.assign(Akt, {
+  thema(el) { lager.set('gym-thema', el.dataset.k); themaAnwenden(); Blatt.frisch(); },
   einstellungen() { Blatt.auf({ titel: 'Einstellungen', voll: true, html: mehrHtml(), neu: mehrHtml }); },
   aufwaermAnzahl(el) { setze('einst', { ...studioEinst(), aufwaerm: +el.dataset.n }); zeichne(); Blatt.frisch(); },
   syncJetzt() { syncFelderLesen(); Sync.abgleich(true); },

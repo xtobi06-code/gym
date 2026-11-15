@@ -117,8 +117,17 @@ const Satz = {
       platten.forEach((el, i) => { el.classList.toggle('oben', i <= sel); el.classList.toggle('unten', i > sel); el.classList.toggle('pin', i === sel); });
       const z = $('.st-zusatz', box); if (z) z.classList.toggle('an', !!this.s.zu);
       const el = platten[sel];
-      if (el && start) box.scrollTop += el.getBoundingClientRect().top - box.getBoundingClientRect().top - (box.clientHeight - el.offsetHeight) / 2;
+      if (el && start) {
+        // Ist der Turm höher als das Fenster, bekommt er oben und unten Luft, damit sich jede Platte in die Mitte holen lässt
+        const turm = box.firstElementChild, max = parseFloat(getComputedStyle(box).maxHeight) || 340;
+        turm.style.marginBlock = turm.offsetHeight + 40 > max ? `${Math.round((max - el.offsetHeight) / 2)}px` : '';
+      }
       if (el) this.stiftSetzen(el, !start);
+      if (el) {
+        // Der Stift bleibt in der Mitte des Fensters: wer weiter nach unten will, tippt einfach die nächste Platte
+        const ziel = box.scrollTop + el.getBoundingClientRect().top - box.getBoundingClientRect().top - (box.clientHeight - el.offsetHeight) / 2;
+        box.scrollTo({ top: ziel, behavior: start || matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      }
     }
     if (this.typ === 'kurzhantel') {
       const box = $('#pk-kh', this.b.el);
