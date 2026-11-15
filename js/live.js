@@ -106,7 +106,12 @@ const Live = {
         <button class="pl-knopf" data-akt="pauseDelta" data-d="15" aria-label="15 Sekunden mehr">+15</button>
         <button class="pl-knopf" data-akt="pauseAus" aria-label="Pause beenden">${ic('x', 18)}</button>`;
     }
+    // Einmal pro Pause melden, sobald sie abgelaufen ist
+    if (drueber && this.gemeldet !== t.pause) { this.gemeldet = t.pause; if (vergangen < soll + 5) Klang.pauseVorbei(); }
+    if (!drueber && this.gemeldet === t.pause) this.gemeldet = null;   // Pause wurde verlängert
     el.classList.toggle('drueber', drueber);
+    if (drueber && !el.classList.contains('drueber-war')) { el.classList.add('drueber-war'); el.animate && el.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.04)' }, { transform: 'scale(1)' }], { duration: 420, easing: 'ease-out' }); }
+    if (!drueber) el.classList.remove('drueber-war');
     $('#pl-zeit').textContent = anzeige;
     $('#pl-text').textContent = drueber ? 'Pause vorbei' : 'Pause';
     $('.pl-fuell', el).style.width = Math.min(100, Math.max(0, (vergangen / soll) * 100)) + '%';
@@ -258,6 +263,30 @@ const Live = {
   pauseStart(p) { Aktiv.t.pause = Date.now(); Aktiv.t.pauseSoll = pauseVon(p.ue); },
 };
 
+/* Ton am Ende der Pause. iOS erlaubt Töne erst nach einer Berührung, deshalb wird beim Abhaken entsperrt. */
+const pausenton = () => (studioEinst().pausenton !== false);
+const Klang = {
+  ctx: null,
+  entsperren() {
+    if (!pausenton()) return;
+    try {
+      if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      if (this.ctx.state === 'suspended') this.ctx.resume();
+    } catch { this.ctx = null; }
+  },
+  ton(f, ab, dauer) {
+    const c = this.ctx, o = c.createOscillator(), g = c.createGain(), t = c.currentTime + ab;
+    o.type = 'sine'; o.frequency.value = f;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.32, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + dauer);
+    o.connect(g).connect(c.destination); o.start(t); o.stop(t + dauer + 0.05);
+  },
+  pauseVorbei() {
+    if (!pausenton() || document.visibilityState !== 'visible') return;
+    try { if (this.ctx && this.ctx.state === 'running') { this.ton(880, 0, 0.35); this.ton(1318.5, 0.16, 0.5); } } catch { /* egal */ }
+    try { if (navigator.vibrate) navigator.vibrate([120, 80, 120]); } catch { /* egal */ }
+  },
+};
+
 /* Übung tauschen, wenn das Gerät besetzt ist: nur für dieses Training */
 const Tausch = {
   pi: 0, b: null,
@@ -382,7 +411,7 @@ Object.assign(Akt, {
     const pi = Live.punktVon(el), p = Aktiv.t.punkte[pi], s = p.saetze[+el.dataset.si];
     if (!s.ok && (s.g == null || !(s.w > 0))) return Satz.auf(pi, +el.dataset.si);
     s.ok = !s.ok;
-    if (s.ok) Live.pauseStart(p);
+    if (s.ok) { Klang.entsperren(); Live.pauseStart(p); }
     Live.nachHaken(pi, +el.dataset.si, s.ok);
   },
   // Vorschlag übernehmen: neues Gewicht für alle offenen Arbeitssätze, Aufwärmen passt sich an

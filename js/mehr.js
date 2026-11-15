@@ -22,6 +22,9 @@ ${window.GYM_VORSCHAU ? '' : `    <div class="gruppe-titel">Sicherung</div>
       <button class="zeile" data-akt="exportieren"><div class="haupt"><b>Als Datei sichern</b><small>${D.trainings.length} Trainings, ${D.geraete.length} Geräte, ${D.uebungen.length} Übungen</small></div>${ic('chevR', 16)}</button>
       <label class="zeile"><div class="haupt"><b>Aus Datei einlesen</b><small>Wird mit dem jetzigen Stand zusammengeführt</small></div>${ic('chevR', 16)}<input type="file" accept="application/json,.json" data-ein="importieren" hidden></label>
     </div>`}
+    <div class="gruppe-titel">Training</div>
+    <div class="gruppe"><label class="zeile feldzeile"><span>Ton am Ende der Pause</span><input type="checkbox" class="schalter" data-ein="pausenton" ${pausenton() ? 'checked' : ''}></label></div>
+    <p class="hinweis">Ein kurzer Doppelton, solange die App offen ist. Im Lautlos-Modus bleibt das iPhone still.</p>
     <div class="gruppe-titel">Aufwärmen, Standard</div>
     <div class="muskelchips">${[1, 2].map((n) => `<button class="chip ${aufwaermAnzahl() === n ? 'an' : ''}" data-akt="aufwaermAnzahl" data-n="${n}" aria-pressed="${aufwaermAnzahl() === n}">${n} ${n === 1 ? 'Aufwärmsatz' : 'Aufwärmsätze'}</button>`).join('')}</div>
     <p class="hinweis oben">Standard für neue Übungen mit Aufwärmen. Pro Übung stellst du es im Trainingstag ein.</p>
@@ -70,6 +73,7 @@ function syncFelderLesen() {
   Sync.speichereCfg({ owner: c.owner, repo: c.repo, pfad: c.pfad, token: c.token });
 }
 Object.assign(Ein, {
+  pausenton(el) { setze('einst', { ...studioEinst(), pausenton: el.checked }); },
   syncFeld(el) {
     const c = Sync.cfg();
     c[el.dataset.f] = el.value.trim();

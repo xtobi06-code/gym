@@ -252,7 +252,7 @@ Object.assign(Akt, {
     const s = Satz.s;
     if (s.g == null || !(s.w > 0)) return toast('Gewicht und Wiederholungen fehlen noch');
     const neu = !s.ok;
-    if (neu) { s.ok = true; Live.pauseStart(Satz.p); }
+    if (neu) { s.ok = true; Klang.entsperren(); Live.pauseStart(Satz.p); }
     const pi = Satz.pi, si = Satz.si;
     Satz.b.zu();
     if (neu) Live.nachHaken(pi, si, true);
