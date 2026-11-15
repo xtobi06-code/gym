@@ -17,6 +17,7 @@ Object.assign(Akt, {
     tab = neu; lager.set('gym-tab', tab);
     zeichne();
     window.scrollTo(0, 0);
+    if (tab === 'fortschritt') zumAktuellenMonat();
   },
   blattZu(el) {
     const huelle = el.closest('.blatt-huelle');
@@ -59,6 +60,7 @@ $$('[data-ic]').forEach((el) => { el.outerHTML = ic(el.dataset.ic, 24); });
 
 vorlageSicherstellen();
 zeichne();
+if (tab === 'fortschritt') zumAktuellenMonat();
 if (Aktiv.t) Live.auf();
 
 // Abgleich: beim Öffnen, beim Zurückkommen und bevor die Seite in den Hintergrund geht

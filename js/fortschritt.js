@@ -44,7 +44,7 @@ function kalenderHtml() {
       if (t) n++;
       zellen += `<i class="tag ${t ? 'an' : ''} ${k === heute ? 'heute' : ''}" ${t ? `style="--c:${planFarbe(t.farbe)}"` : ''}></i>`;
     }
-    h += `<div class="monat" role="img" aria-label="${MONATE[m]}: ${n} ${n === 1 ? 'Training' : 'Trainings'}"><h4>${MONATE[m]}<span>${n || ''}</span></h4><div class="tage kopfzeile">${'MDMDFSS'.split('').map((c) => `<b>${c}</b>`).join('')}</div><div class="tage">${zellen}</div></div>`;
+    h += `<div class="monat${jahr === jetzt.getFullYear() && m === jetzt.getMonth() ? ' jetzt' : ''}" role="img" aria-label="${MONATE[m]}: ${n} ${n === 1 ? 'Training' : 'Trainings'}"><h4>${MONATE[m]}<span>${n || ''}</span></h4><div class="tage kopfzeile">${'MDMDFSS'.split('').map((c) => `<b>${c}</b>`).join('')}</div><div class="tage">${zellen}</div></div>`;
   }
   h += '</div>';
 
@@ -224,3 +224,9 @@ Object.assign(Akt, {
     Blatt.frisch(); Kraft.binde(); zeichne();
   },
 });
+
+// Beim Öffnen des Kalenders zum aktuellen Monat scrollen
+function zumAktuellenMonat() {
+  const el = $('.monat.jetzt');
+  if (el && ui.fortschritt === 'kalender') el.scrollIntoView({ block: 'center' });
+}

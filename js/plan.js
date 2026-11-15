@@ -30,6 +30,24 @@ Akt.wochePause = () => {
   zeichne();
 };
 
+// Geschätzte Dauer: Schnitt der letzten Trainings dieses Tags, sonst aus Sätzen und Pausen gerechnet, auf 5 Minuten gerundet
+function dauerSchaetzung(p) {
+  const fruehere = D.trainings.filter((x) => x.plan === p.id && x.ende > x.start).slice(-3);
+  let ms;
+  if (fruehere.length) ms = fruehere.reduce((a, x) => a + (x.ende - x.start), 0) / fruehere.length;
+  else {
+    let s = 90;
+    for (const x of p.punkte) {
+      if (!finde('uebungen', x.ue)) continue;
+      const n = (x.saetze || 0) + (x.warm ? (x.warmN || aufwaermAnzahl()) : 0);
+      s += 60 + n * 45 + Math.max(0, n - 1) * pauseVon(x.ue);
+    }
+    ms = s * 1000;
+  }
+  const min = Math.max(5, Math.round(ms / 300000) * 5);
+  return dauer(min * 60000);
+}
+
 function kachelHtml(p, art) {
   const letzt = [...D.trainings].reverse().find((x) => x.plan === p.id);
   const namen = p.punkte.map((x) => finde('uebungen', x.ue)).filter(Boolean).map((u) => u.name);
@@ -37,7 +55,7 @@ function kachelHtml(p, art) {
   const saetze = p.punkte.reduce((a, x) => a + (finde('uebungen', x.ue) ? x.saetze || 0 : 0), 0);
   const info = `${namen.length} ${namen.length === 1 ? 'Übung' : 'Übungen'}, ${saetze} ${saetze === 1 ? 'Satz' : 'Sätze'}, ${letzt ? 'zuletzt ' + vorWieLang(letzt.start) : 'noch nie trainiert'}`;
   if (art === 'dran') return `<div class="hero dran" data-akt="planAuf" data-id="${p.id}" role="button" tabindex="0">
-      <div class="hero-kopf"><span class="hero-marke"><i class="tagpunkt"></i>Als Nächstes</span><span class="hero-nr zahl">${String(D.plaene.filter((x) => splitKey(x.split) === splitKey(p.split)).findIndex((x) => x.id === p.id) + 1).padStart(2, '0')}</span></div>
+      <div class="hero-kopf"><span class="hero-marke">Als Nächstes</span><span class="hero-nr zahl dauer">~${dauerSchaetzung(p)}</span></div>
       <h2>${esc(p.name)}</h2>
       <p>${esc(vorschau)}</p>
       <small>${info}</small>
