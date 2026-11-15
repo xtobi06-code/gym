@@ -297,7 +297,7 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 .pk-bild { display: flex; flex-direction: column; align-items: center; gap: 12px; margin: 8px 0 18px; }
 
 /* Steckgewicht: Plattenturm mit Stift */
-.stack { width: min(100%, 290px); max-height: min(36dvh, 330px); overflow-y: auto; overscroll-behavior: contain; padding: 10px 46px 10px 26px; border-radius: 18px;
+.stack { position: relative; width: min(100%, 290px); max-height: min(36dvh, 330px); overflow-y: auto; overscroll-behavior: contain; padding: 10px 46px 10px 26px; border-radius: 18px;
   background:
     linear-gradient(90deg, transparent calc(34% - 4px), #4a4d52 calc(34% - 4px), #6d7178 34%, #4a4d52 calc(34% + 4px), transparent calc(34% + 4px)) local,
     linear-gradient(90deg, transparent calc(58% - 4px), #4a4d52 calc(58% - 4px), #6d7178 58%, #4a4d52 calc(58% + 4px), transparent calc(58% + 4px)) local,
