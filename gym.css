@@ -537,6 +537,10 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 .uekarte.zu .uek-inhalt { display: none; }
 .uekarte.zu .uek-kopf { padding-bottom: 14px; }
 .uekarte.zu.fertig { opacity: .7; }
+.progression { width: 100%; text-align: left; display: flex; gap: 10px; align-items: flex-start; background: var(--ok-leise); color: var(--ok); border-radius: 14px; padding: 10px 12px; margin-bottom: 8px; }
+.progression .ic { margin-top: 1px; }
+.progression b { display: block; font-weight: 650; font-size: 15px; }
+.progression small { display: block; color: var(--text); opacity: .8; font-size: 13px; line-height: 1.35; margin-top: 1px; }
 .uekarte .notizkarte { background: var(--karte2); margin-bottom: 8px; padding: 10px 12px; }
 .uekarte .liste.saetze { border-bottom: 0; margin-bottom: 0; }
 .uekarte .satzknoepfe { margin: 0 2px 4px; }

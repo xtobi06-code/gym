@@ -135,6 +135,7 @@ const Live = {
         <button class="rund klein" data-akt="karteMenue" aria-label="Mehr zu dieser Übung">${ic('punkte', 18)}</button>
       </header>
       <div class="uek-inhalt">
+        ${this.progression(p, alt)}
         <label class="notizkarte">${ic('notiz', 18)}<textarea data-ein="ueNotiz" data-ue="${esc(p.ue)}" rows="1" placeholder="Notiz, z. B. Sitzhöhe oder Bankwinkel">${esc(ue ? ue.notiz : '')}</textarea></label>
         <div class="liste saetze">${p.saetze.map((_, si) => this.satz(p, si, alt)).join('')}</div>
         <div class="satzknoepfe">
@@ -142,6 +143,26 @@ const Live = {
           <button class="textknopf" data-akt="tauschen">${ic('tausch', 16)} Gerät besetzt</button>
         </div>
       </div>`;
+  },
+
+  // Doppelte Progression: letztes Mal in allen Arbeitssätzen das obere Ende erreicht, dann diesmal mehr Gewicht
+  progression(p, alt) {
+    if (!alt || !p.wmax) return '';
+    const g = gewichtVon(finde('uebungen', p.ue));
+    if (g && g.typ === 'koerper') return '';
+    const l = alt.p.saetze.filter((s) => s.g > 0);
+    if (l.length < 2 || !l.every((s) => s.w >= p.wmax)) return '';
+    const naechst = this.naechstesGewicht(g, Math.max(...l.map((s) => s.g)));
+    const offen = arbeitsSaetze(p).filter((x) => !x.ok);
+    if (naechst && offen.length && offen.every((x) => x.g >= naechst)) return '';   // schon übernommen
+    return `<button class="progression" ${naechst && offen.length ? `data-akt="progression" data-g="${naechst}"` : 'disabled'}>${ic('hoch', 18)}<div><b>Zeit für mehr Gewicht</b><small>Letztes Mal alle Sätze mit ${p.wmax} oder mehr Wiederholungen geschafft.${naechst && offen.length ? ` Antippen setzt ${kg(naechst)} kg für die offenen Sätze.` : ''}</small></div></button>`;
+  },
+  // Kleinster sinnvoller Schritt nach oben, so wie es ihn am Gerät gibt
+  naechstesGewicht(g, jetzt) {
+    if (!g) return jetzt + 2.5;
+    if (g.typ === 'stack' || g.typ === 'kurzhantel') { const st = stufenVon(g); return st.find((w) => w > jetzt + 1e-9) || null; }
+    if (g.typ === 'scheiben') return jetzt + (g.beidseitig === false ? 1.25 : 2.5);
+    return jetzt + 2.5;
   },
 
   satz(p, si, alt) {
@@ -363,6 +384,19 @@ Object.assign(Akt, {
     s.ok = !s.ok;
     if (s.ok) Live.pauseStart(p);
     Live.nachHaken(pi, +el.dataset.si, s.ok);
+  },
+  // Vorschlag übernehmen: neues Gewicht für alle offenen Arbeitssätze, Aufwärmen passt sich an
+  progression(el) {
+    const pi = Live.punktVon(el), p = Aktiv.t.punkte[pi], ue = finde('uebungen', p.ue), g = gewichtVon(ue), neu = +el.dataset.g;
+    for (const s of arbeitsSaetze(p)) {
+      if (s.ok) continue;
+      s.g = neu; s.hand = 1; delete s.zu;
+      if (p.wmin) s.w = p.wmin;   // mit mehr Gewicht wieder unten im Bereich anfangen
+      if (g && g.typ === 'scheiben') s.sch = Satz.scheibenAus(neu, g); else delete s.sch;
+    }
+    for (const w of p.saetze) if (w.auf && !w.ok && !w.hand) Object.assign(w, aufwaermSatz(ue, neu));
+    Aktiv.sichern(); Live.neu(pi);
+    toast(`${kg(neu)} kg für die offenen Sätze`);
   },
   satzPlus(el) {
     const pi = Live.punktVon(el), p = Aktiv.t.punkte[pi], a = arbeitsSaetze(p), l = a[a.length - 1];

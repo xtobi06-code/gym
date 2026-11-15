@@ -87,8 +87,8 @@ const Satz = {
     return best;
   },
   // Gesamtgewicht in Scheiben je Seite zerlegen, schwerste zuerst
-  scheibenAus(gesamt) {
-    const g = this.g, mult = g.beidseitig === false ? 1 : 2;
+  scheibenAus(gesamt, g = this.g) {
+    const mult = g.beidseitig === false ? 1 : 2;
     let rest = (gesamt - (g.stange ?? 20)) / mult;
     const out = [];
     for (const w of SCHEIBEN) while (rest >= w - 1e-9 && out.length < 12) { out.push(w); rest -= w; }
