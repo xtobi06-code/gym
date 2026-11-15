@@ -177,7 +177,7 @@ const Live = {
       <span class="nr">${satzLabel(p, si)}</span>
       <div class="haupt">
         <div class="werte ${s.g == null ? 'offen' : ''}"><span class="z">${s.g == null ? '' : vz(p.ue)}${kg(s.g)}</span><span class="e">kg</span><span class="mal">×</span><span class="z">${s.w ?? '–'}</span></div>
-        ${unter ? `<small>${unter}</small>` : ''}
+        ${s.pr && s.ok ? `<small class="pr-zeile">${ic('stern', 14)} Neuer Bestwert</small>` : unter ? `<small>${unter}</small>` : ''}
       </div>
       <button class="haken ${s.ok ? 'an' : ''}" data-akt="satzOk" data-si="${si}" aria-label="Satz ${satzLabel(p, si)} ${s.ok ? 'wieder öffnen' : 'abhaken'}" aria-pressed="${!!s.ok}">${ic('check', 22)}</button>
     </div>`;
@@ -405,13 +405,32 @@ Object.assign(Akt, {
   },
 });
 
+// Geschätztes Maximum über allem Bisherigen (frühere Trainings und schon abgehakte Sätze heute)? Gibt den neuen Wert zurück.
+Live.bestwertPruefen = function (p, s) {
+  if (s.auf) return 0;
+  const e = e1rm(s.g, s.w);
+  if (!(e > 0)) return 0;
+  const vorher = Math.max(0, ...verlauf(p.ue).map((v) => v.e));
+  const heute = Math.max(0, ...p.saetze.filter((x) => x !== s && x.ok && !x.auf && x.pr).map((x) => e1rm(x.g, x.w)));
+  if (vorher <= 0 || e <= Math.max(vorher, heute) + 0.05) { delete s.pr; return 0; }
+  s.pr = 1;
+  return e;
+};
+
 // Nach dem Abhaken: fertige Übung einklappen und zur nächsten offenen springen
 Live.nachHaken = function (pi, si, ok) {
   const p = Aktiv.t.punkte[pi], fertig = p.saetze.every((x) => x.ok);
+  const bestwert = ok && this.bestwertPruefen(p, p.saetze[si]);
+  if (!ok) delete p.saetze[si].pr;
   if (ok && fertig) p.zu = true;
   Aktiv.sichern();
   this.neu(pi);
   if (ok && !fertig) { const h = $(`.uekarte[data-i="${pi}"] .satz[data-si="${si}"] .haken`); if (h) h.classList.add('frisch'); }
+  if (bestwert) {
+    const z = $(`.uekarte[data-i="${pi}"] .satz[data-si="${si}"]`);
+    if (z) z.classList.add('jubel');
+    toast(`Neuer Bestwert, geschätzt ${rund1(bestwert)} kg`);
+  }
   if (ok && fertig) {
     const naechste = Aktiv.t.punkte.findIndex((x, j) => j !== pi && x.saetze.some((y) => !y.ok));
     if (naechste >= 0) { Aktiv.t.punkte[naechste].zu = false; this.klassen(); setTimeout(() => this.zeige(naechste), 120); }
