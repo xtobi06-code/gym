@@ -252,6 +252,9 @@ Object.assign(Akt, {
     const span = $('.zahl', el);
     span.innerHTML = `<input inputmode="decimal" enterkeyhint="done" value="${kg(Satz.s.g)}" aria-label="Gewicht in Kilo">`;
     const inp = $('input', span);
+    // Feld wächst mit der Zahl, damit auch 102,5 ganz zu sehen ist
+    const breite = () => { inp.style.width = `${Math.max(2, inp.value.length) + 0.4}ch`; };
+    breite(); inp.addEventListener('input', breite);
     Satz.b.el.classList.add('tippt');   // Gewichtsbild und Wiederholungen weg, solange die Tastatur offen ist
     inp.focus(); inp.select();
     const fertig = () => {

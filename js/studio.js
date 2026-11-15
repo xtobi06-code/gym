@@ -61,8 +61,11 @@ Object.assign(Ein, {
 
 /* Gewichtsart und Einstellungen: gleich für Geräte und für Freihantel-Übungen.
    p ist das Kürzel der Eingabe-Funktionen (g für Gerät, u für Übung). */
+// Geräte gibt es nur mit Steckgewicht, Scheiben (Plate-Loaded) oder frei eingetragenem Gewicht (etwa eGym)
+const GERAETE_TYPEN = { stack: 'Steckgewicht', scheiben: 'Scheiben', frei: 'Frei eintragen' };
 function gewichtHtml(o, p) {
-  return `<div class="typwahl">${Object.entries(TYPEN).map(([k, t]) => `<button class="chip ${o.typ === k ? 'an' : ''}" data-akt="${p}Typ" data-typ="${k}" aria-pressed="${o.typ === k}">${t}</button>`).join('')}</div>${gewichtFelder(o, p)}`;
+  const typen = p === 'g' ? GERAETE_TYPEN : TYPEN;
+  return `<div class="typwahl">${Object.entries(typen).map(([k, t]) => `<button class="chip ${o.typ === k ? 'an' : ''}" data-akt="${p}Typ" data-typ="${k}" aria-pressed="${o.typ === k}">${t}</button>`).join('')}</div>${gewichtFelder(o, p)}`;
 }
 function gewichtFelder(o, p) {
   let typFelder = '';
