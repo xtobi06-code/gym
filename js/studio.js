@@ -26,7 +26,7 @@ function zeigeStudio() {
     }
   } else {
     if (!D.uebungen.length) {
-      h += `<div class="leer"><h2>Noch keine Übungen</h2><p>Übernimm die bekannten Maschinen aus dem AlphaClub oder such dir Übungen aus der Bibliothek mit rund 600 Einträgen.</p>
+      h += `<div class="leer"><h2>Noch keine Übungen</h2><p>Such dir Übungen aus der Bibliothek mit rund 700 Einträgen oder leg eigene an.</p>
         <div class="knopfzeile"><button class="knopf haupt" data-akt="ueBib">${ic('suche', 18)} Bibliothek</button></div></div>`;
     } else {
       const vorhanden = KATEGORIEN.filter((k) => D.uebungen.some((u) => katVon(u) === k));
@@ -281,7 +281,7 @@ Object.assign(Ein, {
   uPause(el) { UeEd.u.pause = +el.value; },
 });
 
-/* Bibliothek: rund 600 Übungen zum Übernehmen, gefiltert nach dem Equipment, das es im Studio gibt */
+/* Bibliothek: rund 700 Übungen zum Übernehmen, gefiltert nach dem Equipment, das es im Studio gibt */
 const studioEinst = () => D.einst.find((x) => x.id === 'einst') || { id: 'einst' };
 const ohneEquip = () => studioEinst().ohne || [];
 const Bib = {
