@@ -27,7 +27,7 @@ const Satz = {
     if (s.w == null) s.w = (davor && davor.w) || (s.auf ? 10 : this.p.wmin) || 10;
     if (this.typ === 'scheiben' && !s.sch) s.sch = this.scheibenAus(s.g);
     this.vorher = JSON.stringify([s.g, s.w]);
-    this.b = Blatt.auf({ titel: `${ue ? ue.name : 'Übung'}, ${s.auf ? 'Aufwärmen' : 'Satz ' + satzLabel(this.p, si)}`, html: this.html(), onZu: () => this.fertig() });
+    this.b = Blatt.auf({ titel: `${s.auf ? 'Aufwärmen' : 'Satz ' + satzLabel(this.p, si)}: ${ue ? ue.name : 'Übung'}`, html: this.html(), onZu: () => this.fertig() });
     this.b.el.classList.add('satzblatt');
     this.stiftY = null;
     this.nachZeichnen(true);
