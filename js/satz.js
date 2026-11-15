@@ -73,7 +73,7 @@ const Satz = {
     }
     if (this.typ === 'kurzhantel') {
       const st = stufenVon(g), max = st[st.length - 1] || 1;
-      return `<div class="kh-zeiger"></div><div class="kh-leiste" id="pk-kh">${st.map((w) => `<button class="kh ${w === s.g ? 'an' : ''}" data-akt="khWahl" data-g="${w}" style="--h:${Math.round(26 + 44 * Math.sqrt(w / max))}px" aria-label="${kg(w)} Kilo"><span class="kh-bild"><i></i><b></b><i></i></span><span class="kh-zahl">${kg(w)}</span></button>`).join('')}</div>`;
+      return `<div class="kh-zeiger"></div><div class="kh-leiste" id="pk-kh">${st.map((w) => `<button class="kh ${w === s.g ? 'an' : ''}" data-akt="khWahl" data-g="${w}" style="--h:${Math.round(26 + 44 * Math.sqrt(w / max))}px;--w:${Math.round(11 + 11 * Math.sqrt(w / max))}px" aria-label="${kg(w)} Kilo"><span class="kh-bild"><i></i><b></b><i></i></span><span class="kh-zahl">${kg(w)}</span></button>`).join('')}</div>`;
     }
     return `<div class="schritte">${[-5, -2.5, 2.5, 5].map((d) => `<button class="knopf zweit" data-akt="schritt" data-d="${d}">${d > 0 ? '+' : '−'}${kg(Math.abs(d))}</button>`).join('')}</div>
       ${this.typ === 'koerper' ? '<p class="hinweis">Bei 0 zählt nur dein Körpergewicht.</p>' : ''}`;

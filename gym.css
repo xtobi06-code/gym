@@ -368,15 +368,26 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 .kh-leiste { display: flex; align-items: flex-end; width: calc(100% + 32px); margin: 0 -16px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 6px calc(50% + 16px - 39px) 4px; scrollbar-width: none;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent); mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent); }
 .kh-leiste::-webkit-scrollbar { display: none; }
-.kh { flex: 0 0 78px; scroll-snap-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 4px 0; color: var(--t3); }
+.kh { position: relative; flex: 0 0 78px; scroll-snap-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 4px 0; color: var(--t3); }
 .kh:active { transform: none; }
-.kh-bild { height: 74px; display: flex; align-items: center; }
-.kh-bild i { width: 15px; height: var(--h); border-radius: 5px; background: linear-gradient(90deg, #3d4046, #2a2c30); transition: background .2s; }
-.kh-bild b { width: 24px; height: 7px; background: #55585f; }
+/* Ablage: die Hanteln liegen auf einer Stahlschiene */
+.kh::before { content: ""; position: absolute; left: 0; right: 0; top: 82px; height: 5px; background: linear-gradient(#6d7077, #3f4146); }
+.kh-bild { position: relative; height: 78px; display: flex; align-items: flex-end; padding-bottom: 4px; transition: transform .35s var(--ease-out); }
+/* Hex-Kopf von der Seite: gummiert, mit Facettenkanten */
+.kh-bild i { position: relative; width: var(--w, 16px); height: var(--h); border-radius: 3px;
+  background: linear-gradient(#232428, #3b3d42 22%, #2b2d31 23%, #2b2d31 77%, #1a1b1e 78%, #121315);
+  box-shadow: inset 1px 0 0 rgba(255, 255, 255, .07), 0 2px 3px rgba(0, 0, 0, .45); transition: background .2s; }
+.kh-bild i::after { content: ""; position: absolute; top: 50%; width: 3px; height: 14px; margin-top: -7px; background: linear-gradient(90deg, #8c9096, #e4e6e9, #8c9096); border-radius: 1px; }
+.kh-bild i:first-child::after { right: -3px; }
+.kh-bild i:last-child::after { left: -3px; }
+/* Griff: Chrom mit Rändelung, sitzt in der Mitte der Köpfe */
+.kh-bild b { width: 22px; height: 7px; margin: 0 3px calc(var(--h) / 2 - 3.5px);
+  background: repeating-linear-gradient(90deg, rgba(0, 0, 0, .25) 0 1px, transparent 1px 3px), linear-gradient(#e2e4e7, #9a9da3 55%, #6f7278); border-radius: 1px; }
 .kh-zahl { font-family: var(--zahl); font-weight: 700; font-size: 24px; font-variant-numeric: tabular-nums; transition: color .2s, transform .2s var(--ease-out); }
 .kh.an { color: var(--text); }
-.kh.an .kh-bild i { background: linear-gradient(90deg, #8d9097, #5e6168); }
-.kh.an .kh-bild b { background: #b3b6bc; }
+.kh.an .kh-bild { transform: translateY(-14px); }
+.kh.an .kh-bild::after { content: ""; position: absolute; left: 4px; right: 4px; bottom: -14px; height: 8px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0, 0, 0, .4), transparent); }
+.kh.an .kh-bild i { background: linear-gradient(#2c2e33, #4a4d53 22%, #35373c 23%, #35373c 77%, #202125 78%, #17181a); }
 .kh.an .kh-zahl { transform: scale(1.15); }
 
 .schritte { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; width: 100%; }
