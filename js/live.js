@@ -50,7 +50,16 @@ const Live = {
     $$('textarea', this.el).forEach(wachse);
     this.klassen();
     $('#live-liste').scrollTop = y;
+    this.uhrLaenge = 0;
     this.uhr();
+  },
+
+  // Langer Name (etwa FREIES TRAINING): Schrift verkleinern, bis er neben die Uhr passt, statt ihn abzuschneiden
+  titelPassen() {
+    const b = $('.live-kopf .mitte b', this.el), s = b && $('span', b);
+    if (!s) return;
+    b.style.fontSize = '';
+    for (let px = 25; px >= 16 && s.scrollWidth > s.clientWidth + 0.5; px--) b.style.fontSize = px + 'px';
   },
 
   // Zustand der Karten (eingeklappt, fertig) und Gesamtfortschritt
@@ -77,6 +86,7 @@ const Live = {
     const t = Aktiv.t, el = $('#live-uhr');
     if (!t || !el) return;
     el.textContent = uhr(Date.now() - t.start);
+    if (el.textContent.length !== this.uhrLaenge) { this.uhrLaenge = el.textContent.length; this.titelPassen(); }
     this.pause();
   },
 
