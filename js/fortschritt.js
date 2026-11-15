@@ -267,9 +267,3 @@ Object.assign(Akt, {
     Blatt.frisch(); Kraft.binde(); zeichne();
   },
 });
-
-// Beim Öffnen des Kalenders zum aktuellen Monat scrollen
-function zumAktuellenMonat() {
-  const el = $('.monat.jetzt');
-  if (el && ui.fortschritt === 'kalender') el.scrollIntoView({ block: 'center' });
-}

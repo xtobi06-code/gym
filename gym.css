@@ -435,10 +435,10 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 .kennzahlen > div + div { border-left: .5px solid var(--linie); }
 .kennzahlen .zahl { font-size: 46px; line-height: 1; }
 .kennzahlen small { color: var(--t2); font-size: 13px; line-height: 1.25; margin-top: 5px; }
-.monate { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 22px; margin-bottom: 18px; }
-.monat h4 { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--titel); font-size: 21px; font-weight: 400; letter-spacing: .03em; text-transform: uppercase; margin-bottom: 8px; }
-.monat h4 span { font-size: 18px; color: var(--t3); font-weight: 500; }
-.tage { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+.monate { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 14px; margin-bottom: 22px; }
+.monat h4 { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--titel); font-size: 17px; font-weight: 400; letter-spacing: .03em; text-transform: uppercase; margin-bottom: 8px; }
+.monat h4 span { font-size: 15px; color: var(--t3); font-weight: 500; }
+.tage { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; }
 .tage i { aspect-ratio: 1; border-radius: 5px; font-style: normal; display: grid; place-items: center; font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .tage .tag { background: var(--karte); color: var(--t3); }
 .tage .tag.an { background: var(--c); color: var(--pin-tinte); font-weight: 700; }
@@ -531,12 +531,12 @@ textarea { display: block; width: 100%; border: 0; background: transparent; outl
 .chipleiste::-webkit-scrollbar { display: none; }
 .chipleiste .chip { flex: none; }
 .tage.kopfzeile { margin-bottom: 2px; }
-.tage.kopfzeile b { text-align: center; font-size: 10px; font-weight: 600; color: var(--t3); }
+.tage.kopfzeile b { text-align: center; font-size: 8px; font-weight: 600; color: var(--t3); }
 .tage i { position: relative; border-radius: 0; font-size: 0; background: none !important; box-shadow: none !important; }
-.tage i::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--karte3); }
-.tage i.tag.an::before { width: 15px; height: 15px; background: var(--c); }
-.tage i.tag.heute::before { width: 8px; height: 8px; background: var(--pin); }
-.tage i.tag.heute.an::before { width: 15px; height: 15px; background: var(--c); box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--pin); }
+.tage i::before { content: ""; width: 3px; height: 3px; border-radius: 50%; background: var(--karte3); }
+.tage i.tag.an::before { width: 9px; height: 9px; background: var(--c); }
+.tage i.tag.heute::before { width: 6px; height: 6px; background: var(--pin); }
+.tage i.tag.heute.an::before { width: 9px; height: 9px; background: var(--c); box-shadow: 0 0 0 1.5px var(--bg), 0 0 0 3px var(--pin); }
 .jahrwahl { margin-top: 6px; }
 .kachel .scheibe { width: 54px; height: 54px; }
 .kachel h2 { font-size: 32px; }

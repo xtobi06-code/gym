@@ -21,7 +21,6 @@ Object.assign(Akt, {
     // Inhalt gleitet aus der Richtung herein, in die die Kapsel fährt
     const inh = $('#inhalt');
     if (inh.animate && !matchMedia('(prefers-reduced-motion: reduce)').matches) inh.animate([{ opacity: 0, transform: `translateX(${r * 18}px)` }, { opacity: 1, transform: 'none' }], { duration: 260, easing: 'cubic-bezier(.2, .8, .3, 1)' });
-    if (tab === 'fortschritt') zumAktuellenMonat();
   },
   blattZu(el) {
     const huelle = el.closest('.blatt-huelle');
@@ -61,7 +60,6 @@ if (window.visualViewport) {
 
 vorlageSicherstellen();
 zeichne();
-if (tab === 'fortschritt') zumAktuellenMonat();
 if (Aktiv.t) Live.auf();
 bilderVorladen();
 
