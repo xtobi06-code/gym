@@ -244,7 +244,10 @@ const Live = {
       const jetzt = Math.max(...p.saetze.map((s) => e1rm(s.g, s.w)));
       if (vor > 0 && jetzt > vor + 0.05) best.push({ ue: finde('uebungen', p.ue), jetzt, vor });
     }
+    const vorher = t.plan ? [...D.trainings].reverse().find((x) => x.plan === t.plan && x.id !== t.id) : null;
     const fertig = setze('trainings', { id: t.id, plan: t.plan, name: t.name, farbe: t.farbe, start: t.start, ende: Date.now(), punkte });
+    const vVol = vorher ? volumen(vorher) : 0, diff = vVol > 0 ? (volumen(fertig) - vVol) / vVol : null;
+    const vergleich = diff == null ? '' : `<p class="vergleich ${diff > 0.005 ? 'mehr' : ''}">${Math.abs(diff) < 0.005 ? 'Genauso viel bewegt' : `${Math.round(Math.abs(diff) * 100)} % ${diff > 0 ? 'mehr' : 'weniger'} bewegt`} als beim letzten ${esc(t.name)} (${vorWieLang(vorher.start)})</p>`;
     Aktiv.t = null; Aktiv.sichern();
     this.zu();
     Sync.abgleich();
@@ -256,6 +259,7 @@ const Live = {
           <div><span class="zahl">${satzZahl(fertig)}</span><small>Sätze</small></div>
           <div><span class="zahl">${Math.round(volumen(fertig)).toLocaleString('de-DE')}</span><small>kg bewegt</small></div>
         </div>
+        ${vergleich}
         ${best.length ? `<div class="gruppe-titel">Neue Bestwerte</div><div class="gruppe">${best.map((b) => `<div class="zeile"><span class="stern">${ic('stern', 18)}</span><div class="haupt"><b>${esc(b.ue ? b.ue.name : 'Übung')}</b><small>Geschätztes Maximum ${rund1(b.jetzt)} kg, bisher ${rund1(b.vor)} kg</small></div></div>`).join('')}</div>` : ''}
         <button class="knopf haupt breit" data-akt="blattZu">Fertig</button>`,
     });
