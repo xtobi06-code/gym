@@ -158,3 +158,57 @@ Beim Abhaken eines Satzes erscheint der Haken nicht einfach, sondern wird wie mi
 Commit `5296c56`
 
 Nach dem Beenden füllt sich der heutige Kreis unter „Diese Woche“ sichtbar, sobald die Live-Ansicht weggeklappt ist, eine Welle läuft nach außen. Nur einmal direkt nach dem Training.
+
+## 27. Zurückgenommen: Selbst gewähltes Bild bei Übungen aus der Studio-Vorlage
+
+Commit `7ff4d20`
+
+Nimmt Punkt 3 (787e48a) zurück, auf Wunsch. Vorlage-Übungen zeigen wieder immer ihr Standardbild.
+
+## 28. Übung bearbeiten: Bildauswahl nur noch bei eigenen Übungen
+
+Commit `25dd917`
+
+Bei den Übungen aus der Studio-Vorlage ist die Zeile „Bild und Anleitung“ ausgeblendet, weil dort immer das Standardbild gilt.
+
+## 29. Pausentimer: Ton wieder entfernt
+
+Commit `f856349`
+
+Auf Wunsch kein Ton mehr am Ende der Pause, die Einstellung dazu ist weg. Das kurze Pulsieren der Pausenleiste bleibt.
+
+## 30. Bilder: Platzhalter mittig, Bilder werden vorgeladen und blenden weich ein
+
+Commit `d21f0a0`
+
+Der leere Bildkasten trug zufällig dieselbe Klasse wie die großen „Noch keine …“-Karten und bekam deren Abstände ab, dadurch saß er zu hoch. Jetzt ist er mittig und zeigt ein Bildsymbol. Außerdem lädt die App nach dem Start im Hintergrund die Bilder aller Übungen in den Offline-Speicher, beim Laden ist der Hintergrund schon hellblau wie die Bilder und sie blenden weich ein statt aufzuploppen.
+
+## 31. Live-Training: Sätze per Wischen löschen
+
+Commit `10d9379`
+
+Ein Satz im laufenden Training lässt sich wie Übungen im Studio nach links wegwischen, auch Aufwärmsätze. Danach gibt es kurz „Rückgängig“, das ihn an derselben Stelle wieder einsetzt.
+
+## 32. Steckgewicht: Stift mittig, kg und lb, glatte Platten, durchlaufende Stangen
+
+Commit `6e69b3c`
+
+Der Stift steckt jetzt mittig wie am echten Gerät und ist von vorne als Knauf zu sehen; beim Umstecken kommt er nach vorne, fährt zur Platte und geht wieder hinein. Auf der gesteckten Platte ist kein Loch mehr zu sehen. Links steht kg, rechts lb. Die Platten sind glatt statt gestreift. Führungsstangen und Wählstab laufen über den Rand hinaus, beim Überziehen sieht man kein Ende mehr; der Wählstab reicht bis zur gesteckten Platte. Ein aktives Zusatzgewicht liegt sichtbar auf der Kopfplatte. Der Turm passt sich der Höhe an, sodass das Blatt außen nicht mehr scrollt.
+
+## 33. Gerät bearbeiten: Hinweis zum Zusatzgewicht
+
+Commit `00b2df0`
+
+Unter den Steckgewicht-Einstellungen steht jetzt, wofür das Zusatzgewicht gedacht ist: Platten in 5er-Schritten lassen und die 2,5 kg im Satz dazuschalten, statt 2,5er-Schritte mit doppelt so vielen Platten.
+
+## 34. Kalender: ganzes Jahr kompakt in drei Spalten, kein Sprung nach unten
+
+Commit `cc84292`
+
+Die Monate stehen zu dritt nebeneinander mit kleineren Punkten, das Jahr passt so ungefähr auf einen Bildschirm. Fortschritt springt beim Öffnen nicht mehr ans Ende, Kalender, Kraft und Muskeln bleiben oben in Reichweite.
+
+## 35. Kopfbereich mit Datum auf allen Seiten, Einstellungen über Zahnrad statt Reiter „Mehr“
+
+Commit `47909b4`
+
+Studio und Fortschritt haben wie Training das Datum über dem Titel. Rechts daneben sitzt ein schlichtes Zahnrad ohne Glas; es öffnet die bisherigen Mehr-Einstellungen als Blatt. Die Tab-Leiste hat dafür nur noch drei Reiter.
