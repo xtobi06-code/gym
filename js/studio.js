@@ -201,7 +201,7 @@ const UeEd = {
   },
   html() {
     const u = this.u, q = EQUIP[u.equip], g = geraetVon(u);
-    const passend = D.geraete.filter((x) => equipVon({ geraet: x.id }) === u.equip || /egym/i.test(x.marke || ''));
+    const passend = D.geraete.filter((x) => equipVon({ geraet: x.id }) === u.equip);
     const geraete = [['', 'Kein bestimmtes Gerät'], ...[...(passend.length ? passend : D.geraete)].sort((a, b) => a.name.localeCompare(b.name, 'de')).map((x) => [x.id, x.name])];
     const geraetTeil = q.geraet ? `
       <div class="gruppe">${auswahl('Gerät', 'data-ein="uFeld" data-f="geraet"', geraete, u.geraet)}</div>
