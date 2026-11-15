@@ -3,7 +3,7 @@
 
 
 function zeigeFortschritt() {
-  return kopf('Fortschritt') + segment('fortschritt', [['kalender', 'Kalender'], ['kraft', 'Kraft'], ['muskeln', 'Muskeln']]) + (ui.fortschritt === 'kalender' ? kalenderHtml() : ui.fortschritt === 'muskeln' ? muskelHtml() : kraftHtml());
+  return kopf('Fortschritt') + segment('fortschritt', [['kalender', 'Kalender'], ['kraft', 'Kraft']]) + (ui.fortschritt === 'kalender' ? kalenderHtml() : kraftHtml());
 }
 
 // Quartal als Zahl (Jahr * 4 + 0..3), Anzeige wie 26Q4
@@ -59,46 +59,6 @@ function kalenderHtml() {
     if (!ui.alle && imQ.length > 6) h += `<button class="textknopf mittig" data-akt="alleTrainings">Alle ${imQ.length} anzeigen</button>`;
   }
   return h;
-}
-
-/* Muskeln: Arbeitssätze pro Muskel in einer Woche. Der primäre Muskel zählt voll, mittrainierte halb. */
-const SATZ_ZIEL = [10, 20];
-function muskelSaetze(von, bis) {
-  const n = Object.fromEntries(MUSKELN.map((m) => [m, 0]));
-  let trainings = 0;
-  for (const t of D.trainings) {
-    if (t.start < von || t.start >= bis) continue;
-    trainings++;
-    for (const p of t.punkte) {
-      const ue = finde('uebungen', p.ue), k = p.saetze.length;
-      if (!ue || !k) continue;
-      if (ue.muskel in n) n[ue.muskel] += k;
-      for (const m of ue.muskeln2 || []) if (m in n && m !== ue.muskel) n[m] += k / 2;
-    }
-  }
-  return { n, trainings };
-}
-function muskelHtml() {
-  if (!D.trainings.length) return `<div class="leer"><h2>Noch kein Training gespeichert</h2><p>Hier siehst du später, wie viele Sätze jeder Muskel pro Woche bekommt.</p></div>`;
-  const off = ui.mwoche || 0, d = new Date(tagStart(Date.now()));
-  d.setDate(d.getDate() - ((d.getDay() + 6) % 7) + off * 7);
-  const von = d.getTime(), bisD = new Date(von); bisD.setDate(bisD.getDate() + 7);
-  const { n, trainings } = muskelSaetze(von, bisD.getTime());
-  const max = Math.max(SATZ_ZIEL[1] + 4, ...Object.values(n));
-  const pos = (v) => `${(v / max) * 100}%`;
-  const ende = new Date(bisD.getTime() - TAG);
-  const titel = off === 0 ? 'Diese Woche' : off === -1 ? 'Letzte Woche' : `${fmtKurz.format(von)} bis ${fmtKurz.format(ende)}`;
-  const gesamt = Object.entries(n).reduce((a, [, v]) => a + v, 0);
-  return `<div class="jahrwahl wochenwahl">
-      <button class="rund klein" data-akt="mwoche" data-d="-1" aria-label="Woche davor">${ic('chevL', 16)}</button>
-      <div><b>${titel}</b><small>${trainings} ${trainings === 1 ? 'Training' : 'Trainings'}</small></div>
-      <button class="rund klein" data-akt="mwoche" data-d="1" ${off >= 0 ? 'disabled' : ''} aria-label="Woche danach">${ic('chevR', 16)}</button>
-    </div>
-    <p class="hinweis oben">Arbeitssätze pro Muskel, mittrainierte zählen halb. Das helle Band markiert 10 bis 20 Sätze pro Woche, ein üblicher Bereich für Muskelaufbau.</p>
-    ${gesamt ? REGIONEN.map(([r, l]) => `<div class="gruppe-titel klein">${esc(r)}</div><div class="balken">${l.map((m) => {
-      const v = n[m];
-      return `<div class="b-zeile ${v ? '' : 'null'}"><span class="b-name">${esc(m)}</span><span class="b-spur"><i class="b-ziel" style="left:${pos(SATZ_ZIEL[0])};width:calc(${pos(SATZ_ZIEL[1])} - ${pos(SATZ_ZIEL[0])})"></i><i class="b-wert" style="--w:${pos(v)}"></i></span><span class="b-zahl zahl">${rund1(v)}</span></div>`;
-    }).join('')}</div>`).join('') : `<div class="leer"><h2>Keine Sätze in dieser Woche</h2><p>Wähle mit den Pfeilen eine andere Woche.</p></div>`}`;
 }
 
 /* Ein gespeichertes Training ansehen */
@@ -238,7 +198,6 @@ const Kraft = {
 Object.assign(Akt, {
   quartal(el) { ui.quartal += +el.dataset.d; ui.alle = false; zeichne(); },
   alleTrainings() { ui.alle = true; zeichne(); },
-  mwoche(el) { ui.mwoche = Math.min(0, (ui.mwoche || 0) + +el.dataset.d); zeichne(); },
   trainingAuf(el) {
     const t = finde('trainings', el.dataset.id);
     if (t) Blatt.auf({ titel: t.name, voll: true, html: trainingHtml(t) });
