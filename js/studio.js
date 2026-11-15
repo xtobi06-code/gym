@@ -197,7 +197,7 @@ const UeEd = {
   bildZeile() {
     const u = this.u, r = bibVon(u);
     if (vorlageInfo(u)) return '';   // Übungen aus der Studio-Vorlage haben ein festes Bild
-    return `<div class="gruppe"><button class="zeile mitbild" data-akt="ueBild">${r ? vorschau(u, r) : '<span class="vorschau leer"></span>'}<div class="haupt"><b>Bild und Anleitung</b><small>${r ? esc(r[1]) : 'Aus der Bibliothek wählen'}</small></div>${ic('chevR', 16)}</button></div>
+    return `<div class="gruppe"><button class="zeile mitbild" data-akt="ueBild">${r ? vorschau(u, r) : `<span class="vorschau ohne">${ic('bild', 22)}</span>`}<div class="haupt"><b>Bild und Anleitung</b><small>${r ? esc(r[1]) : 'Aus der Bibliothek wählen'}</small></div>${ic('chevR', 16)}</button></div>
       ${r && u.bib ? '<button class="textknopf mittig" data-akt="ueBildWeg">Bild entfernen</button>' : ''}`;
   },
   html() {

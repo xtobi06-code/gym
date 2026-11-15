@@ -63,6 +63,7 @@ vorlageSicherstellen();
 zeichne();
 if (tab === 'fortschritt') zumAktuellenMonat();
 if (Aktiv.t) Live.auf();
+bilderVorladen();
 
 // Abgleich: beim Öffnen, beim Zurückkommen und bevor die Seite in den Hintergrund geht
 if (Sync.bereit) Sync.abgleich();

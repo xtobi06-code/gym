@@ -23,7 +23,19 @@ const posen = (r) => (r[5] === 'sp' ? ['start', 'peak'] : ['main']);
 function vorschau(u, r = null) {
   const rr = r || bibVon(u);
   const src = rr ? bildUrl(rr, posen(rr)[0]) : '';
-  return src ? `<img class="vorschau" src="${esc(src)}" alt="" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'vorschau leer'}))">` : '<span class="vorschau leer"></span>';
+  return src ? `<img class="vorschau" src="${esc(src)}" alt="" decoding="async" onload="this.classList.add('da')" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'vorschau ohne'}))">` : '<span class="vorschau ohne"></span>';
+}
+
+// Bilder der eigenen Übungen im Hintergrund vorladen; der Service Worker legt sie in den Vorrat, danach erscheinen sie sofort
+function bilderVorladen() {
+  const urls = [...new Set(D.uebungen.map(bibVon).filter(Boolean).flatMap((r) => posen(r).map((p) => bildUrl(r, p))))];
+  let i = 0;
+  const weiter = () => {
+    for (const u of urls.slice(i, i + 4)) { const img = new Image(); img.decoding = 'async'; img.src = u; }
+    i += 4;
+    if (i < urls.length) setTimeout(weiter, 250);
+  };
+  (window.requestIdleCallback || ((f) => setTimeout(f, 1500)))(weiter);
 }
 
 // Beschreibung, Anleitung und Tipps liegen in einer Datei, die erst beim ersten Öffnen geladen wird
@@ -56,7 +68,7 @@ const UeInfo = {
     let bild = '';
     if (r) {
       const p = posen(r);
-      bild = `<div class="ablauf${p.length === 1 ? ' eins' : ''}">${p.map((x, i) => `<img${i ? ' class="zwei"' : ''} src="${bildUrl(r, x)}" alt="${i ? 'Endposition' : 'Startposition'}">`).join('')}</div>${istAehnlich(u) ? '<p class="hinweis oben">Bild und Anleitung einer ähnlichen Übung.</p>' : ''}`;
+      bild = `<div class="ablauf${p.length === 1 ? ' eins' : ''}">${p.map((x, i) => `<img class="${i ? 'zwei' : 'eins'}" src="${bildUrl(r, x)}" alt="${i ? 'Endposition' : 'Startposition'}" onload="this.classList.add('da')">`).join('')}</div>${istAehnlich(u) ? '<p class="hinweis oben">Bild und Anleitung einer ähnlichen Übung.</p>' : ''}`;
     }
     const g = u ? geraetVon(u) : null;
     return `${bild}
