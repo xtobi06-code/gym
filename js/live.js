@@ -69,7 +69,8 @@ const Live = {
 
   zeige(i, weich = true) {
     const el = $(`.uekarte[data-i="${i}"]`), box = $('#live-liste');
-    if (el && box) box.scrollTo({ top: el.offsetTop - 8, behavior: weich ? 'smooth' : 'auto' });
+    // Abstand zur Liste selbst messen: offsetTop bezöge sich auf die ganze Live-Ansicht samt Kopf
+    if (el && box) box.scrollTo({ top: box.scrollTop + el.getBoundingClientRect().top - box.getBoundingClientRect().top - 8, behavior: weich ? 'smooth' : 'auto' });
   },
 
   uhr() {
