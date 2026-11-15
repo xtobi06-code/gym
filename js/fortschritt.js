@@ -6,37 +6,40 @@ function zeigeFortschritt() {
   return kopf('Fortschritt') + segment('fortschritt', [['kalender', 'Kalender'], ['kraft', 'Kraft'], ['muskeln', 'Muskeln']]) + (ui.fortschritt === 'kalender' ? kalenderHtml() : ui.fortschritt === 'muskeln' ? muskelHtml() : kraftHtml());
 }
 
+// Quartal als Zahl (Jahr * 4 + 0..3), Anzeige wie 26Q4
+const quartalVon = (ts) => { const d = new Date(ts); return d.getFullYear() * 4 + Math.floor(d.getMonth() / 3); };
+const quartalName = (q) => `${String(Math.floor(q / 4)).slice(-2)}Q${(q % 4) + 1}`;
+
 function kalenderHtml() {
-  const jahr = ui.jahr, jetzt = new Date();
-  const imJahr = D.trainings.filter((t) => new Date(t.start).getFullYear() === jahr);
   if (!D.trainings.length) return `<div class="leer"><h2>Noch kein Training gespeichert</h2><p>Nach deinem ersten Training siehst du hier, an welchen Tagen du im Studio warst.</p></div>`;
+  const jetzt = Date.now(), qJetzt = quartalVon(jetzt), qMin = Math.min(qJetzt, quartalVon(D.trainings[0].start));
+  if (ui.quartal == null || ui.quartal > qJetzt || ui.quartal < qMin) ui.quartal = qJetzt;
+  const q = ui.quartal, jahr = Math.floor(q / 4), m0 = (q % 4) * 3;
+  const von = new Date(jahr, m0, 1).getTime(), bis = new Date(jahr, m0 + 3, 1).getTime();
+  const imQ = D.trainings.filter((t) => t.start >= von && t.start < bis);
 
   // Trainingstage je Datum, bei mehreren am selben Tag zählt das letzte
   const proTag = new Map();
-  for (const t of imJahr) proTag.set(tagKey(t.start), t);
+  for (const t of imQ) proTag.set(tagKey(t.start), t);
 
-  // Kennzahlen
-  const erstes = imJahr.length ? imJahr[0].start : 0;
-  const ende = jahr === jetzt.getFullYear() ? Date.now() : new Date(jahr, 11, 31).getTime();
-  const wochen = imJahr.length ? Math.max(1, (tagStart(ende) - tagStart(erstes)) / TAG / 7) : 1;
+  // Kennzahlen: Trainings im Quartal und pro Woche, gerechnet ab dem ersten Training bzw. bis heute
+  const start = Math.max(von, D.trainings[0].start), ende = Math.min(bis - 1, jetzt);
+  const wochen = Math.max(1, (tagStart(ende) - tagStart(start)) / TAG / 7);
   const reihe = serie();
-
-  const jahre = [...new Set([...D.trainings.map((t) => new Date(t.start).getFullYear()), jetzt.getFullYear()])];
-  const min = Math.min(...jahre), max = Math.max(...jahre);
 
   let h = `<div class="hero streak">
       <div class="streak-zahl"><span class="zahl">${reihe}</span>${ic('flamme', 30)}</div>
       <p>${reihe === 1 ? 'Woche' : 'Wochen'} in Folge aktiv</p>
-      <div class="hero-zahlen"><div><b class="zahl">${imJahr.length}</b><small>Trainings ${jahr}</small></div><div><b class="zahl">${imJahr.length ? rund1(imJahr.length / wochen) : '0'}</b><small>pro Woche</small></div></div>
+      <div class="hero-zahlen"><div><b class="zahl">${imQ.length}</b><small>Trainings ${quartalName(q)}</small></div><div><b class="zahl">${imQ.length ? rund1(imQ.length / wochen) : '0'}</b><small>pro Woche</small></div></div>
     </div>
     <div class="jahrwahl">
-      <button class="rund klein" data-akt="jahr" data-d="-1" ${jahr <= min ? 'disabled' : ''} aria-label="Vorheriges Jahr">${ic('chevL', 16)}</button>
-      <b>${jahr}</b>
-      <button class="rund klein" data-akt="jahr" data-d="1" ${jahr >= max ? 'disabled' : ''} aria-label="Nächstes Jahr">${ic('chevR', 16)}</button>
+      <button class="rund klein" data-akt="quartal" data-d="-1" ${q <= qMin ? 'disabled' : ''} aria-label="Quartal davor">${ic('chevL', 16)}</button>
+      <b>${quartalName(q)}</b>
+      <button class="rund klein" data-akt="quartal" data-d="1" ${q >= qJetzt ? 'disabled' : ''} aria-label="Quartal danach">${ic('chevR', 16)}</button>
     </div>
     <div class="monate">`;
-  const heute = tagKey(Date.now());
-  for (let m = 0; m < 12; m++) {
+  const heute = tagKey(jetzt);
+  for (let m = m0; m < m0 + 3; m++) {
     const erster = new Date(jahr, m, 1), tage = new Date(jahr, m + 1, 0).getDate(), versatz = (erster.getDay() + 6) % 7;
     let zellen = '<i></i>'.repeat(versatz), n = 0;
     for (let d = 1; d <= tage; d++) {
@@ -44,16 +47,16 @@ function kalenderHtml() {
       if (t) n++;
       zellen += `<i class="tag ${t ? 'an' : ''} ${k === heute ? 'heute' : ''}" ${t ? `style="--c:${planFarbe(t.farbe)}"` : ''}></i>`;
     }
-    h += `<div class="monat${jahr === jetzt.getFullYear() && m === jetzt.getMonth() ? ' jetzt' : ''}" role="img" aria-label="${MONATE[m]}: ${n} ${n === 1 ? 'Training' : 'Trainings'}"><h4>${MONATE[m]}<span>${n || ''}</span></h4><div class="tage kopfzeile">${'MDMDFSS'.split('').map((c) => `<b>${c}</b>`).join('')}</div><div class="tage">${zellen}</div></div>`;
+    h += `<div class="monat" role="img" aria-label="${MONATE[m]}: ${n} ${n === 1 ? 'Training' : 'Trainings'}"><h4>${MONATE[m]}<span>${n || ''}</span></h4><div class="tage kopfzeile">${'MDMDFSS'.split('').map((c) => `<b>${c}</b>`).join('')}</div><div class="tage">${zellen}</div></div>`;
   }
   h += '</div>';
 
-  const letzte = [...imJahr].reverse().slice(0, ui.alle ? 400 : 6);
+  const letzte = [...imQ].reverse().slice(0, ui.alle ? 400 : 6);
   if (letzte.length) {
-    h += `<div class="gruppe-titel">${ui.alle ? 'Alle Trainings ' + jahr : 'Letzte Trainings'}</div><div class="liste">${letzte.map((t) => `<button class="zeile" data-akt="trainingAuf" data-id="${t.id}">
+    h += `<div class="gruppe-titel">${ui.alle ? 'Alle Trainings ' + quartalName(q) : 'Letzte Trainings'}</div><div class="liste">${letzte.map((t) => `<button class="zeile" data-akt="trainingAuf" data-id="${t.id}">
         <span class="farbpunkt" style="background:${planFarbe(t.farbe)}"></span>
         <div class="haupt"><b>${esc(t.name)}</b><small>${fmtWochentag.format(t.start)}, ${dauer(t.ende - t.start)}, ${satzZahl(t)} Sätze</small></div>${ic('chevR', 16)}</button>`).join('')}</div>`;
-    if (!ui.alle && imJahr.length > 6) h += `<button class="textknopf mittig" data-akt="alleTrainings">Alle ${imJahr.length} anzeigen</button>`;
+    if (!ui.alle && imQ.length > 6) h += `<button class="textknopf mittig" data-akt="alleTrainings">Alle ${imQ.length} anzeigen</button>`;
   }
   return h;
 }
@@ -233,7 +236,7 @@ const Kraft = {
 };
 
 Object.assign(Akt, {
-  jahr(el) { ui.jahr += +el.dataset.d; ui.alle = false; zeichne(); },
+  quartal(el) { ui.quartal += +el.dataset.d; ui.alle = false; zeichne(); },
   alleTrainings() { ui.alle = true; zeichne(); },
   mwoche(el) { ui.mwoche = Math.min(0, (ui.mwoche || 0) + +el.dataset.d); zeichne(); },
   trainingAuf(el) {

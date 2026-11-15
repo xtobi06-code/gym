@@ -1,7 +1,7 @@
 'use strict';
 /* Studio-Reiter: welche Geräte gibt es, wo stehen sie, und welche Übungen machst du daran. */
 
-const ui = { kat: 'alle', studio: 'uebungen', fortschritt: 'kalender', jahr: new Date().getFullYear() };
+const ui = { kat: 'alle', studio: 'uebungen', fortschritt: 'kalender', quartal: null };
 
 function segment(name, werte) {
   return `<div class="segment" role="tablist">${werte.map(([v, t]) => `<button class="${ui[name] === v ? 'an' : ''}" data-akt="seg" data-name="${name}" data-v="${v}" role="tab" aria-selected="${ui[name] === v}">${esc(t)}</button>`).join('')}</div>`;
