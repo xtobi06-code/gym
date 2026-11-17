@@ -20,7 +20,7 @@ function zeigeStudio() {
       const bereiche = [...m.entries()].sort((a, b) => KATEGORIEN.indexOf(a[0]) - KATEGORIEN.indexOf(b[0]));
       h += bereiche.map(([b, liste]) => `<div class="gruppe-titel">${esc(b)}<span class="zahl-klein">${liste.length}</span></div><div class="liste">${liste.sort((x, y) => x.name.localeCompare(y.name, 'de')).map((g) => {
         const n = D.uebungen.filter((u) => u.geraet === g.id).length;
-        return `<button class="zeile" data-akt="geraetAuf" data-id="${g.id}" data-wisch="geraete"><div class="haupt"><b>${esc(g.name)}</b><small>${esc([typText(g), g.bereich].filter(Boolean).join(', '))}</small></div><span class="neben">${n ? n + (n === 1 ? ' Übung' : ' Übungen') : ''}</span>${ic('chevR', 16)}</button>`;
+        return `<button class="zeile" data-akt="geraetAuf" data-id="${g.id}" data-wisch="geraete"><div class="haupt"><b>${esc(g.name)}</b><small>${esc([...new Set([typText(g), [g.marke, g.modell].filter(Boolean).join(' '), g.bereich])].filter(Boolean).join(', '))}</small></div><span class="neben">${n ? n + (n === 1 ? ' Übung' : ' Übungen') : ''}</span>${ic('chevR', 16)}</button>`;
       }).join('')}</div>`).join('');
       h += `<button class="knopf zweit breit" data-akt="geraetNeu">${ic('plus', 18)} Gerät eintragen</button>`;
     }
@@ -119,11 +119,10 @@ const GeraetEd = {
       </div>
       <div class="gruppe-titel">So stellst du das Gewicht ein</div>
       ${gewichtHtml(g, 'g')}
-      <div class="gruppe-titel">Typenschild und Notiz</div>
+      <div class="gruppe-titel">Typenschild</div>
       <div class="gruppe">
         ${feld('Marke', 'data-ein="gFeld" data-f="marke" placeholder="optional"', g.marke)}
         ${feld('Modell', 'data-ein="gFeld" data-f="modell" placeholder="optional"', g.modell)}
-        <label class="zeile notizzeile"><textarea data-ein="gFeld" data-f="notiz" rows="1" placeholder="Notiz zum Gerät">${esc(g.notiz)}</textarea></label>
       </div>
       ${this.neu ? (g.typ === 'stack' || g.typ === 'scheiben' ? `<div class="gruppe">
           <label class="zeile feldzeile"><span>Gleichnamige Übung anlegen</span><input type="checkbox" class="schalter" data-ein="gMitUe" ${this.mitUe ? 'checked' : ''}></label>

@@ -195,8 +195,8 @@ function letztes(ueId, vor = Infinity) {
   for (let i = D.trainings.length - 1; i >= 0; i--) {
     const t = D.trainings[i];
     if (t.start >= vor) continue;
-    const p = t.punkte.find((x) => x.ue === ueId && x.saetze.length);
-    if (p) return { t, p };
+    const p = t.punkte.find((x) => x.ue === ueId && arbeitsSaetze(x).length);
+    if (p) return { t, p: { ...p, saetze: arbeitsSaetze(p) } };   // Vorlage fürs nächste Mal: nur Arbeitssätze
   }
   return null;
 }
@@ -205,20 +205,22 @@ function letztes(ueId, vor = Infinity) {
 function verlauf(ueId) {
   const rows = [];
   for (const t of D.trainings) {
-    const p = t.punkte.find((x) => x.ue === ueId && x.saetze.length);
+    const p = t.punkte.find((x) => x.ue === ueId && arbeitsSaetze(x).length);
     if (!p) continue;
+    const arbeit = arbeitsSaetze(p);
     let best = null;
-    for (const s of p.saetze) {
+    for (const s of arbeit) {
       const e = e1rm(s.g, s.w);
       if (!best || e > best.e || (e === best.e && (s.g > best.g || (s.g === best.g && s.w > best.w)))) best = { e, g: s.g, w: s.w };
     }
-    rows.push({ ts: t.start, tid: t.id, ...best, wmax: Math.max(...p.saetze.map((s) => s.w || 0)) });
+    rows.push({ ts: t.start, tid: t.id, ...best, wmax: Math.max(...arbeit.map((s) => s.w || 0)) });
   }
   return rows;
 }
 
-const volumen = (t) => t.punkte.reduce((sum, p) => sum + p.saetze.reduce((s, x) => s + (x.g || 0) * (x.w || 0), 0), 0);
-const satzZahl = (t) => t.punkte.reduce((sum, p) => sum + p.saetze.length, 0);
+// Aufwärmsätze werden gespeichert, zählen aber in keiner Statistik mit
+const volumen = (t) => t.punkte.reduce((sum, p) => sum + arbeitsSaetze(p).reduce((s, x) => s + (x.g || 0) * (x.w || 0), 0), 0);
+const satzZahl = (t) => t.punkte.reduce((sum, p) => sum + arbeitsSaetze(p).length, 0);
 
 /* Splits: Trainingstage gehören zu einem Split, einer davon ist gerade aktiv */
 // Split-Namen gibt es nur in Großbuchstaben, so lassen sich "ppl" und "PPL" nicht verwechseln

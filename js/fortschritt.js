@@ -67,7 +67,7 @@ function trainingHtml(t) {
     ${t.punkte.map((p) => {
       const ue = finde('uebungen', p.ue);
       return `<div class="gruppe-titel">${esc(ue ? ue.name : 'Gelöschte Übung')}</div><div class="liste">
-        ${p.saetze.map((s, i) => `<div class="zeile satz fest"><span class="nr">${i + 1}</span><div class="haupt"><div class="werte"><span class="z">${vz(p.ue)}${kg(s.g)}</span><span class="e">kg</span><span class="mal">×</span><span class="z">${s.w}</span></div></div></div>`).join('')}
+        ${p.saetze.map((s, i) => `<div class="zeile satz fest ${s.auf ? 'warm' : ''}"><span class="nr">${satzLabel(p, i)}</span><div class="haupt"><div class="werte"><span class="z">${vz(p.ue)}${kg(s.g)}</span><span class="e">kg</span><span class="mal">×</span><span class="z">${s.w}</span></div></div></div>`).join('')}
         ${p.marke || p.notiz ? `<div class="zeile merk">${ic(p.marke ? MARKEN[p.marke].ic : 'notiz', 18)}<div class="haupt">${p.marke ? `<b>${MARKEN[p.marke].kurz}</b>` : ''}${p.notiz ? `<small>${esc(p.notiz)}</small>` : ''}</div></div>` : ''}
       </div>`;
     }).join('')}

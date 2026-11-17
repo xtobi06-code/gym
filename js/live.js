@@ -233,13 +233,13 @@ const Live = {
     const t = Aktiv.t;
     const punkte = t.punkte.map((p) => ({
       ue: p.ue, marke: '', notiz: '',
-      saetze: p.saetze.filter((s) => s.ok && !s.auf).map((s) => ({ g: s.g, w: s.w, ...(s.sch ? { sch: s.sch } : {}), ...(s.zu ? { zu: 1 } : {}) })),
+      saetze: p.saetze.filter((s) => s.ok).map((s) => ({ g: s.g, w: s.w, ...(s.auf ? { auf: 1 } : {}), ...(s.sch ? { sch: s.sch } : {}), ...(s.zu ? { zu: 1 } : {}) })),
     })).filter((p) => p.saetze.length);
     // Bestwerte gegenüber allem Bisherigen
     const best = [];
     for (const p of punkte) {
       const vor = Math.max(0, ...verlauf(p.ue).map((v) => v.e));
-      const jetzt = Math.max(...p.saetze.map((s) => e1rm(s.g, s.w)));
+      const jetzt = Math.max(0, ...arbeitsSaetze(p).map((s) => e1rm(s.g, s.w)));
       if (vor > 0 && jetzt > vor + 0.05) best.push({ ue: finde('uebungen', p.ue), jetzt, vor });
     }
     const vorher = t.plan ? [...D.trainings].reverse().find((x) => x.plan === t.plan && x.id !== t.id) : null;

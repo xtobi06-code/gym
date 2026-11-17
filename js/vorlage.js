@@ -3,22 +3,25 @@
    Übernehmen nichts verdoppelt. u = 1, damit eigene Änderungen und Löschungen immer gewinnen. */
 
 const VORLAGE_ALPHACLUB = (() => {
-  const STECK = { typ: 'stack', start: 5, schritt: 5, anzahl: 20, zusatz: 2.5, stufen: '', marke: 'Technogym' };
+  const STECK = { typ: 'stack', start: 5, schritt: 5, anzahl: 20, zusatz: 2.5, stufen: '', marke: '' };
   const PLATTE = { typ: 'scheiben', stange: 0, beidseitig: true };
-  const pruefen = 'Gewichtsstufen beim nächsten Training prüfen';
-  const g = (id, name, art, extra = {}) => ({ id: 'ac-g-' + id, u: 1, name, bereich: '', modell: '', notiz: '', ...art, ...extra });
+  const g = (id, name, art, extra = {}) => ({ id: 'ac-g-' + id, u: 1, name, bereich: '', modell: '', ...art, ...extra });
   const geraete = [
-    g('seitheben', 'Seitheben-Maschine', STECK, { notiz: pruefen }),
-    g('schulter', 'Schulterdrücken-Maschine', STECK, { notiz: pruefen }),
-    g('brust-schraeg', 'Brustpresse schräg', STECK, { notiz: 'Drückt eher nach oben. ' + pruefen }),
-    g('brust', 'Brustpresse', STECK, { notiz: 'Drückt nach vorne. ' + pruefen }),
-    g('latzug', 'Latzug', STECK, { notiz: 'Frei drehbare Griffe. ' + pruefen }),
-    g('kabel', 'Kabelzug', STECK, { notiz: 'Gibt es zweimal, eventuell mit Crossover dazwischen. ' + pruefen }),
-    g('rudern-breit', 'Rudern breit', STECK, { notiz: pruefen }),
-    g('beinstrecker', 'Beinstrecker', STECK, { notiz: 'Gibt es zweimal. ' + pruefen }),
-    g('dips', 'Dips-Maschine', PLATTE, { marke: '', notiz: 'Leergewicht prüfen' }),
-    g('vsquat', 'V-Squat', PLATTE, { marke: '', notiz: 'Leergewicht prüfen' }),
-    g('brust-platte', 'Brustpresse Plate-Loaded', PLATTE, { marke: '', notiz: 'Im Liegen auf einer Bank, Griffe laufen eng zusammen. Leergewicht prüfen' }),
+    g('seitheben', 'Seitheben-Maschine', STECK),
+    g('schulter', 'Schulterdrücken-Maschine', STECK),
+    g('brust-schraeg', 'Brustpresse schräg', STECK),
+    g('brust', 'Brustpresse', STECK),
+    g('latzug', 'Latzug', STECK, { marke: 'gym80' }),
+    g('kabel', 'Kabelzug', STECK, { anzahl: 26 }),
+    g('rudern-breit', 'Rudern breit', STECK, { anzahl: 15, marke: 'ergofit', modell: 'Back Pull 4000' }),
+    g('beinstrecker', 'Beinstrecker', STECK),
+    g('beinbeuger', 'Beinbeuger', STECK, { anzahl: 21 }),
+    g('beinpresse', 'Beinpresse', STECK, { start: 10, schritt: 10, anzahl: 25, marke: 'Technogym' }),
+    g('butterfly', 'Butterfly mit Polstern', STECK),
+    g('dips', 'Dips-Maschine', PLATTE, { stange: 1.8, marke: 'Hammer Strength', modell: 'Seated Dip' }),
+    g('vsquat', 'V-Squat', PLATTE),
+    g('brust-platte', 'Brustpresse Plate-Loaded', PLATTE),
+    g('fly-platte', 'Chest Fly mit Griffen', PLATTE),
     g('egym-beinpresse', 'Beinpresse eGym', { typ: 'frei' }, { marke: 'eGym', bereich: 'eGym' }),
     g('egym-bizeps', 'Bizeps-Curl eGym', { typ: 'frei' }, { marke: 'eGym', bereich: 'eGym' }),
     g('egym-rudern', 'Ruderzug eGym', { typ: 'frei' }, { marke: 'eGym', bereich: 'eGym' }),
@@ -46,12 +49,13 @@ const VORLAGE_ALPHACLUB = (() => {
     u('dips', 'Dips sitzend', 'plate', 'Trizeps', ['Brust', 'Vordere Schulter'], 'dips'),
     u('vsquat', 'V-Squat', 'plate', 'Quadrizeps', ['Gesäß'], 'vsquat'),
     u('brust-platte', 'Konvergierende Brustpresse', 'plate', 'Brust', ['Trizeps', 'Vordere Schulter'], 'brust-platte'),
-    u('beinpresse', 'Beinpresse', 'maschine', 'Quadrizeps', ['Gesäß', 'Beinbeuger'], 'egym-beinpresse'),
-    u('waden-beinpresse', 'Wadenheben an der Beinpresse', 'maschine', 'Waden', [], 'egym-beinpresse'),
+    u('fly-platte', 'Chest Fly mit Griffen', 'plate', 'Brust', ['Vordere Schulter'], 'fly-platte'),
+    u('beinpresse', 'Beinpresse', 'maschine', 'Quadrizeps', ['Gesäß', 'Beinbeuger'], 'beinpresse'),
+    u('waden-beinpresse', 'Wadenheben an der Beinpresse', 'maschine', 'Waden', [], 'beinpresse'),
     u('egym-bizeps', 'Bizeps-Curl eGym', 'maschine', 'Bizeps', [], 'egym-bizeps'),
     u('egym-rudern', 'Rudern eGym', 'maschine', 'Oberer Rücken', ['Lat', 'Bizeps', 'Hintere Schulter'], 'egym-rudern'),
     u('egym-ruecken', 'Rückenstrecker eGym', 'maschine', 'Unterer Rücken', ['Gesäß'], 'egym-ruecken'),
-    u('egym-beinbeuger', 'Beinbeuger eGym', 'maschine', 'Beinbeuger', ['Waden'], 'egym-beinbeuger'),
+    u('egym-beinbeuger', 'Beinbeuger', 'maschine', 'Beinbeuger', ['Waden'], 'beinbeuger'),   // id von früher, damit der Verlauf bleibt
     u('egym-schulter', 'Schulterpresse eGym', 'maschine', 'Vordere Schulter', ['Seitliche Schulter', 'Trizeps'], 'egym-schulter'),
     u('egym-latzug', 'Latzug eGym', 'maschine', 'Lat', ['Bizeps', 'Oberer Rücken'], 'egym-latzug'),
     u('egym-hipthrust', 'Hip Thrust eGym', 'maschine', 'Gesäß', ['Beinbeuger'], 'egym-hipthrust'),
@@ -82,6 +86,7 @@ const VORLAGE_INFO = {
   'ac-u-dips': { bib: 'plate-loaded-seated-dip-machine' },
   'ac-u-vsquat': { bib: 'hack-squat', aehnlich: true },
   'ac-u-brust-platte': { bib: 'chest-press-machine', aehnlich: true },
+  'ac-u-fly-platte': { bib: 'machine-chest-fly', aehnlich: true },
   'ac-u-beinpresse': { bib: 'horizontal-leg-press' },
   'ac-u-waden-beinpresse': { bib: 'machine-calf-raise', aehnlich: true },
   'ac-u-egym-bizeps': { bib: 'machine-preacher-curl' },
