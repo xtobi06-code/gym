@@ -51,6 +51,7 @@ const Live = {
     $$('textarea', this.el).forEach(wachse);
     this.klassen();
     $('#live-liste').scrollTop = y;
+    sortierbar($('#live-liste'), { eintrag: '.uekarte', griff: '.uek-kopf', fertig: (von, nach) => { verschiebe(Aktiv.t.punkte, von, nach); Aktiv.sichern(); this.zeichne(); } });
     this.uhrLaenge = 0;
     this.uhr();
   },
@@ -138,13 +139,18 @@ const Live = {
         <button class="rund klein" data-akt="karteMenue" aria-label="Mehr zu dieser Übung">${ic('punkte', 18)}</button>
       </header>
       <div class="uek-inhalt">
-        ${this.progression(p, alt)}
+        ${alt && MARKEN[alt.p.marke] ? `<div class="fb-hinweis">${ic(MARKEN[alt.p.marke].ic, 18)}<span>Letztes Mal vorgenommen: <b>${MARKEN[alt.p.marke].lang}</b></span></div>` : ''}
+        ${alt && (alt.p.marke === 'halten' || alt.p.marke === 'technik') ? '' : this.progression(p, alt)}
         <label class="notizkarte">${ic('notiz', 18)}<textarea data-ein="ueNotiz" data-ue="${esc(p.ue)}" rows="1" placeholder="Notiz, z. B. Sitzhöhe oder Bankwinkel">${esc(ue ? ue.notiz : '')}</textarea></label>
         <div class="liste saetze">${p.saetze.map((_, si) => this.satz(p, si, alt)).join('')}</div>
         <div class="satzknoepfe">
           <button class="textknopf" data-akt="satzPlus">${ic('plus', 16)} Satz</button>
           <button class="textknopf" data-akt="tauschen">${ic('tausch', 16)} Gerät besetzt</button>
         </div>
+      </div>
+      <div class="uek-feedback" role="group" aria-label="Fürs nächste Mal">
+        <small>Fürs nächste Mal</small>
+        <div>${Object.entries(MARKEN).map(([k, m]) => `<button class="chip klein ${p.marke === k ? 'an' : ''}" data-akt="feedback" data-k="${k}" aria-pressed="${p.marke === k}">${ic(m.ic, 14)} ${m.kurz}</button>`).join('')}</div>
       </div>`;
   },
 
@@ -232,7 +238,7 @@ const Live = {
   abschliessen() {
     const t = Aktiv.t;
     const punkte = t.punkte.map((p) => ({
-      ue: p.ue, marke: '', notiz: '',
+      ue: p.ue, marke: p.marke || '', notiz: (finde('uebungen', p.ue) || {}).notiz || '',
       saetze: p.saetze.filter((s) => s.ok).map((s) => ({ g: s.g, w: s.w, ...(s.auf ? { auf: 1 } : {}), ...(s.sch ? { sch: s.sch } : {}), ...(s.zu ? { zu: 1 } : {}) })),
     })).filter((p) => p.saetze.length);
     // Bestwerte gegenüber allem Bisherigen
@@ -385,6 +391,12 @@ Object.assign(Akt, {
     if (Live.planUebernehmen()) { toast('Trainingstag aktualisiert'); const s = $('#live-schluss'); if (s) s.innerHTML = Live.schluss(); }
   },
   satzAuf(el) { Satz.auf(Live.punktVon(el), +el.dataset.si); },
+  feedback(el) {
+    const pi = Live.punktVon(el), p = Aktiv.t.punkte[pi], k = el.dataset.k;
+    if (p.marke === k) delete p.marke; else p.marke = k;
+    Aktiv.sichern();
+    $$('[data-akt="feedback"]', el.parentElement).forEach((b) => { const an = b.dataset.k === p.marke; b.classList.toggle('an', an); b.setAttribute('aria-pressed', an); });
+  },
   satzOk(el, e) {
     e.stopPropagation();
     const pi = Live.punktVon(el), p = Aktiv.t.punkte[pi], s = p.saetze[+el.dataset.si];

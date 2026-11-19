@@ -65,11 +65,18 @@ function kalenderHtml() {
 function trainingHtml(t) {
   return `<p class="hinweis oben">${fmtLang.format(t.start)}, ${dauer(t.ende - t.start)}, ${Math.round(volumen(t)).toLocaleString('de-DE')} kg bewegt</p>
     ${t.punkte.map((p) => {
-      const ue = finde('uebungen', p.ue);
-      return `<div class="gruppe-titel">${esc(ue ? ue.name : 'Gelöschte Übung')}</div><div class="liste">
-        ${p.saetze.map((s, i) => `<div class="zeile satz fest ${s.auf ? 'warm' : ''}"><span class="nr">${satzLabel(p, i)}</span><div class="haupt"><div class="werte"><span class="z">${vz(p.ue)}${kg(s.g)}</span><span class="e">kg</span><span class="mal">×</span><span class="z">${s.w}</span></div></div></div>`).join('')}
-        ${p.marke || p.notiz ? `<div class="zeile merk">${ic(p.marke ? MARKEN[p.marke].ic : 'notiz', 18)}<div class="haupt">${p.marke ? `<b>${MARKEN[p.marke].kurz}</b>` : ''}${p.notiz ? `<small>${esc(p.notiz)}</small>` : ''}</div></div>` : ''}
-      </div>`;
+      const ue = finde('uebungen', p.ue), a = arbeitsSaetze(p), m = MARKEN[p.marke];
+      return `<article class="uekarte rueck">
+        <header class="uek-kopf">
+          <button class="uek-bild" data-akt="ueInfo" data-id="${esc(p.ue)}" aria-label="Bild und Anleitung">${vorschau(ue)}</button>
+          <div class="haupt"><h2>${esc(ue ? ue.name : 'Gelöschte Übung')}</h2><small>${esc([ortVon(ue), `${a.length} ${a.length === 1 ? 'Satz' : 'Sätze'}`].filter(Boolean).join(', '))}</small></div>
+        </header>
+        <div class="uek-inhalt">
+          ${p.notiz ? `<div class="notizkarte fest">${ic('notiz', 18)}<p>${esc(p.notiz)}</p></div>` : ''}
+          <div class="liste saetze">${p.saetze.map((x, i) => `<div class="zeile satz fest ${x.auf ? 'warm' : ''}"><span class="nr">${satzLabel(p, i)}</span><div class="haupt"><div class="werte"><span class="z">${vz(p.ue)}${kg(x.g)}</span><span class="e">kg</span><span class="mal">×</span><span class="z">${x.w}</span></div>${x.auf ? '<small>Aufwärmen</small>' : ''}</div></div>`).join('')}</div>
+          ${m ? `<div class="fb-hinweis">${ic(m.ic, 18)}<span>Fürs nächste Mal: <b>${m.lang}</b></span></div>` : ''}
+        </div>
+      </article>`;
     }).join('')}
     <button class="textknopf rot mittig" data-akt="trainingWeg" data-id="${t.id}">Training löschen</button>`;
 }

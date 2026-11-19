@@ -659,3 +659,34 @@ img.vorschau.da, .ablauf img.eins.da { opacity: 1; }
 #toast:has(.toast-knopf) { white-space: nowrap; }
 
 .geheim { -webkit-text-security: disc; }
+
+/* Feedback fürs nächste Mal: erscheint, sobald alle Arbeitssätze abgehakt sind, und bleibt auch eingeklappt sichtbar */
+.uek-feedback { display: none; flex-direction: column; gap: 8px; padding: 0 16px 14px; }
+.uekarte.fertig .uek-feedback { display: flex; }
+.uek-feedback small { color: var(--t2); font-size: 13px; }
+.uek-feedback > div { display: flex; flex-wrap: wrap; gap: 6px; }
+.uekarte.zu.fertig:has(.uek-feedback .an) { opacity: 1; }
+.fb-hinweis { display: flex; align-items: center; gap: 10px; background: var(--pin-leise); color: var(--text); border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; font-size: 15px; }
+.fb-hinweis .ic { color: var(--pin); flex: none; }
+.fb-hinweis b { font-weight: 650; }
+
+/* Rückblick: dieselben Karten wie live, nur ohne Abhaken */
+.uekarte.rueck .uek-kopf { cursor: default; }
+.uekarte.rueck .uek-inhalt { padding-bottom: 10px; }
+.notizkarte.fest p { margin: 0; color: var(--text); white-space: pre-wrap; font-size: 15px; line-height: 1.35; }
+
+/* Planen als Karten */
+.uekarte.punkt { padding: 0; }
+.uekarte.punkt .uek-kopf { padding-bottom: 8px; }
+.uekarte.punkt .uek-inhalt { padding: 0 16px 14px; }
+.uekarte.punkt .punkt-extra { margin-top: 0; }
+
+/* Ziehen zum Sortieren */
+.uek-kopf { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.sortiert .uekarte .uek-inhalt, .sortiert .uekarte .uek-feedback, .sortiert > .hinweis { display: none; }
+.sortiert .uekarte { opacity: 1 !important; }
+.uekarte.gezogen { position: relative; z-index: 5; transition: none; box-shadow: 0 14px 34px rgba(0, 0, 0, .35); }
+@media (prefers-reduced-motion: reduce) { .sortiert .uekarte { transition: none !important; } }
+/* Blätter mit Übungskarten bekommen den Seitenhintergrund, damit sich die Karten abheben wie live */
+.blatt:has(.uekarte) { background: var(--bg); }
+.blatt:has(.uekarte) .gruppe { background: var(--karte); }

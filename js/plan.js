@@ -131,6 +131,7 @@ const PlanEd = {
     this.neu = !o;
     this.p = o ? structuredClone(o) : { id: neuId(), name: '', farbe: 0, split: aktiverSplit(), punkte: [] };
     this.b = Blatt.auf({ titel: o ? 'Trainingstag' : 'Neuer Trainingstag', voll: true, html: this.html(), aktion: { text: 'Sichern', akt: 'planSichern' } });
+    sortierbar($('#plan-punkte', this.b.el), { eintrag: '.punkt', griff: '.uek-kopf', fertig: (von, nach) => { verschiebe(this.p.punkte, von, nach); this.neuPunkte(); } });
   },
 
   html() {
@@ -150,15 +151,15 @@ const PlanEd = {
   punkteHtml() {
     const p = this.p;
     if (!p.punkte.length) return `<p class="hinweis">Noch keine Übung. Füge die erste hinzu.</p>`;
-    return `<div class="gruppe">${p.punkte.map((x, i) => {
+    return `${p.punkte.length > 1 ? '<p class="hinweis oben">Lange auf eine Übung drücken und ziehen, um die Reihenfolge zu ändern.</p>' : ''}${p.punkte.map((x, i) => {
       const ue = finde('uebungen', x.ue);
-      return `<div class="punkt" data-i="${i}">
-        <div class="punkt-kopf">
-          <div class="haupt"><b>${esc(ue ? ue.name : 'Gelöschte Übung')}</b><small>${esc(ue ? [ue.muskel, ortVon(ue)].filter(Boolean).join(', ') : '')}</small></div>
-          <button class="rund klein" data-akt="punktHoch" ${i === 0 ? 'disabled' : ''} aria-label="Nach oben">${ic('chevU', 16)}</button>
-          <button class="rund klein" data-akt="punktRunter" ${i === p.punkte.length - 1 ? 'disabled' : ''} aria-label="Nach unten">${ic('chevD', 16)}</button>
+      return `<article class="uekarte punkt" data-i="${i}">
+        <header class="uek-kopf">
+          <button class="uek-bild" data-akt="ueInfo" data-id="${esc(x.ue)}" aria-label="Bild und Anleitung">${vorschau(ue)}</button>
+          <div class="haupt"><h2>${esc(ue ? ue.name : 'Gelöschte Übung')}</h2><small>${esc(ue ? [ue.muskel, ortVon(ue)].filter(Boolean).join(', ') : '')}</small></div>
           <button class="rund klein" data-akt="punktWeg" aria-label="Entfernen">${ic('x', 16)}</button>
-        </div>
+        </header>
+        <div class="uek-inhalt">
         <div class="punkt-extra">
           <button class="chip klein ${x.warm ? 'an' : ''}" data-akt="punktWarm" aria-pressed="${!!x.warm}">${ic('flamme', 14)} Aufwärmen</button>
           ${(x.alt || []).map((a) => { const au = finde('uebungen', a); return au ? `<span class="chip klein alt">${ic('tausch', 14)} ${esc(au.name)}<button data-akt="altWeg" data-a="${a}" aria-label="Alternative entfernen">${ic('x', 14)}</button></span>` : ''; }).join('')}
@@ -169,8 +170,9 @@ const PlanEd = {
           <span class="zaehler"><button class="rund klein" data-akt="punktSaetze" data-d="-1" aria-label="Ein Satz weniger">${ic('minus', 16)}</button><b>${x.saetze}</b><span>${x.saetze === 1 ? 'Satz' : 'Sätze'}</span><button class="rund klein" data-akt="punktSaetze" data-d="1" aria-label="Ein Satz mehr">${ic('plus', 16)}</button></span>
           <span class="bereich"><input data-ein="punktMin" inputmode="numeric" value="${x.wmin ?? ''}" aria-label="Wiederholungen von"><span>bis</span><input data-ein="punktMax" inputmode="numeric" value="${x.wmax ?? ''}" aria-label="Wiederholungen bis"><span>Wdh.</span></span>
         </div>
-      </div>`;
-    }).join('')}</div>`;
+        </div>
+      </article>`;
+    }).join('')}`;
   },
   neuPunkte() { $('#plan-punkte', this.b.el).innerHTML = this.punkteHtml(); },
   iVon(el) { return +el.closest('.punkt').dataset.i; },
@@ -182,8 +184,6 @@ Object.assign(Akt, {
   planUePlus() {
     UeWahl.auf((id) => { PlanEd.p.punkte.push({ ue: id, saetze: 3, wmin: 8, wmax: 12, warm: !PlanEd.p.punkte.length, alt: [] }); PlanEd.neuPunkte(); });
   },
-  punktHoch(el) { const i = PlanEd.iVon(el), l = PlanEd.p.punkte; [l[i - 1], l[i]] = [l[i], l[i - 1]]; PlanEd.neuPunkte(); },
-  punktRunter(el) { const i = PlanEd.iVon(el), l = PlanEd.p.punkte; [l[i + 1], l[i]] = [l[i], l[i + 1]]; PlanEd.neuPunkte(); },
   punktWarmN(el) { const x = PlanEd.p.punkte[PlanEd.iVon(el)]; x.warmN = Math.min(3, Math.max(1, (x.warmN || aufwaermAnzahl()) + +el.dataset.d)); PlanEd.neuPunkte(); },
   punktWarm(el) { const x = PlanEd.p.punkte[PlanEd.iVon(el)]; x.warm = !x.warm; PlanEd.neuPunkte(); },
   altPlus(el) { const x = PlanEd.p.punkte[PlanEd.iVon(el)]; UeWahl.auf((id) => { if (id !== x.ue && !(x.alt || []).includes(id)) x.alt = [...(x.alt || []), id]; PlanEd.neuPunkte(); }); },
